@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft } from "lucide-react"
 import { CommunityLinks } from "@/components/community-links"
 import dynamic from "next/dynamic"
+import { InfoTooltip } from "@/components/ui/info-tooltip"
 
 // 动态导入组件，减少初始加载体积
 const FormSection = dynamic(() => import("@/components/memeverse/create/form-section").then((mod) => mod.FormSection), {
@@ -558,6 +559,25 @@ export default function CreateMemecoinPage() {
                     telegram={formData.telegram}
                     onChange={handleCommunityLinkChange}
                   />
+
+                  {/* Cross chain Fee */}
+                  {formData.omniChains.length > 0 && (
+                    <div className="p-3 bg-black/20 rounded-lg border border-purple-500/20">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm text-pink-300/80">Cross chain Fee</span>
+                          <InfoTooltip
+                            content="Cross chain fees are collected by LayerZero, which include LayerZero network fees and transaction gas on the destination blockchain."
+                            width={295}
+                            iconClassName="text-pink-300/80 hover:text-pink-300"
+                          />
+                        </div>
+                        <span className="text-sm text-white font-medium">
+                          ~{(0.005 * formData.omniChains.length).toFixed(3)} ETH
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Submit button */}
                   <SubmitButton isSubmitting={isSubmitting} />

@@ -174,11 +174,26 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
           className="mb-12 lg:mb-12 mb-8"
         />
 
+        {/* Faucet button - 位于标题下方 */}
+        <div className="flex justify-center mb-8">
+          <Button
+            className="bg-gradient-to-r from-emerald-600/80 to-teal-600/80 border-[1.5px] border-emerald-500/70 hover:border-emerald-400 text-white font-bold py-2.5 px-6 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.6)] transition-all duration-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.8)] relative overflow-hidden group"
+            onClick={() => window.open("https://faucet.outrun.finance", "_blank")}
+          >
+            <div className="flex items-center justify-center gap-2 relative z-10">
+              <span className="text-base font-semibold bg-gradient-to-r from-emerald-300 via-white to-emerald-300 bg-clip-text text-transparent">
+                Faucet
+              </span>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </Button>
+        </div>
+
         {/* 搜索和过滤器 */}
         <div className="mb-8">
           {/* 移动端布局 - 在小于1120px的屏幕上显示 */}
           <div className="flex flex-col gap-6 max-[1120px]:flex min-[1120px]:hidden">
-            {/* Consensus Launch按钮 - ���动端位置 */}
+            {/* Consensus Launch按钮 - 动端位置 */}
             <div className="flex justify-center w-full mb-6">
               <Button
                 className="bg-gradient-to-r from-purple-600/80 via-pink-500/80 to-purple-600/80 border-[1.5px] border-cyan-400/70 hover:border-cyan-300 text-white font-bold py-2.5 px-6 rounded-lg shadow-[0_0_15px_rgba(236,72,153,0.6)] transition-all duration-300 hover:shadow-[0_0_20px_rgba(236,72,153,0.8)] relative overflow-hidden group"
