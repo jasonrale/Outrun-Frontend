@@ -247,7 +247,7 @@ export default function VerseDetailPage() {
     gradient: "from-gray-600 to-gray-500",
   }
 
-  // 确保控制台输出社交媒���链接，以便调试
+  // 确保控制台输出社交媒体链接，以便调试
 
   // Locked阶段使用与原来locked页面完全相同的布局
   if (verse.stage === "Locked" || verse.stage === "Unlocked") {
@@ -259,7 +259,7 @@ export default function VerseDetailPage() {
           <Button
             onClick={handleBackClick}
             variant="outline"
-            className="hidden min-[1115px]:flex relative overflow-hidden group w-auto mr-auto mr-0 absolute left-0 w-auto relative overflow-hidden desktop-back-button mb-6"
+            className="hidden min-[1114px]:flex relative overflow-hidden group w-auto mr-auto mr-0 absolute left-0 w-auto relative overflow-hidden desktop-back-button mb-6"
           >
             {/* 背景渐变效果 */}
             <span className="absolute inset-0 block opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out"></span>
@@ -286,14 +286,14 @@ export default function VerseDetailPage() {
           <button
             onClick={handleBackClick}
             type="button"
-            className="max-[1115px]:flex hidden items-center text-pink-300 mr-auto bg-transparent border-0 p-0 shadow-none outline-none mb-6"
+            className="max-[1114px]:flex hidden items-center text-pink-300 mr-auto bg-transparent border-0 p-0 shadow-none outline-none mb-6"
           >
             <ChevronLeft className="mr-1 h-4 w-4 text-pink-300" />
             <span className="font-medium">Back</span>
           </button>
 
           {/* 桌面端布局 - 使用CSS媒体查询 */}
-          <div className="hidden min-[1115px]:block">
+          <div className="hidden min-[1114px]:block">
             {/* 项目详情卡片 */}
             <GradientBackgroundCard
               className="mb-8"
@@ -368,7 +368,7 @@ export default function VerseDetailPage() {
           </div>
 
           {/* 移动端布局 - 使用CSS媒体查询 */}
-          <div className="max-[1115px]:block hidden">
+          <div className="max-[1114px]:block hidden">
             {/* 三标签导航 */}
             <div className="mb-4">
               <div className="flex bg-black/40 backdrop-blur-sm rounded-xl border border-purple-500/40 p-1">

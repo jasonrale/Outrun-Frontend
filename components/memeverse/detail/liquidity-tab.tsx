@@ -57,7 +57,7 @@ export function LiquidityTab({ project }: LiquidityTabProps) {
             <Button
               variant="outline"
               size="sm"
-              className={`${activeTab === "token" ? "bg-purple-600 text-white" : "bg-black/40 text-pink-300"} border border-purple-500/40`}
+              className={`${activeTab === "token" ? "bg-purple-600 text-white hover:bg-purple-600 hover:text-white" : "bg-black/40 text-pink-300 hover:bg-purple-600 hover:text-white"} border border-purple-500/40 transition-all duration-200`}
               onClick={() => setActiveTab("token")}
             >
               Token
@@ -65,7 +65,7 @@ export function LiquidityTab({ project }: LiquidityTabProps) {
             <Button
               variant="outline"
               size="sm"
-              className={`${activeTab === "pol" ? "bg-purple-600 text-white" : "bg-black/40 text-pink-300"} border border-purple-500/40`}
+              className={`${activeTab === "pol" ? "bg-purple-600 text-white hover:bg-purple-600 hover:text-white" : "bg-black/40 text-pink-300 hover:bg-purple-600 hover:text-white"} border border-purple-500/40 transition-all duration-200`}
               onClick={() => setActiveTab("pol")}
             >
               POL
@@ -73,7 +73,7 @@ export function LiquidityTab({ project }: LiquidityTabProps) {
             <Button
               variant="outline"
               size="sm"
-              className={`${activeTab === "staked" ? "bg-purple-600 text-white" : "bg-black/40 text-pink-300"} border border-purple-500/40`}
+              className={`${activeTab === "staked" ? "bg-purple-600 text-white hover:bg-purple-600 hover:text-white" : "bg-black/40 text-pink-300 hover:bg-purple-600 hover:text-white"} border border-purple-500/40 transition-all duration-200`}
               onClick={() => setActiveTab("staked")}
             >
               Staked Token

@@ -191,7 +191,7 @@ export function DAOTab({ project }: DAOTabProps) {
                 content="End the current cycle and start the next cycle."
                 position="top"
                 iconSize={14}
-                width={200}
+                width={175}
                 iconClassName="text-white/80 hover:text-white ml-1"
               />
             </div>
