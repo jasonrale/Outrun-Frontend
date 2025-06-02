@@ -230,7 +230,7 @@ export const MemeversePriceChart = React.memo(({ project }: MemeversePriceChartP
               </div>
               <div className="flex items-center gap-1 px-2 py-1 bg-purple-900/30 rounded-md">
                 <span className="text-pink-300 font-medium text-xs">CA:</span>
-                <span className="text-white font-mono text-xs">{formatContractAddress(contractAddress)}</span>
+                <span className="text-white font-medium text-xs">{formatContractAddress(contractAddress)}</span>
                 <button
                   onClick={copyContractAddress}
                   className="p-1 hover:text-purple-400 transition-colors duration-200"
@@ -308,7 +308,7 @@ export const MemeversePriceChart = React.memo(({ project }: MemeversePriceChartP
               />
               <div className="flex items-center gap-1 px-2 py-1 bg-purple-900/30 rounded-md">
                 <span className="text-pink-300 font-medium">CA:</span>
-                <span className="text-white font-mono">{formatContractAddress(contractAddress)}</span>
+                <span className="text-white font-medium text-xs">{formatContractAddress(contractAddress)}</span>
                 <button
                   onClick={copyContractAddress}
                   className="p-0.5 hover:text-purple-400 transition-colors duration-200"

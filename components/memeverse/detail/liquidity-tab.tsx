@@ -49,7 +49,9 @@ export function LiquidityTab({ project }: LiquidityTabProps) {
       {/* Liquidity overview */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-pink-300 max-[540px]:hidden">Liquidity Overview</h3>
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent max-[540px]:hidden">
+            Liquidity Overview
+          </h3>
 
           <div className="flex space-x-2">
             <Button
@@ -108,7 +110,9 @@ export function LiquidityTab({ project }: LiquidityTabProps) {
       {/* Liquidity pools list */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
         <div className="mb-4">
-          <h3 className="text-lg font-semibold text-pink-300">Liquidity Pools</h3>
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+            Liquidity Pools
+          </h3>
         </div>
 
         <div className="space-y-4">

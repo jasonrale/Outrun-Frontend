@@ -247,7 +247,7 @@ export default function VerseDetailPage() {
     gradient: "from-gray-600 to-gray-500",
   }
 
-  // 确保控制台输出社交媒体链接，以便调试
+  // 确保控制台输出社交媒���链接，以便调试
 
   // Locked阶段使用与原来locked页面完全相同的布局
   if (verse.stage === "Locked" || verse.stage === "Unlocked") {

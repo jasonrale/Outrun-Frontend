@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation"
 import { ProjectCard } from "@/components/memeverse/board/project-card"
 import { MemeVerseProvider, useMemeVerse } from "@/contexts/memeverse-context"
 import { useMemo } from "react"
-import React from "react"
+import React, { useState } from "react"
+import { FaucetModal } from "@/components/faucet-modal"
 
 // 主页面组件
 export default function MemeverseBoardPage() {
@@ -59,6 +60,8 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
     getSortOptions,
     getCurrentSortLabel,
   } = useMemeVerse()
+
+  const [isFaucetModalOpen, setIsFaucetModalOpen] = useState(false)
 
   // 使用useMemo优化分页计算
   const paginationData = useMemo(() => {
@@ -175,10 +178,10 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
         />
 
         {/* Faucet button - 位于标题下方 */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-10">
           <Button
             className="bg-gradient-to-r from-emerald-600/80 to-teal-600/80 border-[1.5px] border-emerald-500/70 hover:border-emerald-400 text-white font-bold py-2.5 px-6 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.6)] transition-all duration-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.8)] relative overflow-hidden group"
-            onClick={() => window.open("https://faucet.outrun.finance", "_blank")}
+            onClick={() => setIsFaucetModalOpen(true)}
           >
             <div className="flex items-center justify-center gap-2 relative z-10">
               <span className="text-base font-semibold bg-gradient-to-r from-emerald-300 via-white to-emerald-300 bg-clip-text text-transparent">
@@ -583,6 +586,9 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
 
         {/* Pagination component */}
         {renderPagination()}
+
+        {/* Faucet Modal */}
+        <FaucetModal isOpen={isFaucetModalOpen} onClose={() => setIsFaucetModalOpen(false)} />
       </div>
     </div>
   )

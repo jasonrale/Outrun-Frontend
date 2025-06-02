@@ -44,7 +44,9 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
         <div className="mb-4">
           {/* 桌面端布局 */}
           <div className="hidden lg:flex items-center justify-center relative">
-            <h3 className="text-lg font-semibold text-pink-300 absolute left-0">Yield Vault Overview</h3>
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent absolute left-0">
+              Yield Vault Overview
+            </h3>
             <div className="text-center">
               <span className="text-pink-300 mr-2">Contract Address:</span>
               <span className="font-mono text-white/90">{vaultData.contractAddress}</span>
@@ -64,7 +66,9 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
 
           {/* 移动端布局 */}
           <div className="lg:hidden space-y-3">
-            <h3 className="text-lg font-semibold text-pink-300 text-center">Yield Vault Overview</h3>
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent text-center">
+              Yield Vault Overview
+            </h3>
             <div className="text-center">
               <span className="text-pink-300 mr-2">Contract:</span>
               <span className="font-mono text-white/90 text-sm">

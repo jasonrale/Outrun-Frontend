@@ -232,7 +232,9 @@ export function POLTab({ project }: POLTabProps) {
         <div className="mb-4">
           {/* 桌面端布局 */}
           <div className="hidden lg:flex items-center justify-center relative">
-            <h3 className="text-lg font-semibold text-pink-300 absolute left-0">POL Overview</h3>
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent absolute left-0">
+              POL Overview
+            </h3>
             <div className="text-center">
               <span className="text-pink-300 mr-2">Contract Address:</span>
               <span className="font-mono text-white/90">{polData.contractAddress}</span>
@@ -241,7 +243,9 @@ export function POLTab({ project }: POLTabProps) {
 
           {/* 移动端布局 */}
           <div className="lg:hidden space-y-3">
-            <h3 className="text-lg font-semibold text-pink-300 text-center">POL Overview</h3>
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent text-center">
+              POL Overview
+            </h3>
             <div className="text-center">
               <span className="text-pink-300 mr-2">Contract:</span>
               <span className="font-mono text-white/90 text-sm">
@@ -301,7 +305,9 @@ export function POLTab({ project }: POLTabProps) {
       {/* Your POL */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
         <div className="flex items-center mb-4">
-          <h3 className="text-lg font-semibold text-pink-300">Your POL</h3>
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+            Your POL
+          </h3>
           <Button
             className="ml-3 h-7 px-3 text-sm bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110"
             onClick={() => setIsClaimModalOpen(true)}
@@ -353,7 +359,7 @@ export function POLTab({ project }: POLTabProps) {
             </div>
           </div>
         ) : (
-          // Locked阶段：有Liquidity Unlock卡片，Operate只有一个按钮
+          // Locked阶：有Liquidity Unlock卡片，Operate只有一个按钮
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
             <div className="bg-black/40 rounded-lg border border-purple-500/30 p-4 md:col-span-2">
               <div className="text-sm text-pink-300/80 mb-1">Your Balance</div>

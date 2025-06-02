@@ -72,33 +72,6 @@ export function EnhancedSwapInterface() {
     [fromToken.symbol, toToken.symbol],
   )
 
-  // const settingsPanelRef = useRef<HTMLDivElement>(null)
-
-  // Add functionality to close settings panel when clicking outside
-  // useEffect(() => {
-  //   if (!showSettings) return
-
-  //   const handleClickOutside = (event: MouseEvent) => {
-  //     // Check if click is outside the settings panel
-  //     if (
-  //       settingsPanelRef.current &&
-  //       !settingsPanelRef.current.contains(event.target as Node) &&
-  //       // Make sure it's not clicking the settings button itself
-  //       !(event.target as Element).closest('[title="Settings"]')
-  //     ) {
-  //       setShowSettings(false)
-  //     }
-  //   }
-
-  //   // Add global click event listener
-  //   document.addEventListener("mousedown", handleClickOutside)
-
-  //   // Cleanup function
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside)
-  //   }
-  // }, [showSettings])
-
   // Get exchange rate display
   const getExchangeRateDisplay = useCallback(() => {
     if (!fromToken.price || !toToken.price) return null
