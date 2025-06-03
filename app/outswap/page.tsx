@@ -28,8 +28,8 @@ export default function OutSwapPage() {
           <div className="container px-4 md:px-6 mx-auto pt-24 pb-12">
             <div className="flex flex-col items-center text-center space-y-12">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
                 transition={{ duration: 0.8 }}
                 className="space-y-6 max-w-4xl"
               >
@@ -53,8 +53,8 @@ export default function OutSwapPage() {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="flex flex-col sm:flex-row gap-4"
               >

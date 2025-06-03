@@ -34,12 +34,7 @@ export default function MemeversePage() {
               >
                 <div className="inline-block mb-6">
                   <div className="relative">
-                    <div
-                      className="absolute inset-0 blur-xl bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 opacity-70 rounded-full"
-                      style={{
-                        willChange: "filter",
-                        transform: "translateZ(0)",
-                      }}
+                    <div className="absolute inset-0 blur-xl bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 opacity-70 rounded-full"
                     />
                     <div className="relative px-6 py-2 bg-black/65 backdrop-blur-sm border border-white/10 rounded-full text-sm font-medium text-white">
                       Memecoin × DeFi × DAO
