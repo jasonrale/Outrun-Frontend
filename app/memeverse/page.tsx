@@ -27,14 +27,20 @@ export default function MemeversePage() {
           <div className="container px-4 md:px-6 mx-auto pt-24 pb-12">
             <div className="flex flex-col items-center text-center space-y-12">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
                 transition={{ duration: 0.8 }}
                 className="space-y-6 max-w-4xl"
               >
                 <div className="inline-block mb-6">
                   <div className="relative">
-                    <div className="absolute inset-0 blur-xl bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 opacity-70 rounded-full" />
+                    <div
+                      className="absolute inset-0 blur-xl bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 opacity-70 rounded-full"
+                      style={{
+                        willChange: "filter",
+                        transform: "translateZ(0)",
+                      }}
+                    />
                     <div className="relative px-6 py-2 bg-black/65 backdrop-blur-sm border border-white/10 rounded-full text-sm font-medium text-white">
                       Memecoin × DeFi × DAO
                     </div>
@@ -349,7 +355,7 @@ export default function MemeversePage() {
                   "The fairest and safest Memecoin launch mechanism, eliminating fraud and ensuring fair participation for all users.",
                   "Cross-chain interoperability across multiple blockchains, greatly enhancing community accessibility.",
                   "Built-in staking and DAO governance to ensure long-term sustainability and community-driven development.",
-                  "Innovative governance cycle incentive module to achieve high-quality and highly active DAO governance scenarios, driving the mass adoption of DAO governance."
+                  "Innovative governance cycle incentive module to achieve high-quality and highly active DAO governance scenarios, driving the mass adoption of DAO governance.",
                 ]}
                 color="#a855f7"
                 delay={0.1}
