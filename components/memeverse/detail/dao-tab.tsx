@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect, useMemo } from "react"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
+import { AssetDetailModal } from "./asset-detail-modal"
 
 interface DAOTabProps {
   project: any
@@ -8,8 +9,60 @@ interface DAOTabProps {
 
 export function DAOTab({ project }: DAOTabProps) {
   const [countdown, setCountdown] = useState("")
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean
+    type: "current-treasury" | "last-treasury" | "unclaimed-rewards" | "reward-claimable" | null
+  }>({
+    isOpen: false,
+    type: null,
+  })
 
   const daoData = project.daoData
+
+  // Mock asset data for different modal types
+  const assetData = {
+    "current-treasury": {
+      title: "Current Treasury Details",
+      totalValue: daoData.treasuryValue,
+      assets: [
+        { symbol: "ETH", name: "Ethereum", amount: "1,250.5", usdValue: 3125000, percentage: 62.5 },
+        { symbol: "USDC", name: "USD Coin", amount: "875,000", usdValue: 875000, percentage: 17.5 },
+        { symbol: "USDT", name: "Tether USD", amount: "500,000", usdValue: 500000, percentage: 10.0 },
+        { symbol: "DAI", name: "Dai Stablecoin", amount: "300,000", usdValue: 300000, percentage: 6.0 },
+        { symbol: "WBTC", name: "Wrapped Bitcoin", amount: "2.1", usdValue: 200000, percentage: 4.0 },
+      ],
+    },
+    "last-treasury": {
+      title: "Last Cycle Treasury Details",
+      totalValue: daoData.lastCycleTreasuryValue || 3500000,
+      assets: [
+        { symbol: "ETH", name: "Ethereum", amount: "1,100.2", usdValue: 2750000, percentage: 78.6 },
+        { symbol: "USDC", name: "USD Coin", amount: "450,000", usdValue: 450000, percentage: 12.9 },
+        { symbol: "USDT", name: "Tether USD", amount: "200,000", usdValue: 200000, percentage: 5.7 },
+        { symbol: "DAI", name: "Dai Stablecoin", amount: "100,000", usdValue: 100000, percentage: 2.8 },
+      ],
+    },
+    "unclaimed-rewards": {
+      title: "Unclaimed Rewards Details",
+      totalValue: daoData.lastCycleRemainingRewards,
+      assets: [
+        { symbol: "ETH", name: "Ethereum", amount: "45.8", usdValue: 114500, percentage: 78.9 },
+        { symbol: "USDC", name: "USD Coin", amount: "20,000", usdValue: 20000, percentage: 13.8 },
+        { symbol: "USDT", name: "Tether USD", amount: "7,500", usdValue: 7500, percentage: 5.2 },
+        { symbol: "DAI", name: "Dai Stablecoin", amount: "3,000", usdValue: 3000, percentage: 2.1 },
+      ],
+    },
+    "reward-claimable": {
+      title: "Reward Claimable Detail",
+      totalValue: daoData.lastCycleClaimableReward,
+      assets: [
+        { symbol: "ETH", name: "Ethereum", amount: "18.2", usdValue: 45500, percentage: 75.8 },
+        { symbol: "USDC", name: "USD Coin", amount: "8,500", usdValue: 8500, percentage: 14.2 },
+        { symbol: "USDT", name: "Tether USD", amount: "4,000", usdValue: 4000, percentage: 6.7 },
+        { symbol: "DAI", name: "Dai Stablecoin", amount: "2,000", usdValue: 2000, percentage: 3.3 },
+      ],
+    },
+  }
 
   // 将时间计算移到这里，确保正确转换为Date对象
   const cycleEndTime = useMemo(() => {
@@ -70,6 +123,25 @@ export function DAOTab({ project }: DAOTabProps) {
     personalVotes: 20000000,
     estimatedReward: 22500,
   }
+
+  const handleArrowClick = (type: "current-treasury" | "last-treasury" | "unclaimed-rewards" | "reward-claimable") => {
+    setModalState({ isOpen: true, type })
+  }
+
+  const closeModal = () => {
+    setModalState({ isOpen: false, type: null })
+  }
+
+  // 在 DAOTab 组件中添加 handleClaim 函数
+  const handleClaim = () => {
+    // 这里可以添加实际的领取奖励逻辑
+    console.log("Claiming rewards...")
+    // 关闭模态窗口
+    closeModal()
+    // 可以添加一个成功提示或其他反馈
+  }
+
+  const currentModalData = modalState.type ? assetData[modalState.type] : null
 
   return (
     <div className="space-y-6">
@@ -211,7 +283,38 @@ export function DAOTab({ project }: DAOTabProps) {
 
           {/* Treasury - moved from DAO Overview */}
           <div className="bg-black/40 rounded-lg border border-purple-500/30 p-4">
-            <div className="text-sm text-pink-300/80 mb-1">Treasury</div>
+            <div className="text-sm text-pink-300/80 mb-1 flex items-center justify-between">
+              <span>Treasury</span>
+              <button
+                onClick={() => handleArrowClick("current-treasury")}
+                className="flex items-center hover:scale-110 transition-transform duration-200"
+              >
+                <svg
+                  className="w-4 h-4 text-pink-300/60 animate-arrow-1 hover:text-pink-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                <svg
+                  className="w-4 h-4 -ml-2 text-pink-300/60 animate-arrow-2 hover:text-pink-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                <svg
+                  className="w-4 h-4 -ml-2 text-pink-300/60 animate-arrow-3 hover:text-pink-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
             <div className="text-xl font-bold text-white">${daoData.treasuryValue.toLocaleString()}</div>
           </div>
 
@@ -247,10 +350,10 @@ export function DAOTab({ project }: DAOTabProps) {
               <div className="flex items-center gap-1">
                 <span className="text-sm text-pink-300/80">Estimated Personal Claimable</span>
                 <InfoTooltip
-                  content="This is an estimate of your potential rewards based on your current voting power and participation in the current cycle."
+                  content="This is an estimate of your potential rewards at the end of the cycle based on your governance participation in the current cycle."
                   position="top"
                   iconSize={15}
-                  width={282}
+                  width={298}
                   iconClassName="text-pink-300/80 hover:text-pink-300"
                 />
               </div>
@@ -279,7 +382,38 @@ export function DAOTab({ project }: DAOTabProps) {
 
           {/* Treasury */}
           <div className="bg-black/40 rounded-lg border border-purple-500/30 p-4">
-            <div className="text-sm text-pink-300/80 mb-1">Treasury</div>
+            <div className="text-sm text-pink-300/80 mb-1 flex items-center justify-between">
+              <span>Treasury</span>
+              <button
+                onClick={() => handleArrowClick("last-treasury")}
+                className="flex items-center hover:scale-110 transition-transform duration-200"
+              >
+                <svg
+                  className="w-4 h-4 text-pink-300/60 animate-arrow-1 hover:text-pink-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                <svg
+                  className="w-4 h-4 -ml-2 text-pink-300/60 animate-arrow-2 hover:text-pink-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                <svg
+                  className="w-4 h-4 -ml-2 text-pink-300/60 animate-arrow-3 hover:text-pink-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
             <div className="text-xl font-bold text-white">
               ${daoData.lastCycleTreasuryValue?.toLocaleString() || "N/A"}
             </div>
@@ -287,7 +421,38 @@ export function DAOTab({ project }: DAOTabProps) {
 
           {/* Remaining Unclaimed Rewards */}
           <div className="bg-black/40 rounded-lg border border-purple-500/30 p-4">
-            <div className="text-sm text-pink-300/80 mb-1">Remaining Unclaimed Rewards</div>
+            <div className="text-sm text-pink-300/80 mb-1 flex items-center justify-between">
+              <span>Remaining Unclaimed Rewards</span>
+              <button
+                onClick={() => handleArrowClick("unclaimed-rewards")}
+                className="flex items-center hover:scale-110 transition-transform duration-200"
+              >
+                <svg
+                  className="w-4 h-4 text-pink-300/60 animate-arrow-1 hover:text-pink-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                <svg
+                  className="w-4 h-4 -ml-2 text-pink-300/60 animate-arrow-2 hover:text-pink-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                <svg
+                  className="w-4 h-4 -ml-2 text-pink-300/60 animate-arrow-3 hover:text-pink-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
             <div className="text-xl font-bold text-white">${daoData.lastCycleRemainingRewards.toLocaleString()}</div>
           </div>
 
@@ -317,13 +482,29 @@ export function DAOTab({ project }: DAOTabProps) {
             </div>
             <div className="flex items-center justify-between gap-2">
               <div className="text-xl font-bold text-white">${daoData.lastCycleClaimableReward.toLocaleString()}</div>
-              <button className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium text-sm hover:from-purple-500 hover:to-pink-500 transition-all duration-300 whitespace-nowrap">
+              <button
+                onClick={() => handleArrowClick("reward-claimable")}
+                className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium text-sm hover:from-purple-500 hover:to-pink-500 transition-all duration-300 whitespace-nowrap"
+              >
                 Claim Rewards
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Asset Detail Modal */}
+      {currentModalData && (
+        <AssetDetailModal
+          isOpen={modalState.isOpen}
+          onClose={closeModal}
+          title={currentModalData.title}
+          assets={currentModalData.assets}
+          totalValue={currentModalData.totalValue}
+          modalType={modalState.type}
+          onClaim={handleClaim}
+        />
+      )}
 
       <style jsx global>{`
         @keyframes arrow-pulse-1 {

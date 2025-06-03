@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useMemo, useCallback } from "react"
+import { useEffect, useState, useMemo, useCallback, Suspense } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, Info, TrendingUp, DollarSign } from "lucide-react"
@@ -114,7 +114,28 @@ function useLocalTimeZoneFormatter() {
   )
 }
 
+// 添加加载组件
+function DetailPageSkeleton() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-16 h-16 border-4 border-t-purple-500 border-r-transparent border-b-pink-500 border-l-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-pink-300">Loading memeverse details...</p>
+      </div>
+    </div>
+  )
+}
+
 export default function VerseDetailPage() {
+  return (
+    <Suspense fallback={<DetailPageSkeleton />}>
+      <VerseDetailContent />
+    </Suspense>
+  )
+}
+
+// 将原来的组件逻辑移到这里
+function VerseDetailContent() {
   const router = useRouter()
   const params = useParams()
   const [verse, setVerse] = useState<any>(null)

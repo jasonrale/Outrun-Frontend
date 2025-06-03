@@ -346,9 +346,10 @@ export default function MemeversePage() {
                 description="Memeverse provides a secure, transparent, and fair platform for creating and managing memecoins with built-in sustainability mechanisms."
                 steps={[
                   "Simplified creation process with no coding knowledge required - just use our intuitive UI to launch your memecoin.",
-                  "Multi-chain deployment with universal token templates and fair distribution mechanisms across multiple blockchains.",
+                  "The fairest and safest Memecoin launch mechanism, eliminating fraud and ensuring fair participation for all users.",
+                  "Cross-chain interoperability across multiple blockchains, greatly enhancing community accessibility.",
                   "Built-in staking and DAO governance to ensure long-term sustainability and community-driven development.",
-                  "Liquidity protection mechanisms that prevent rug pulls and ensure fair participation for all users.",
+                  "Innovative governance cycle incentive module to achieve high-quality and highly active DAO governance scenarios, driving the mass adoption of DAO governance."
                 ]}
                 color="#a855f7"
                 delay={0.1}

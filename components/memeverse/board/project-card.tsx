@@ -127,8 +127,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   // Handle card click event
   const handleCardClick = () => {
-    // 所有项目都导航到 detail 页面
-    router.push(`/memeverse/${project.id}/detail/`)
+    // 立即进行乐观路由切换，不等待RSC
+    router.push(`/memeverse/${project.id}/detail/`, { scroll: false })
+
+    // 或者使用 router.prefetch 预加载
+    // router.prefetch(`/memeverse/${project.id}/detail/`)
   }
 
   return (
