@@ -422,7 +422,16 @@ export function DAOTab({ project }: DAOTabProps) {
           {/* Remaining Unclaimed Rewards */}
           <div className="bg-black/40 rounded-lg border border-purple-500/30 p-4">
             <div className="text-sm text-pink-300/80 mb-1 flex items-center justify-between">
-              <span>Remaining Unclaimed Rewards</span>
+              <div className="flex items-center gap-1">
+                <span>Remaining Rewards</span>
+                <InfoTooltip
+                  content="After the current cycle ends, unclaimed rewards from the previous cycle will be added to the current cycle's treasury balance."
+                  position="top"
+                  iconSize={15}
+                  width={305}
+                  iconClassName="text-pink-300/80 hover:text-pink-300"
+                />
+              </div>
               <button
                 onClick={() => handleArrowClick("unclaimed-rewards")}
                 className="flex items-center hover:scale-110 transition-transform duration-200"
@@ -468,10 +477,10 @@ export function DAOTab({ project }: DAOTabProps) {
             <div className="text-xl font-bold text-white">{daoData.lastCycleYourVotes.toLocaleString()} votes</div>
           </div>
 
-          {/* Reward Claimable */}
+          {/* Rewards Claimable */}
           <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-lg border border-pink-500/30 p-4">
             <div className="flex items-center gap-1 mb-1">
-              <span className="text-sm text-pink-300/80">Reward Claimable</span>
+              <span className="text-sm text-pink-300/80">Your Rewards Claimable</span>
               <InfoTooltip
                 content="After the current cycle ends, unclaimed rewards from the previous cycle will be added to the treasury balance of the current cycle. Please claim your rewards before the current cycle ends."
                 position="top"
