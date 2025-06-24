@@ -467,7 +467,7 @@ export function LiquidityPoolsTable({
   const getCurrentPagePools = () => {
     const itemsPerPage = isMobile ? 5 : 10
     const startIndex = (currentPage - 1) * itemsPerPage
-    // 返回当前页的数据，但总是保持相同的数据以模拟多页
+    // 返回��前页的数据，但总是保持相同的数据以模拟多页
     return visiblePools.slice(0, itemsPerPage)
   }
 

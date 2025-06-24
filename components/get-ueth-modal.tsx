@@ -87,11 +87,11 @@ export function GetUETHModal({ isOpen, onClose }: GetUETHModalProps) {
 
                     {/* Token Dropdown */}
                     {isTokenDropdownOpen && (
-                      <div className="absolute top-full right-0 mt-2 w-full rounded-md overflow-hidden bg-gradient-to-br from-purple-950/85 via-purple-900/90 to-indigo-950/85 backdrop-blur-md border border-purple-500/40 shadow-[0_4px_20px_rgba(138,75,175,0.3)] z-10">
+                      <div className="absolute top-full right-0 mt-2 w-auto min-w-full rounded-md overflow-hidden bg-gradient-to-br from-purple-950/85 via-purple-900/90 to-indigo-950/85 backdrop-blur-md border border-purple-500/40 shadow-[0_4px_20px_rgba(138,75,175,0.3)] z-10">
                         {tokenOptions.map((token) => (
                           <button
                             key={token.symbol}
-                            className="flex items-center w-full px-3 py-2 text-sm text-pink-300 hover:bg-gradient-to-r hover:from-purple-600/30 hover:to-pink-500/30 hover:text-pink-200 transition-all duration-300"
+                            className="flex items-center w-auto min-w-full px-3 py-2 text-sm text-pink-300 hover:bg-gradient-to-r hover:from-purple-600/30 hover:to-pink-500/30 hover:text-pink-200 transition-all duration-300 whitespace-nowrap"
                             onClick={() => {
                               setSelectedToken(token.symbol)
                               setIsTokenDropdownOpen(false)

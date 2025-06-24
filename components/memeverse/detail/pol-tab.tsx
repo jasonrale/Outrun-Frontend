@@ -5,7 +5,7 @@ import { formatMarketCap } from "@/utils/format"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { useState, useEffect, useCallback } from "react"
 import { GradientBackgroundCard } from "@/components/ui/gradient-background-card"
-import { ChevronDown, RefreshCw, Settings, Clock, X } from "lucide-react"
+import { ChevronDown, RefreshCw, Settings, X } from "lucide-react"
 import { TokenIcon } from "@/components/ui/token-icon"
 import { SettingsPanel } from "@/components/ui/settings-panel"
 import { USER_BALANCES } from "@/data/memeverse-projects"
@@ -55,6 +55,23 @@ const formatNumberWithSubscriptZeros = (num: number): string => {
   return `${integerPart}.0${subscriptZeroCount}${significantDigits}`
 }
 
+// Add this function to format large numbers with abbreviations
+const formatLargeNumber = (num: number | string): string => {
+  const numValue = typeof num === "string" ? Number.parseFloat(num.replace(/,/g, "")) : num
+
+  if (isNaN(numValue)) return "0"
+
+  const absNum = Math.abs(numValue)
+
+  if (absNum >= 1e12) {
+    return (numValue / 1e12).toFixed(2).replace(/\.?0+$/, "") + "T"
+  } else if (absNum >= 1e10) {
+    return (numValue / 1e9).toFixed(2).replace(/\.?0+$/, "") + "B"
+  } else {
+    return numValue.toLocaleString()
+  }
+}
+
 interface POLTabProps {
   project: any
 }
@@ -70,7 +87,6 @@ export function POLTab({ project }: POLTabProps) {
   const [isMintModalOpen, setIsMintModalOpen] = useState(false)
   const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false)
   const [countdown, setCountdown] = useState("")
-  const [claimCountdown, setClaimCountdown] = useState("")
   const [showDetails, setShowDetails] = useState(false)
   const [isRateReversed, setIsRateReversed] = useState(false)
   const [pfrogAmount, setPfrogAmount] = useState("")
@@ -80,17 +96,9 @@ export function POLTab({ project }: POLTabProps) {
   const [slippage, setSlippage] = useState("0.5")
   const [showSettings, setShowSettings] = useState(false)
   const [transactionDeadline, setTransactionDeadline] = useState("10")
-  const [showClaimCard, setShowClaimCard] = useState(false)
 
   // 判断是否为Unlock阶段
   const isUnlocked = project.stage === "Unlocked"
-
-  // 计算Memecoin领取时间（Unlock Time + 3 days）
-  const memecoinClaimTime = new Date(new Date(project.unlockTime).getTime() + 3 * 24 * 60 * 60 * 1000)
-  const canClaimMemecoin = new Date() >= memecoinClaimTime
-
-  // 模拟待领取的Memecoin数量
-  const pendingMemecoinClaim = 125000
 
   useEffect(() => {
     const updateCountdown = () => {
@@ -115,30 +123,6 @@ export function POLTab({ project }: POLTabProps) {
 
     return () => clearInterval(interval)
   }, [project.unlockTime])
-
-  useEffect(() => {
-    const updateClaimCountdown = () => {
-      const now = new Date().getTime()
-      const claimTime = memecoinClaimTime.getTime()
-      const difference = claimTime - now
-
-      if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24))
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000)
-
-        setClaimCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`)
-      } else {
-        setClaimCountdown("Ready to Claim")
-      }
-    }
-
-    updateClaimCountdown()
-    const interval = setInterval(updateClaimCountdown, 1000)
-
-    return () => clearInterval(interval)
-  }, [memecoinClaimTime])
 
   // When modal is open, prevent body scrolling
   useEffect(() => {
@@ -247,16 +231,37 @@ export function POLTab({ project }: POLTabProps) {
               POL Overview
             </h3>
             <div className="text-center">
-              <span className="text-pink-300 mr-2">Contract:</span>
-              <span className="font-mono text-white/90 text-sm">
-                {polData.contractAddress.substring(0, 10)}...
-                {polData.contractAddress.substring(polData.contractAddress.length - 8)}
-              </span>
+              <div className="flex items-center justify-center gap-1">
+                <span className="text-pink-300">Contract:</span>
+                <span className="font-mono text-white/90 text-sm">
+                  {polData.contractAddress.substring(0, 10)}...
+                  {polData.contractAddress.substring(polData.contractAddress.length - 8)}
+                </span>
+                <button
+                  onClick={() => navigator.clipboard.writeText(polData.contractAddress)}
+                  className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
+                  title="Copy contract address"
+                >
+                  <svg
+                    className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-black/40 rounded-lg border border-purple-500/30 p-4">
             <div className="text-sm text-pink-300/80 mb-1">Market Price</div>
             <div className="text-lg font-bold text-white">${polData.polPrice.toFixed(4)}</div>
@@ -284,20 +289,6 @@ export function POLTab({ project }: POLTabProps) {
           <div className="bg-black/40 rounded-lg border border-purple-500/30 p-4">
             <div className="text-sm text-pink-300/80 mb-1">Total Supply</div>
             <div className="text-lg font-bold text-white">{polData.polTotalSupply.toLocaleString()}</div>
-          </div>
-
-          <div className="bg-black/40 rounded-lg border border-purple-500/30 p-4">
-            <div className="flex items-center text-sm text-pink-300/80 mb-1">
-              <span>Burned</span>
-              <InfoTooltip
-                content="Burned without redemption"
-                position="top"
-                className="ml-1"
-                iconSize={15}
-                iconClassName="text-pink-300/80 hover:text-pink-300"
-              />
-            </div>
-            <div className="text-lg font-bold text-white">{polData.burned.toLocaleString()}</div>
           </div>
         </div>
       </div>
@@ -724,55 +715,38 @@ export function POLTab({ project }: POLTabProps) {
                   className="mb-3 p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
                   style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
                 >
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="text-left text-green-300 text-lg font-medium w-1/2">
-                      {getRedeemOutputs().uethAmount}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 flex-1 min-w-0 max-w-[60%]">
+                      <div className="text-left text-green-300 text-lg font-medium">
+                        {formatLargeNumber(getRedeemOutputs().uethAmount)}
+                      </div>
+                      <div className="text-green-400/60 text-xs whitespace-nowrap">~$--</div>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center flex-shrink-0">
                       <TokenIcon symbol="UETH" size={20} className="mr-2" />
                       <span className="text-green-300 font-medium">UETH</span>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="text-green-400/60">~$--</div>
-                    <div className="text-green-400/60">Immediate</div>
                   </div>
                 </div>
 
                 {/* Project Token Output (Delayed) */}
                 <div
-                  className="p-3 rounded-lg bg-gradient-to-br from-orange-900/20 to-yellow-800/20 border border-orange-500/30"
-                  style={{ boxShadow: "0 0 15px rgba(251,146,60,0.15) inset, 0 0 20px rgba(251,146,60,0.1)" }}
+                  className="p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
+                  style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
                 >
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="text-left text-orange-300 text-lg font-medium w-1/2">
-                      {getRedeemOutputs().memecoinAmount}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 flex-1 min-w-0 max-w-[60%]">
+                      <div className="text-left text-green-300 text-lg font-medium">
+                        {formatLargeNumber(getRedeemOutputs().memecoinAmount)}
+                      </div>
+                      <div className="text-green-400/60 text-xs whitespace-nowrap">~$--</div>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center flex-shrink-0">
                       <TokenIcon symbol={project.symbol} size={20} className="mr-2" />
-                      <span className="text-orange-300 font-medium">{project.symbol}</span>
+                      <span className="text-green-300 font-medium">{project.symbol}</span>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="text-orange-400/60">~$--</div>
-                    <div className="text-orange-400/60">{canClaimMemecoin ? "Claimable" : "Delayed"}</div>
                   </div>
                 </div>
-
-                {/* Memecoin Claim Notice */}
-                {!canClaimMemecoin && hasRedeemAmount && (
-                  <div className="mt-3 p-3 rounded-lg bg-orange-900/20 border border-orange-500/30">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Clock size={14} className="text-orange-400" />
-                      <span className="text-xs text-orange-300 font-medium">Claim Notice</span>
-                    </div>
-                    <p className="text-xs text-orange-400/80 leading-relaxed">
-                      {project.symbol} tokens will be available for manual claim after{" "}
-                      <span className="font-medium text-orange-300">{memecoinClaimTime.toLocaleDateString()}</span>.
-                      UETH will be sent immediately.
-                    </p>
-                  </div>
-                )}
               </div>
 
               {/* Redeem Button */}
@@ -786,49 +760,6 @@ export function POLTab({ project }: POLTabProps) {
               >
                 {!hasRedeemAmount ? "Please Input" : "Redeem"}
               </Button>
-
-              {/* Pending Memecoin Claim Card - Moved from main interface to modal */}
-              {pendingMemecoinClaim > 0 && (
-                <div className="mt-4 bg-black/40 rounded-lg border border-orange-500/30 p-4">
-                  <button
-                    className="w-full flex items-center justify-between text-left"
-                    onClick={() => setShowClaimCard(!showClaimCard)}
-                  >
-                    <div className="flex items-center gap-2">
-                      <Clock size={16} className="text-orange-400" />
-                      <span className="text-sm text-orange-300 font-medium">Pending Memecoin Claim</span>
-                    </div>
-                    <ChevronDown
-                      size={16}
-                      className={`text-orange-400 transition-transform duration-200 ${showClaimCard ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  {showClaimCard && (
-                    <div className="mt-4 pt-4 border-t border-orange-500/20">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <TokenIcon symbol={project.symbol} size={20} />
-                          <span className="text-white font-medium">{project.symbol}</span>
-                        </div>
-                        <span className="text-lg font-bold text-orange-300">
-                          {pendingMemecoinClaim.toLocaleString()}
-                        </span>
-                      </div>
-
-                      {canClaimMemecoin ? (
-                        <Button className="w-full h-8 text-sm bg-gradient-to-r from-orange-600 to-yellow-500 hover:from-orange-500 hover:to-yellow-400 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110">
-                          Claim {project.symbol}
-                        </Button>
-                      ) : (
-                        <div className="text-center">
-                          <div className="text-sm text-orange-400/80">Available in: {claimCountdown}</div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
           </GradientBackgroundCard>
         </div>

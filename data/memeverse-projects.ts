@@ -509,7 +509,8 @@ export const MOCK_PROJECTS = [
     },
     daoData: {
       totalVotingPower: 35000000,
-      contractAddress: "0x7d8e9f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e",
+      governorAddress: "0x7d8e9f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e",
+      cycleIncentivizerAddress: "0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0",
       currentCycle: 14,
       cycleEndTime: "2025-08-15T14:30:00Z",
       proposals: 32,
@@ -650,7 +651,8 @@ export const MOCK_PROJECTS = [
     },
     daoData: {
       totalVotingPower: 28000000,
-      contractAddress: "0x3d9d22ce8e205de5f3d0e9e0b258accde1d33a0b",
+      governorAddress: "0x3d9d22ce8e205de5f3d0e9e0b258accde1d33a0b",
+      cycleIncentivizerAddress: "0x4b8c11ab2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a",
       currentCycle: 10,
       cycleEndTime: "2025-08-22T18:00:00Z",
       proposals: 69,
@@ -788,7 +790,8 @@ export const MOCK_PROJECTS = [
     },
     daoData: {
       totalVotingPower: 42000000,
-      contractAddress: "0x9a67f1940164d0318612b497e8e6038f902a00a4",
+      governorAddress: "0x9a67f1940164d0318612b497e8e6038f902a00a4",
+      cycleIncentivizerAddress: "0x6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b",
       currentCycle: 16,
       cycleEndTime: "2025-09-05T12:00:00Z",
       proposals: 36,
@@ -933,7 +936,8 @@ export const MOCK_PROJECTS = [
     },
     daoData: {
       totalVotingPower: 45000000,
-      contractAddress: "0x4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f",
+      governorAddress: "0x4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f",
+      cycleIncentivizerAddress: "0x2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b",
       currentCycle: 18,
       cycleEndTime: "2025-08-28T16:00:00Z",
       proposals: 56,

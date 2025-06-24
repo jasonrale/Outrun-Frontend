@@ -155,8 +155,8 @@ export function DAOTab({ project }: DAOTabProps) {
               DAO Overview
             </h3>
             <div className="text-center">
-              <span className="text-pink-300 mr-2">Contract Address:</span>
-              <span className="font-mono text-white/90">{daoData.contractAddress}</span>
+              <span className="text-pink-300 mr-2">Governor:</span>
+              <span className="font-mono text-white/90">{daoData.governorAddress}</span>
             </div>
             <div className="absolute right-0 flex items-center gap-2">
               <span className="text-pink-300">Live in:</span>
@@ -173,11 +173,32 @@ export function DAOTab({ project }: DAOTabProps) {
               DAO Overview
             </h3>
             <div className="text-center">
-              <span className="text-pink-300 mr-2">Contract:</span>
-              <span className="font-mono text-white/90 text-sm">
-                {daoData.contractAddress.substring(0, 10)}...
-                {daoData.contractAddress.substring(daoData.contractAddress.length - 8)}
-              </span>
+              <div className="flex items-center justify-center gap-1">
+                <span className="text-pink-300">Governor:</span>
+                <span className="font-mono text-white/90 text-sm">
+                  {daoData.governorAddress.substring(0, 10)}...
+                  {daoData.governorAddress.substring(daoData.governorAddress.length - 8)}
+                </span>
+                <button
+                  onClick={() => navigator.clipboard.writeText(daoData.governorAddress)}
+                  className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
+                  title="Copy contract address"
+                >
+                  <svg
+                    className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div className="flex items-center justify-center gap-2">
               <span className="text-pink-300">Live in:</span>
@@ -226,49 +247,135 @@ export function DAOTab({ project }: DAOTabProps) {
 
       {/* Current Cycle Incentive Card */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
-            Current Cycle Incentive
-          </h3>
-          <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-600 text-white font-medium text-sm hover:from-pink-400 hover:via-purple-400 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/25">
-            <div className="flex items-center">
-              <div className="flex items-center mr-1">
-                <svg
-                  className="w-4 h-4 text-gray-200 animate-arrow-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-                <svg
-                  className="w-4 h-4 -ml-2 text-gray-200 animate-arrow-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-                <svg
-                  className="w-4 h-4 -ml-2 text-gray-200 animate-arrow-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-              <span>Finalize</span>
-              <InfoTooltip
-                content="End the current cycle and start the next cycle."
-                position="top"
-                iconSize={14}
-                width={175}
-                iconClassName="text-white/80 hover:text-white ml-1"
-              />
+        {/* 头部布局 - 响应式设计 */}
+        <div className="mb-4">
+          {/* 桌面端布局 */}
+          <div className="hidden lg:flex items-center justify-center relative">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent absolute left-0">
+              Current Cycle Incentive
+            </h3>
+            <div className="text-center">
+              <span className="text-pink-300 mr-2">Incentivizer:</span>
+              <span className="font-mono text-white/90">{daoData.cycleIncentivizerAddress}</span>
             </div>
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-pink-600/30 via-purple-600/30 to-blue-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-overlay pointer-events-none"></div>
-          </button>
+            <div className="absolute right-0">
+              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-600 text-white font-medium text-sm hover:from-pink-400 hover:via-purple-400 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/25">
+                <div className="flex items-center">
+                  <div className="flex items-center mr-1">
+                    <svg
+                      className="w-4 h-4 text-gray-200 animate-arrow-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <svg
+                      className="w-4 h-4 -ml-2 text-gray-200 animate-arrow-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <svg
+                      className="w-4 h-4 -ml-2 text-gray-200 animate-arrow-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  <span>Finalize</span>
+                  <InfoTooltip
+                    content="End the current cycle and start the next cycle."
+                    position="top"
+                    iconSize={14}
+                    width={175}
+                    iconClassName="text-white/80 hover:text-white ml-1"
+                  />
+                </div>
+                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-pink-600/30 via-purple-600/30 to-blue-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-overlay pointer-events-none"></div>
+              </button>
+            </div>
+          </div>
+
+          {/* 移动端布局 */}
+          <div className="lg:hidden space-y-3">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent text-center">
+              Current Cycle Incentive
+            </h3>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1">
+                <span className="text-pink-300">Incentivizer:</span>
+                <span className="font-mono text-white/90 text-sm">
+                  {daoData.cycleIncentivizerAddress.substring(0, 10)}...
+                  {daoData.cycleIncentivizerAddress.substring(daoData.cycleIncentivizerAddress.length - 8)}
+                </span>
+                <button
+                  onClick={() => navigator.clipboard.writeText(daoData.cycleIncentivizerAddress)}
+                  className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
+                  title="Copy contract address"
+                >
+                  <svg
+                    className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-600 text-white font-medium text-sm hover:from-pink-400 hover:via-purple-400 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/25">
+                <div className="flex items-center">
+                  <div className="flex items-center mr-1">
+                    <svg
+                      className="w-4 h-4 text-gray-200 animate-arrow-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <svg
+                      className="w-4 h-4 -ml-2 text-gray-200 animate-arrow-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <svg
+                      className="w-4 h-4 -ml-2 text-gray-200 animate-arrow-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  <span>Finalize</span>
+                  <InfoTooltip
+                    content="End the current cycle and start the next cycle."
+                    position="top"
+                    iconSize={14}
+                    width={175}
+                    iconClassName="text-white/80 hover:text-white ml-1"
+                  />
+                </div>
+                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-pink-600/30 via-purple-600/30 to-blue-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-overlay pointer-events-none"></div>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
