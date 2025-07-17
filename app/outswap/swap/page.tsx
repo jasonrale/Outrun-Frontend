@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { EnhancedSwapInterface } from "@/components/enhanced-swap-interface"
+import { EnhancedSwapInterface } from "@/components/outswap/enhanced-swap-interface"
 
 export default function SwapPage() {
   return (

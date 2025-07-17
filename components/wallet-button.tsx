@@ -58,7 +58,7 @@ export function WalletButton({ isMobile = false }: WalletButtonProps) {
         disabled={isConnecting}
       >
         <span
-          className={`relative z-10 font-medium tracking-wide text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] w-full text-center inline-flex items-center justify-center text-[10px]`}
+          className={`relative z-10 font-medium tracking-wide text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] w-full text-center inline-flex items-center justify-center text-[11px]`}
         >
           {isConnecting ? (
             <>

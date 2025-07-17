@@ -11,10 +11,8 @@ interface LiquidityTabProps {
 export function LiquidityTab({ project }: LiquidityTabProps) {
   const [activeTab, setActiveTab] = useState("token")
 
-  // 使用项目中的liquidityData
   const { liquidityData } = project
 
-  // 如果没有liquidityData，显示空状态
   if (!liquidityData) {
     return (
       <div className="flex items-center justify-center h-64 bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40">
@@ -25,7 +23,6 @@ export function LiquidityTab({ project }: LiquidityTabProps) {
     )
   }
 
-  // 获取对应的流动性池数据
   const getActivePools = () => {
     switch (activeTab) {
       case "pol":
@@ -39,7 +36,6 @@ export function LiquidityTab({ project }: LiquidityTabProps) {
 
   const liquidityPools = getActivePools()
 
-  // 计算总体流动性增长率
   const totalTVL = liquidityPools.reduce((sum, pool) => sum + pool.tvl, 0)
   const totalTVLPrevWeek = liquidityPools.reduce((sum, pool) => sum + pool.tvlPrevWeek, 0)
   const overallGrowthRate = totalTVLPrevWeek > 0 ? ((totalTVL - totalTVLPrevWeek) / totalTVLPrevWeek) * 100 : 0
@@ -110,7 +106,7 @@ export function LiquidityTab({ project }: LiquidityTabProps) {
       {/* Liquidity pools list */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
         <div className="mb-4">
-          <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+          <h3 className="inline-block text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
             Liquidity Pools
           </h3>
         </div>

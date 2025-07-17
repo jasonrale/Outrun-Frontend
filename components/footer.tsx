@@ -4,8 +4,8 @@ export function Footer() {
   return (
     <footer className="border-t border-white/10 bg-black/40 backdrop-blur-lg">
       <div className="container mx-auto px-4 md:px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
-          <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-9 gap-12 md:gap-12">
+          <div className="space-y-6 md:col-span-3">
             <div className="flex items-center gap-3">
               <div className="relative h-10 w-10">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 blur-sm opacity-70" />
@@ -18,7 +18,7 @@ export function Footer() {
               </span>
             </div>
 
-            <p className="text-zinc-400 leading-relaxed">
+            <p className="text-zinc-400 leading-relaxed max-w-xs">
               Pioneer the next generation of DeFi and Web3 industries and driving the real-world adoption.
             </p>
 
@@ -91,7 +91,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <h3 className="text-lg font-semibold text-white mb-6">Products</h3>
             <ul className="space-y-4">
               <li>
@@ -117,7 +117,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <h3 className="text-lg font-semibold text-white mb-6">Resources</h3>
             <ul className="space-y-4">
               <li>
@@ -141,7 +141,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <h3 className="text-lg font-semibold text-white mb-6">Company</h3>
             <ul className="space-y-4">
               <li>

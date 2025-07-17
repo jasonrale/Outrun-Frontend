@@ -73,7 +73,7 @@ export function DAOTab({ project }: DAOTabProps) {
     } else if (typeof endTime === "string") {
       return new Date(endTime)
     } else {
-      // 如果都不是，返回一个默认的未来时间
+      // 如果都不�����������一个默认的未来时间
       return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
     }
   }, [daoData.cycleEndTime])
@@ -168,39 +168,39 @@ export function DAOTab({ project }: DAOTabProps) {
           </div>
 
           {/* 移动端布局 */}
-          <div className="lg:hidden space-y-3">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent text-center">
+          <div className="lg:hidden flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent flex-shrink-0">
               DAO Overview
             </h3>
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-pink-300">Governor:</span>
-                <span className="font-mono text-white/90 text-sm">
-                  {daoData.governorAddress.substring(0, 10)}...
-                  {daoData.governorAddress.substring(daoData.governorAddress.length - 8)}
-                </span>
-                <button
-                  onClick={() => navigator.clipboard.writeText(daoData.governorAddress)}
-                  className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
-                  title="Copy contract address"
+            <div className="flex items-center justify-center gap-1 flex-shrink-0">
+              <span className="text-pink-300">Governor:</span>
+              <span className="font-mono text-white/90 text-base">
+                {" "}
+                {/* Changed text-sm to text-base */}
+                {daoData.governorAddress.substring(0, 10)}...
+                {daoData.governorAddress.substring(daoData.governorAddress.length - 8)}
+              </span>
+              <button
+                onClick={() => navigator.clipboard.writeText(daoData.governorAddress)}
+                className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
+                title="Copy contract address"
+              >
+                <svg
+                  className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg
-                    className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
-                </button>
-              </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+              </button>
             </div>
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-pink-300">Live in:</span>
               <div className="flex items-center gap-1">
                 <img src="/networks/ethereum.svg" alt="Ethereum" className="w-5 h-5" />
@@ -222,7 +222,9 @@ export function DAOTab({ project }: DAOTabProps) {
             <div className="text-sm text-pink-300/80 mb-1">Proposals</div>
             <div className="text-xl font-bold text-white flex items-baseline gap-2 flex-wrap">
               {daoData.proposals}
-              <span className="text-sm text-pink-300/80 font-normal">({daoData.activeProposals} active)</span>
+              {daoData.activeProposals > 0 && (
+                <span className="text-sm text-blue-500 font-normal">({daoData.activeProposals} active)</span>
+              )}
             </div>
           </div>
 
@@ -259,7 +261,7 @@ export function DAOTab({ project }: DAOTabProps) {
               <span className="font-mono text-white/90">{daoData.cycleIncentivizerAddress}</span>
             </div>
             <div className="absolute right-0">
-              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-600 text-white font-medium text-sm hover:from-pink-400 hover:via-purple-400 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/25">
+              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-600 text-white font-medium text-sm hover:from-pink-400 hover:via-purple-400 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/25">
                 <div className="flex items-center">
                   <div className="flex items-center mr-1">
                     <svg
@@ -292,7 +294,7 @@ export function DAOTab({ project }: DAOTabProps) {
                     content="End the current cycle and start the next cycle."
                     position="top"
                     iconSize={14}
-                    width={175}
+                    width={170}
                     iconClassName="text-white/80 hover:text-white ml-1"
                   />
                 </div>
@@ -302,40 +304,40 @@ export function DAOTab({ project }: DAOTabProps) {
           </div>
 
           {/* 移动端布局 */}
-          <div className="lg:hidden space-y-3">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent text-center">
+          <div className="lg:hidden flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent flex-shrink-0">
               Current Cycle Incentive
             </h3>
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-pink-300">Incentivizer:</span>
-                <span className="font-mono text-white/90 text-sm">
-                  {daoData.cycleIncentivizerAddress.substring(0, 10)}...
-                  {daoData.cycleIncentivizerAddress.substring(daoData.cycleIncentivizerAddress.length - 8)}
-                </span>
-                <button
-                  onClick={() => navigator.clipboard.writeText(daoData.cycleIncentivizerAddress)}
-                  className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
-                  title="Copy contract address"
+            <div className="flex items-center justify-center gap-1 flex-shrink-0">
+              <span className="text-pink-300">Incentivizer:</span>
+              <span className="font-mono text-white/90 text-base">
+                {" "}
+                {/* Changed text-sm to text-base */}
+                {daoData.cycleIncentivizerAddress.substring(0, 10)}...
+                {daoData.cycleIncentivizerAddress.substring(daoData.cycleIncentivizerAddress.length - 8)}
+              </span>
+              <button
+                onClick={() => navigator.clipboard.writeText(daoData.cycleIncentivizerAddress)}
+                className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
+                title="Copy contract address"
+              >
+                <svg
+                  className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg
-                    className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
-                </button>
-              </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+              </button>
             </div>
-            <div className="flex justify-center">
-              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-600 text-white font-medium text-sm hover:from-pink-400 hover:via-purple-400 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/25">
+            <div className="flex-shrink-0">
+              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-600 text-white font-medium text-sm hover:from-pink-400 hover:via-purple-400 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/25">
                 <div className="flex items-center">
                   <div className="flex items-center mr-1">
                     <svg
@@ -368,7 +370,7 @@ export function DAOTab({ project }: DAOTabProps) {
                     content="End the current cycle and start the next cycle."
                     position="top"
                     iconSize={14}
-                    width={175}
+                    width={170}
                     iconClassName="text-white/80 hover:text-white ml-1"
                   />
                 </div>
@@ -475,7 +477,7 @@ export function DAOTab({ project }: DAOTabProps) {
       {/* Last Cycle Incentive Card */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
         <div className="mb-4">
-          <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+          <h3 className="inline-block text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
             Last Cycle Incentive
           </h3>
         </div>
@@ -589,10 +591,10 @@ export function DAOTab({ project }: DAOTabProps) {
             <div className="flex items-center gap-1 mb-1">
               <span className="text-sm text-pink-300/80">Your Rewards Claimable</span>
               <InfoTooltip
-                content="After the current cycle ends, unclaimed rewards from the previous cycle will be added to the treasury balance of the current cycle. Please claim your rewards before the current cycle ends."
+                content="After the current cycle ends, unclaimed rewards from the previous cycle will be added to the current cycle's treasury balance. Please claim your rewards before the current cycle ends."
                 position="top"
                 iconSize={15}
-                width={350}
+                width={338}
                 iconClassName="text-pink-300/80 hover:text-pink-300"
               />
             </div>
@@ -600,7 +602,7 @@ export function DAOTab({ project }: DAOTabProps) {
               <div className="text-xl font-bold text-white">${daoData.lastCycleClaimableReward.toLocaleString()}</div>
               <button
                 onClick={() => handleArrowClick("reward-claimable")}
-                className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium text-sm hover:from-purple-500 hover:to-pink-500 transition-all duration-300 whitespace-nowrap"
+                className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium text-sm hover:from-purple-500 hover:to-pink-500 transition-all duration-300 whitespace-nowrap"
               >
                 Claim Rewards
               </button>

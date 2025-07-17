@@ -5,26 +5,11 @@ import React from "react"
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { motion } from "framer-motion"
 import { TrendingUp, TrendingDown, Copy } from "lucide-react"
+import { SimpleTooltip } from "@/components/ui/universal-tooltip"
 
 interface MemeversePriceChartProps {
   project: any
 }
-
-// Custom tooltip component that can overflow container boundaries
-const CustomTooltip = React.memo(({ trigger, content }: { trigger: React.ReactNode; content: React.ReactNode }) => {
-  return (
-    <div className="relative group">
-      {trigger}
-      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-        <div className="bg-gradient-to-r from-purple-900/90 to-pink-900/90 backdrop-blur-sm text-pink-200 px-3 py-1.5 rounded-md whitespace-nowrap shadow-[0_0_8px_rgba(168,85,247,0.3)] border border-pink-500/20">
-          {content}
-        </div>
-      </div>
-    </div>
-  )
-})
-
-CustomTooltip.displayName = "CustomTooltip"
 
 export const MemeversePriceChart = React.memo(({ project }: MemeversePriceChartProps) => {
   const [chartData, setChartData] = useState<any[]>([])
@@ -168,51 +153,38 @@ export const MemeversePriceChart = React.memo(({ project }: MemeversePriceChartP
               </h3>
               <div className="flex flex-wrap gap-2 text-xs">
                 {/* 保持原有的统计信息卡片 */}
-                <CustomTooltip
-                  trigger={
-                    <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px] cursor-help">
-                      <span className="text-pink-300 font-medium">MC: </span>
-                      <span className="text-white">${formatLargeNumber(project.marketCap || 0)}</span>
-                    </div>
-                  }
+                <SimpleTooltip
                   content={<span>Market Cap: ${project.marketCap ? project.marketCap.toLocaleString() : "0"}</span>}
-                />
-                <CustomTooltip
-                  trigger={
-                    <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px] cursor-help">
-                      <span className="text-pink-300 font-medium">Liq: </span>
-                      <span className="text-white">${formatLargeNumber(liquidity)}</span>
-                    </div>
-                  }
-                  content={<span>Liquidity: ${liquidity.toLocaleString()}</span>}
-                />
-                <CustomTooltip
-                  trigger={
-                    <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px] cursor-help">
-                      <span className="text-pink-300 font-medium">Vol: </span>
-                      <span className="text-white">${formatLargeNumber(volume)}</span>
-                    </div>
-                  }
-                  content={<span>Volume: ${volume.toLocaleString()}</span>}
-                />
-                <CustomTooltip
-                  trigger={
-                    <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px] cursor-help">
-                      <span className="text-pink-300 font-medium">Pop: </span>
-                      <span className="text-white">{formatLargeNumber(project.population || 1000000000)}</span>
-                    </div>
-                  }
-                  content={<span>Population: {(project.population || 1000000000).toLocaleString()}</span>}
-                />
-                <CustomTooltip
-                  trigger={
-                    <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px] cursor-help">
-                      <span className="text-pink-300 font-medium">TS: </span>
-                      <span className="text-white">{formatLargeNumber(totalSupply)}</span>
-                    </div>
-                  }
-                  content={<span>Total Supply: {totalSupply.toLocaleString()}</span>}
-                />
+                >
+                  <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px]">
+                    <span className="text-pink-300 font-medium">MC: </span>
+                    <span className="text-white">${formatLargeNumber(project.marketCap || 0)}</span>
+                  </div>
+                </SimpleTooltip>
+                <SimpleTooltip content={<span>Liquidity: ${liquidity.toLocaleString()}</span>}>
+                  <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px]">
+                    <span className="text-pink-300 font-medium">Liq: </span>
+                    <span className="text-white">${formatLargeNumber(liquidity)}</span>
+                  </div>
+                </SimpleTooltip>
+                <SimpleTooltip content={<span>Volume: ${volume.toLocaleString()}</span>}>
+                  <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px]">
+                    <span className="text-pink-300 font-medium">Vol: </span>
+                    <span className="text-white">${formatLargeNumber(volume)}</span>
+                  </div>
+                </SimpleTooltip>
+                <SimpleTooltip content={<span>Population: {(project.population || 1000000000).toLocaleString()}</span>}>
+                  <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px]">
+                    <span className="text-pink-300 font-medium">Pop: </span>
+                    <span className="text-white">{formatLargeNumber(project.population || 1000000000)}</span>
+                  </div>
+                </SimpleTooltip>
+                <SimpleTooltip content={<span>Total Supply: {totalSupply.toLocaleString()}</span>}>
+                  <div className="px-2 py-1 bg-purple-900/30 rounded-md w-[100px]">
+                    <span className="text-pink-300 font-medium">TS: </span>
+                    <span className="text-white">{formatLargeNumber(totalSupply)}</span>
+                  </div>
+                </SimpleTooltip>
               </div>
             </div>
             <div className="flex items-center justify-between gap-4">
@@ -261,51 +233,38 @@ export const MemeversePriceChart = React.memo(({ project }: MemeversePriceChartP
           <div className="lg:hidden">
             {/* 统计信息卡片在顶部 */}
             <div className="flex flex-wrap gap-1.5 text-xs mb-3">
-              <CustomTooltip
-                trigger={
-                  <div className="px-2 py-1 bg-purple-900/30 rounded-md cursor-help">
-                    <span className="text-pink-300 font-medium">MC: </span>
-                    <span className="text-white">${formatLargeNumber(project.marketCap || 0)}</span>
-                  </div>
-                }
+              <SimpleTooltip
                 content={<span>Market Cap: ${project.marketCap ? project.marketCap.toLocaleString() : "0"}</span>}
-              />
-              <CustomTooltip
-                trigger={
-                  <div className="px-2 py-1 bg-purple-900/30 rounded-md cursor-help">
-                    <span className="text-pink-300 font-medium">Liq: </span>
-                    <span className="text-white">${formatLargeNumber(liquidity)}</span>
-                  </div>
-                }
-                content={<span>Liquidity: ${liquidity.toLocaleString()}</span>}
-              />
-              <CustomTooltip
-                trigger={
-                  <div className="px-2 py-1 bg-purple-900/30 rounded-md cursor-help">
-                    <span className="text-pink-300 font-medium">Vol: </span>
-                    <span className="text-white">${formatLargeNumber(volume)}</span>
-                  </div>
-                }
-                content={<span>Volume: ${volume.toLocaleString()}</span>}
-              />
-              <CustomTooltip
-                trigger={
-                  <div className="px-2 py-1 bg-purple-900/30 rounded-md cursor-help">
-                    <span className="text-pink-300 font-medium">Pop: </span>
-                    <span className="text-white">{formatLargeNumber(project.population || 1000000000)}</span>
-                  </div>
-                }
-                content={<span>Population: {(project.population || 1000000000).toLocaleString()}</span>}
-              />
-              <CustomTooltip
-                trigger={
-                  <div className="px-2 py-1 bg-purple-900/30 rounded-md cursor-help">
-                    <span className="text-pink-300 font-medium">TS: </span>
-                    <span className="text-white">{formatLargeNumber(totalSupply)}</span>
-                  </div>
-                }
-                content={<span>Total Supply: ${totalSupply.toLocaleString()}</span>}
-              />
+              >
+                <div className="px-2 py-1 bg-purple-900/30 rounded-md">
+                  <span className="text-pink-300 font-medium">MC: </span>
+                  <span className="text-white">${formatLargeNumber(project.marketCap || 0)}</span>
+                </div>
+              </SimpleTooltip>
+              <SimpleTooltip content={<span>Liquidity: ${liquidity.toLocaleString()}</span>}>
+                <div className="px-2 py-1 bg-purple-900/30 rounded-md">
+                  <span className="text-pink-300 font-medium">Liq: </span>
+                  <span className="text-white">${formatLargeNumber(liquidity)}</span>
+                </div>
+              </SimpleTooltip>
+              <SimpleTooltip content={<span>Volume: ${volume.toLocaleString()}</span>}>
+                <div className="px-2 py-1 bg-purple-900/30 rounded-md">
+                  <span className="text-pink-300 font-medium">Vol: </span>
+                  <span className="text-white">${formatLargeNumber(volume)}</span>
+                </div>
+              </SimpleTooltip>
+              <SimpleTooltip content={<span>Population: {(project.population || 1000000000).toLocaleString()}</span>}>
+                <div className="px-2 py-1 bg-purple-900/30 rounded-md">
+                  <span className="text-pink-300 font-medium">Pop: </span>
+                  <span className="text-white">{formatLargeNumber(project.population || 1000000000)}</span>
+                </div>
+              </SimpleTooltip>
+              <SimpleTooltip content={<span>Total Supply: ${totalSupply.toLocaleString()}</span>}>
+                <div className="px-2 py-1 bg-purple-900/30 rounded-md">
+                  <span className="text-pink-300 font-medium">TS: </span>
+                  <span className="text-white">{formatLargeNumber(totalSupply)}</span>
+                </div>
+              </SimpleTooltip>
               <div className="flex items-center gap-1 px-2 py-1 bg-purple-900/30 rounded-md">
                 <span className="text-pink-300 font-medium">CA:</span>
                 <span className="text-white font-medium text-xs">{formatContractAddress(contractAddress)}</span>
@@ -319,7 +278,7 @@ export const MemeversePriceChart = React.memo(({ project }: MemeversePriceChartP
               </div>
             </div>
 
-            {/* 代币Symbol + 价格 + 涨跌幅，在小屏幕下周期选择器移到下一行 */}
+            {/* 币Symbol + 价格 + 涨跌幅，在小屏幕下周期选择器移到下一行 */}
             <div>
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1 flex-1 min-w-0">

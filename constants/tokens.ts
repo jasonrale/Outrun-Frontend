@@ -9,6 +9,8 @@ export const TOKEN_ICONS: Record<string, string> = {
   DAI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png",
   BTC: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png",
   WBTC: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599/logo.png",
+  sUSDe: "/outstake/tokens/sUSDe.svg",
+  wstETH: "/outstake/tokens/wstETH.svg", // 新增 wstETH 图标路径
 }
 
 // Background colors for fallback display
@@ -20,6 +22,8 @@ export const TOKEN_COLORS: Record<string, string> = {
   DAI: "#F5AC37",
   BTC: "#F7931A",
   WBTC: "#F7931A",
+  sUSDe: "#A855F7",
+  wstETH: "#00A3FF", // 新增 wstETH 颜色
 }
 
 // Define common token list

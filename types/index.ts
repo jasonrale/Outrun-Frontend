@@ -1,5 +1,4 @@
 import type React from "react"
-// 通用类型定义
 
 export type Token = {
   symbol: string
@@ -161,7 +160,6 @@ export type GeometricShapesProps = {
   className?: string
 }
 
-// 推荐返佣相关类型
 export interface ReferralStats {
   totalEarned: string
   pendingRewards: string

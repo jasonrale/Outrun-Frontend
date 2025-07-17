@@ -2,8 +2,7 @@
 
 import { formatMarketCap } from "@/utils/format"
 import { useMemo, useCallback } from "react"
-// 更新入路径
-import { ChainTooltip } from "@/components/memeverse/common/chain-tooltip"
+import { ChainTooltip } from "@/components/ui/universal-tooltip"
 import React from "react"
 
 interface ProjectDetailsProps {

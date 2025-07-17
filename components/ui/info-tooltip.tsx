@@ -124,6 +124,10 @@ export function InfoTooltip({
     setIsVisible(true)
   }, [])
 
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+  }, [])
+
   const handleMouseLeave = useCallback(() => {
     hideTimeoutRef.current = setTimeout(() => setIsVisible(false), 300)
   }, [])
@@ -229,6 +233,7 @@ export function InfoTooltip({
       onMouseLeave={handleMouseLeave}
       onFocus={handleMouseEnter}
       onBlur={handleMouseLeave}
+      onClick={handleClick}
     >
       <Info
         size={iconSize}
@@ -246,6 +251,7 @@ export function InfoTooltip({
             className="transition-opacity duration-200"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
           >
             <div className="relative p-2 text-xs text-zinc-300 rounded-lg bg-[#1a0445]/95 backdrop-blur-sm border border-pink-500/20 shadow-[0_0_10px_rgba(236,72,153,0.2)] whitespace-normal break-words">
               {processedContent}

@@ -159,7 +159,7 @@ export const MOCK_PROJECTS = [
     marketCap: 225000,
     progress: 19.5,
     genesisEndTime: "2025-06-28T16:00:00Z",
-    unlockTime: "2025-03-02T16:00:00Z", // 设置为genesisEndTime后226天
+    unlockTime: "2025-03-02T16:00:00Z", // 设置���genesisEndTime后226天
     createdAt: "2025-05-25T10:30:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
@@ -179,7 +179,7 @@ export const MOCK_PROJECTS = [
     marketCap: 175000,
     progress: 16.8,
     genesisEndTime: "2025-07-01T14:30:00Z",
-    unlockTime: "2025-03-22T14:30:00Z", // 设置为genesisEndTime后240天
+    unlockTime: "2025-03-22T14:30:00Z", // 设置为genesisEndTime�����240天
     createdAt: "2025-05-28T09:45:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
@@ -425,7 +425,7 @@ export const MOCK_PROJECTS = [
     marketCap: 250000,
     progress: 25.0,
     genesisEndTime: "2025-06-05T12:00:00Z",
-    unlockTime: "2025-01-27T12:00:00Z", // 修改为genesisEndTime后226天
+    unlockTime: "2025-01-27T12:00:00Z", // 修���为genesisEndTime后226天
     createdAt: "2025-05-01T12:00:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },

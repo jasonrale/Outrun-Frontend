@@ -67,7 +67,7 @@ export function NetworkSelectorModal({
             }}
           ></div>
 
-          {/* 底部发光效果 */}
+          {/* 底部���光���果 */}
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-purple-600/5 to-transparent"></div>
 
           <div className="relative z-10">

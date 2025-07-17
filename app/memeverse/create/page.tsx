@@ -435,7 +435,7 @@ export default function CreateMemecoinPage() {
       <div className="container px-4 md:px-6 mx-auto pt-24 md:pt-24 pb-8 md:pb-16">
         <div className="max-w-3xl mx-auto mb-6 md:mb-10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-0">
           {/* Back button - 使用条件渲染为PC和移动端提供不同的按钮 */}
-          {/* PC端按钮 - 只在md及以上屏幕显示 */}
+          {/* PC���按钮 - 只在md及以上屏幕显示 */}
           <Button
             onClick={handleBackClick}
             variant="outline"
@@ -454,7 +454,7 @@ export default function CreateMemecoinPage() {
               }}
             ></span>
 
-            {/* 按钮内容 */}
+            {/* ���钮�����容 */}
             <div className="flex items-center relative z-10">
               <ChevronLeft className="mr-1 h-4 w-4 text-pink-300 group-hover:text-pink-200 transition-colors duration-500" />
               <span className="text-pink-300 group-hover:text-pink-200 transition-colors duration-500 font-medium">
@@ -463,7 +463,7 @@ export default function CreateMemecoinPage() {
             </div>
           </Button>
 
-          {/* 移动端按钮 - 只在小于md的屏幕显示 */}
+          {/* 移动端按钮 - 只在���于md的屏幕显示 */}
           <button
             onClick={handleBackClick}
             type="button"

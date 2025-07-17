@@ -47,8 +47,7 @@ export default function MemeversePage() {
                 </h1>
 
                 <p className="text-xl md:text-2xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
-                  A disruptive innovation platform for Memecoin launch, staking and DAO governance, built around the
-                  'sustainability' ethos and based on the FFLaunch philosophy.
+                  A disruptive innovation platform for Consensus Launch, Staking and DAO governance, built around the sustainability ethos and based on the FFLaunch philosophy.
                 </p>
               </motion.div>
 

@@ -6,6 +6,7 @@ import { TokenIcon } from "@/components/ui/token-icon"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { useNetwork } from "@/contexts/network-context"
 import { USER_BALANCES } from "@/data/memeverse-projects"
+import { formatMarketCap } from "@/utils/format" // Import formatMarketCap
 
 interface YieldVaultTabProps {
   project: any
@@ -65,39 +66,37 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
           </div>
 
           {/* 移动端布局 */}
-          <div className="lg:hidden space-y-3">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent text-center">
+          <div className="lg:hidden flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent flex-shrink-0">
               Yield Vault Overview
             </h3>
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-pink-300">Contract:</span>
-                <span className="font-mono text-white/90 text-sm">
-                  {vaultData.contractAddress.substring(0, 10)}...
-                  {vaultData.contractAddress.substring(vaultData.contractAddress.length - 8)}
-                </span>
-                <button
-                  onClick={() => navigator.clipboard.writeText(vaultData.contractAddress)}
-                  className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
-                  title="Copy contract address"
+            <div className="flex items-center justify-center gap-1 flex-shrink-0">
+              <span className="text-pink-300">Contract:</span>
+              <span className="font-mono text-white/90 text-base">
+                {vaultData.contractAddress.substring(0, 10)}...
+                {vaultData.contractAddress.substring(vaultData.contractAddress.length - 8)}
+              </span>
+              <button
+                onClick={() => navigator.clipboard.writeText(vaultData.contractAddress)}
+                className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
+                title="Copy contract address"
+              >
+                <svg
+                  className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg
-                    className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
-                </button>
-              </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+              </button>
             </div>
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-pink-300">Live in:</span>
               <div className="flex items-center gap-1">
                 <img
@@ -111,19 +110,19 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-[1.9fr_2.1fr_1fr] gap-4">
           <div className="bg-black/40 rounded-lg border border-purple-500/30 p-4">
             <div className="text-sm text-pink-300/80 mb-1">Total Staked</div>
             <div className="flex items-center gap-2">
               <div className="text-lg font-bold text-white">
-                {vaultData.totalStaked.toLocaleString()}
+                {formatMarketCap(vaultData.totalStaked)}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
                   {" "}
                   {project.symbol}
                 </span>
               </div>
               <div className="text-sm text-pink-300/80">
-                ~ ${(vaultData.totalStaked * vaultData.tokenPrice).toLocaleString()}
+                ~ ${formatMarketCap(vaultData.totalStaked * vaultData.tokenPrice)}
               </div>
             </div>
           </div>
@@ -214,7 +213,7 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
                 <input
                   type="text"
                   value={stakeAmount}
-                  onChange={(e) => setStakeAmount(e.target.value.replace(/[^0-9.]/g, ""))}
+                  onChange={(e) => e.target.value.replace(/[^0-9.]/g, "")}
                   placeholder="0.00"
                   className="w-full bg-transparent text-2xl font-medium text-white outline-none"
                 />

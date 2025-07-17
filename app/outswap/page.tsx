@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { SectionHeading } from "@/components/ui/section-heading"
 import { FeatureCard } from "@/components/ui/feature-card"
-import { EnhancedSwapInterface } from "@/components/enhanced-swap-interface"
+import { EnhancedSwapInterface } from "@/components/outswap/enhanced-swap-interface"
 
 export default function OutSwapPage() {
   const { scrollYProgress } = useScroll()

@@ -3,12 +3,10 @@
 import type React from "react"
 import { useRouter } from "next/navigation"
 import { Star } from "lucide-react"
-// 更新导入路径
-import { ChainTooltip } from "@/components/memeverse/common/chain-tooltip"
+import { ChainTooltip } from "@/components/ui/universal-tooltip"
 import type { MemeProject, StageColorMap } from "@/types/memeverse"
 import { formatDateTime, formatMarketCap, formatUSD } from "@/utils/memeverse"
 
-// 最小总筹资金额
 const MIN_TOTAL_FUND = 10
 
 // Stage label color mapping

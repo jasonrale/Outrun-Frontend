@@ -29,7 +29,7 @@ export function RefundSection({ totalRefundAmount, userRefundAmount, refundToken
     }, 2000)
   }
 
-  // 更精细的响应式布局控制
+  // 更精细���响应���布局控制
   const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">("desktop")
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export function RefundSection({ totalRefundAmount, userRefundAmount, refundToken
 
   return (
     <div className="w-full lg:w-1/4 flex-shrink-0 deposit-section-container" style={{ overflow: "visible" }}>
-      {/* 主容器 - 创建一个新的堆叠上下文 */}
+      {/* 主��器 - 创建一个新的堆叠上���文 */}
       <div
         className="bg-[#0f0326]/90 rounded-lg border border-purple-500/40 flex flex-col shadow-[0_4px_20px_-4px_rgba(168,85,247,0.25)]"
         style={{

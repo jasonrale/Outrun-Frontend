@@ -65,7 +65,7 @@ export function GradientBackgroundCard({
   border = false,
   borderColor = "rgba(236,72,153,0.3)",
 
-  // 阴影选项
+  // 阴影���项
   shadow = false,
   shadowColor = "rgba(236,72,153,0.4)",
 

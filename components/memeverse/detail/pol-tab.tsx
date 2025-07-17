@@ -226,37 +226,35 @@ export function POLTab({ project }: POLTabProps) {
           </div>
 
           {/* 移动端布局 */}
-          <div className="lg:hidden space-y-3">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent text-center">
+          <div className="lg:hidden flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent flex-shrink-0">
               POL Overview
             </h3>
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-pink-300">Contract:</span>
-                <span className="font-mono text-white/90 text-sm">
-                  {polData.contractAddress.substring(0, 10)}...
-                  {polData.contractAddress.substring(polData.contractAddress.length - 8)}
-                </span>
-                <button
-                  onClick={() => navigator.clipboard.writeText(polData.contractAddress)}
-                  className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
-                  title="Copy contract address"
+            <div className="flex items-center justify-center gap-1 flex-shrink-0">
+              <span className="text-pink-300">Contract:</span>
+              <span className="font-mono text-white/90 text-base">
+                {polData.contractAddress.substring(0, 10)}...
+                {polData.contractAddress.substring(polData.contractAddress.length - 8)}
+              </span>
+              <button
+                onClick={() => navigator.clipboard.writeText(polData.contractAddress)}
+                className="p-1 hover:bg-white/10 rounded transition-colors duration-200 group"
+                title="Copy contract address"
+              >
+                <svg
+                  className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg
-                    className="w-4 h-4 text-pink-300/60 group-hover:text-pink-300 transition-colors duration-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
-                </button>
-              </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -276,6 +274,7 @@ export function POLTab({ project }: POLTabProps) {
                 className="ml-1"
                 iconSize={15}
                 iconClassName="text-pink-300/80 hover:text-pink-300"
+                maxWidth={212}
               />
             </div>
             <div className="text-lg font-bold text-white">${(polData.polPrice * 1.25).toFixed(4)}</div>

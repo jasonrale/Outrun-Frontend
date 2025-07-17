@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, Info, TrendingUp, DollarSign } from "lucide-react"
 
-// Import components
 import { ProjectDetails } from "@/components/memeverse/detail/project-details"
 import { DepositSection } from "@/components/memeverse/detail/deposit-section"
 import { RefundSection } from "@/components/memeverse/detail/refund-section"
@@ -21,9 +20,8 @@ import { DAOTab } from "@/components/memeverse/detail/dao-tab"
 import { MemeversePriceChart } from "@/components/memeverse/detail/memeverse-price-chart"
 import { CompactSwapInterface } from "@/components/memeverse/detail/compact-swap-interface"
 import { formatMarketCap } from "@/utils/format"
-import { ChainTooltip } from "@/components/memeverse/common/chain-tooltip"
+import { ChainTooltip } from "@/components/ui/universal-tooltip"
 
-// 修改Stage颜色映射，使用更加统一的渐变和阴影效果
 const STAGE_COLORS: Record<string, { bg: string; text: string; glow: string; gradient: string }> = {
   Genesis: {
     bg: "bg-purple-600",
@@ -81,10 +79,10 @@ const getTabsForStage = (stage: string) => {
 
 // 确保所有项目都有社交媒体链接
 const DEFAULT_SOCIAL_LINKS = {
-  website: "https://outrun.network",
-  x: "https://x.com/outrunnetwork",
-  telegram: "https://t.me/outrunnetwork",
-  discord: "https://discord.gg/outrun",
+  website: "https://outrun.build",
+  x: "https://x.com/outrunbuild",
+  telegram: "https://t.me/outrunbuild",
+  discord: "https://discord.gg/outrunbuild",
 }
 
 // 添加时间格式化函数
@@ -280,7 +278,7 @@ function VerseDetailContent() {
           <Button
             onClick={handleBackClick}
             variant="outline"
-            className="hidden min-[1114px]:flex relative overflow-hidden group w-auto mr-auto mr-0 absolute left-0 w-auto relative overflow-hidden desktop-back-button mb-6"
+            className="hidden min-[1114px]:flex relative overflow-hidden group w-auto mr-auto mr-0 absolute left-0 w-auto relative overflow-hidden desktop-back-button mb-6 bg-transparent"
           >
             {/* 背景渐变效果 */}
             <span className="absolute inset-0 block opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out"></span>
@@ -506,21 +504,21 @@ function VerseDetailContent() {
         </div>
 
         <style jsx global>{`
-          .desktop-back-button {
-            background: rgba(15, 3, 38, 0.8);
-            border: 1px solid rgba(236, 72, 153, 0.4);
-            border-radius: 9999px;
-            box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
-            padding: 8px 16px;
-            transition: all 0.5s ease-in-out;
-          }
+         .desktop-back-button {
+           background: rgba(15, 3, 38, 0.8);
+           border: 1px solid rgba(236, 72, 153, 0.4);
+           border-radius: 9999px;
+           box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
+           padding: 8px 16px;
+           transition: all 0.5s ease-in-out;
+         }
 
-          .desktop-back-button:hover {
-            background: rgba(25, 10, 45, 0.9);
-            color: #f9a8d4;
-            text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
-          }
-        `}</style>
+         .desktop-back-button:hover {
+           background: rgba(25, 10, 45, 0.9);
+           color: #f9a8d4;
+           text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
+         }
+       `}</style>
       </div>
     )
   }
@@ -534,7 +532,7 @@ function VerseDetailContent() {
         <Button
           onClick={handleBackClick}
           variant="outline"
-          className="hidden md:flex relative overflow-hidden group w-auto mr-auto md:mr-0 md:absolute md:left-0 md:w-auto md:relative md:overflow-hidden desktop-back-button mb-6"
+          className="hidden md:flex relative overflow-hidden group w-auto mr-auto md:mr-0 md:absolute md:left-0 md:w-auto md:relative md:overflow-hidden desktop-back-button mb-6 bg-transparent"
         >
           {/* 背景渐变效果 */}
           <span className="absolute inset-0 block opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out"></span>
@@ -837,21 +835,21 @@ function VerseDetailContent() {
       </div>
 
       <style jsx global>{`
-        .desktop-back-button {
-          background: rgba(15, 3, 38, 0.8);
-          border: 1px solid rgba(236, 72, 153, 0.4);
-          border-radius: 9999px;
-          box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
-          padding: 8px 16px;
-          transition: all 0.5s ease-in-out;
-        }
+       .desktop-back-button {
+         background: rgba(15, 3, 38, 0.8);
+         border: 1px solid rgba(236, 72, 153, 0.4);
+         border-radius: 9999px;
+         box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
+         padding: 8px 16px;
+         transition: all 0.5s ease-in-out;
+       }
 
-        .desktop-back-button:hover {
-          background: rgba(25, 10, 45, 0.9);
-          color: #f9a8d4; /* 粉色 */
-          text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
-        }
-      `}</style>
+       .desktop-back-button:hover {
+         background: rgba(25, 10, 45, 0.9);
+         color: #f9a8d4; /* 粉色 */
+         text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
+       }
+     `}</style>
     </div>
   )
 }

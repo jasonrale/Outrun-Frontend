@@ -1,5 +1,7 @@
 "use client"
 
+import { ChainTooltip } from "@/components/ui/universal-tooltip" // Import ChainTooltip
+
 interface LockedOverviewTabProps {
   description: string
   website?: string
@@ -25,16 +27,13 @@ export function LockedOverviewTab({
 }: LockedOverviewTabProps) {
   return (
     <div className="w-full" style={{ margin: 0, padding: 0 }}>
-      {/* 响应式布局：小屏幕垂直排列，大屏幕水平排列 */}
       <div className="flex flex-col sm:flex-row gap-4 w-full">
-        {/* 项目图片 - 小屏幕居中，大屏幕左对齐 */}
         <div className="flex-shrink-0 w-[220px] mx-auto sm:mx-0">
           <div className="w-[220px] h-[220px]">
             <img src={image || "/placeholder.svg"} alt={name} className="w-full h-full object-cover rounded-xl" />
           </div>
         </div>
 
-        {/* 项目信息和社交链接 - 占据剩余空间 */}
         <div className="flex-1 min-w-0 bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)] flex flex-col min-h-[220px]">
           <h2 className="text-xl font-bold mb-4 flex items-center">
             <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 text-transparent bg-clip-text">
@@ -43,7 +42,6 @@ export function LockedOverviewTab({
             {symbol && <span className="text-pink-300 ml-2">{symbol}</span>}
           </h2>
 
-          {/* 描述文本 - 添加强制换行样式 */}
           <p
             className="text-pink-200/90 mb-6"
             style={{
@@ -56,7 +54,6 @@ export function LockedOverviewTab({
             {description}
           </p>
 
-          {/* 社交媒体图标和Available on */}
           {(website || x || telegram || discord || omnichain.length > 0) && (
             <div className="flex flex-col min-[680px]:flex-row min-[680px]:justify-between min-[680px]:items-center mt-auto gap-4 md:gap-0">
               <div className="flex space-x-6">
@@ -152,13 +149,7 @@ export function LockedOverviewTab({
                   <span className="text-pink-300 text-sm mr-2">Available on</span>
                   <div className="flex space-x-2">
                     {omnichain.map((chain, index) => (
-                      <img
-                        key={index}
-                        src={chain.icon || "/placeholder.svg"}
-                        alt={chain.name}
-                        title={chain.name}
-                        className="w-5 h-5"
-                      />
+                      <ChainTooltip key={index} chainName={chain.name} chainIcon={chain.icon || "/placeholder.svg"} />
                     ))}
                   </div>
                 </div>
@@ -169,13 +160,7 @@ export function LockedOverviewTab({
                   <span className="text-pink-300 text-sm mr-2">Available on</span>
                   <div className="flex space-x-2">
                     {omnichain.map((chain, index) => (
-                      <img
-                        key={index}
-                        src={chain.icon || "/placeholder.svg"}
-                        alt={chain.name}
-                        title={chain.name}
-                        className="w-5 h-5"
-                      />
+                      <ChainTooltip key={index} chainName={chain.name} chainIcon={chain.icon || "/placeholder.svg"} />
                     ))}
                   </div>
                 </div>

@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation" // 导入useRouter
+import { useRouter } from "next/navigation" // 导��useRouter
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, ChevronDown, ChevronRight, ChevronUp } from "lucide-react"
 import { usePathname } from "next/navigation"
@@ -72,10 +72,7 @@ function useNavbarResponsive() {
 
 export function Navbar() {
   const router = useRouter()
-  // 移除这一行
-  // const isMobile = useMobile() // 保留这个，用于其他可能的用途
-  // 只保留这一行
-  const isNavMobile = useNavbarResponsive() // 专门用于导航栏
+  const isNavMobile = useNavbarResponsive()
   const pathname = usePathname() // Get the current path
   const isHomePage = pathname === "/" // Check if we're on the home page
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -83,59 +80,46 @@ export function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [hoverPosition, setHoverPosition] = useState({ x: 0, width: 0 })
   const navRef = useRef<HTMLDivElement>(null)
-  // 在 useState 声明部分添加一个新的状态来跟踪当前活动的导航项
   const [currentActiveItem, setCurrentActiveItem] = useState<string | null>(null)
-  // 添加一个新的状态来跟踪移动端展开的子菜单
   const [expandedMobileSubmenu, setExpandedMobileSubmenu] = useState<string | null>(null)
 
-  // 在 Navbar 组件内部，将 handleScroll 函数替换为节流版本
   const handleScroll = useThrottleFn(() => {
     setIsScrolled(window.scrollY > 10)
   }, 100) // 100ms 节流
 
-  // 然后在 useEffect 中使用这个节流函数
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [handleScroll])
 
-  // 添加一个新的 useEffect 来控制菜单打开时的滚动行为
   useEffect(() => {
     if (isNavMobile) {
       if (isMenuOpen) {
-        // 禁止滚动
         document.body.style.overflow = "hidden"
         document.body.style.height = "100%"
       } else {
-        // 恢复滚动
         document.body.style.overflow = ""
         document.body.style.height = ""
       }
     }
 
-    // 组件卸载时恢复滚动
     return () => {
       document.body.style.overflow = ""
       document.body.style.height = ""
     }
   }, [isMenuOpen, isNavMobile])
 
-  // 在 useEffect 中添加一个新的 effect 来根据当前路径设置活动项
   useEffect(() => {
-    // ���到匹配当前路径的导航项
     const matchingItem = navItems.find(
       (item) => pathname === item.href || (item.children && item.children.some((child) => pathname === child.href)),
     )
 
-    // 设置当前活动项
     setCurrentActiveItem(matchingItem?.title || null)
 
-    // 如果鼠标不在导航上，更新高亮条位置
     if (!activeDropdown) {
       updateHighlightForCurrentPath()
     }
 
-    // 如果当前路径匹配某个子菜单项，自动展开该子菜单（仅限移动端）
     if (isNavMobile && matchingItem?.children) {
       const hasActiveChild = matchingItem.children.some((child) => pathname === child.href)
       if (hasActiveChild) {
@@ -144,16 +128,13 @@ export function Navbar() {
     }
   }, [pathname, activeDropdown, isNavMobile])
 
-  // 添加一个函数来更新当前路径的高亮
   const updateHighlightForCurrentPath = () => {
     if (navRef.current) {
-      // 如果是首页，不显示高亮
       if (isHomePage) {
         setHoverPosition({ x: 0, width: 0 })
         return
       }
 
-      // 查找匹配当前路径的导航项
       const activeNavItem = navRef.current.querySelector(`[data-nav-item="${currentActiveItem}"]`)
       if (activeNavItem) {
         const rect = (activeNavItem as HTMLElement).getBoundingClientRect()
@@ -162,7 +143,6 @@ export function Navbar() {
         setHoverPosition({ x: 0, width: 0 })
       }
     } else {
-      // 如果是首页或没有匹配项，不显示高亮
       setHoverPosition({ x: 0, width: 0 })
     }
   }
@@ -174,15 +154,12 @@ export function Navbar() {
     }
   }
 
-  // 修改 resetHoverPosition 函数
   const resetHoverPosition = () => {
-    if (activeDropdown) return // 如果有下拉菜单激活，不重置位置
+    if (activeDropdown) return
     updateHighlightForCurrentPath()
   }
 
-  // 在组件加载时立即执行一次高亮更新
   useEffect(() => {
-    // 短暂延迟确保DOM已完全加载
     const timer = setTimeout(() => {
       updateHighlightForCurrentPath()
     }, 100)
@@ -190,21 +167,16 @@ export function Navbar() {
     return () => clearTimeout(timer)
   }, [])
 
-  // 修改移动端菜单的实现，解决无法收回和切换的问题
-
-  // 1. 修改toggleMobileSubmenu函数，确保它能正确切换子菜单状态
   const toggleMobileSubmenu = (title: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation()
     setExpandedMobileSubmenu((prev) => (prev === title ? null : title))
   }
 
-  // 创建一个新的导航函数，使用Next.js的router.push而不是window.location
   const navigateTo = (href: string) => {
     setIsMenuOpen(false)
     router.push(href)
   }
 
-  // 检查当前路径是否匹配某个导航项或其子项
   const isNavItemActive = (item: NavItem) => {
     return pathname === item.href || (item.children && item.children.some((child) => pathname === child.href))
   }
@@ -236,7 +208,6 @@ export function Navbar() {
               <div className="relative ml-8">
                 <nav className="flex items-center gap-1 md:gap-2" ref={navRef}>
                   {navItems.map((item) => {
-                    // 检查当前路径是否匹配此导航项或其子项
                     const isActive = isNavItemActive(item)
 
                     return (
@@ -286,7 +257,6 @@ export function Navbar() {
                                 <div className="relative z-10 p-2">
                                   <div className="py-1 grid gap-1">
                                     {item.children.map((child) => {
-                                      // 检查子项是否匹配当前路径
                                       const isChildActive = pathname === child.href
 
                                       return (
@@ -352,7 +322,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* 重新��计的移动端菜单 */}
       <AnimatePresence>
         {isNavMobile && isMenuOpen && (
           <motion.div

@@ -223,12 +223,7 @@ export function LiquidityPoolsTable({
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setSelectedPool(null)}></div>
-        <GradientBackgroundCard
-          className="w-full max-w-xs z-10"
-          shadow
-          border
-          contentClassName="p-3 space-y-3"
-        >
+        <GradientBackgroundCard className="w-full max-w-xs z-10" shadow border contentClassName="p-3 space-y-3">
           <div className="border-b border-pink-500/20 pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -467,7 +462,7 @@ export function LiquidityPoolsTable({
   const getCurrentPagePools = () => {
     const itemsPerPage = isMobile ? 5 : 10
     const startIndex = (currentPage - 1) * itemsPerPage
-    // 返回��前页的数据，但总是保持相同的数据以模拟多页
+    // 返回���前页的数据，但总是保持相同的数据以模拟多页
     return visiblePools.slice(0, itemsPerPage)
   }
 

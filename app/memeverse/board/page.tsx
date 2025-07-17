@@ -8,7 +8,7 @@ import { ProjectCard } from "@/components/memeverse/board/project-card"
 import { MemeVerseProvider, useMemeVerse } from "@/contexts/memeverse-context"
 import { useMemo } from "react"
 import React, { useState } from "react"
-import { FaucetModal } from "@/components/faucet-modal"
+import { FaucetModal } from "@/components/memeverse/faucet/faucet-modal"
 
 // 主页面组件
 export default function MemeverseBoardPage() {

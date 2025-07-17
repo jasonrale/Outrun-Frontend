@@ -1,38 +1,43 @@
 /**
  * Format currency value
  */
-export function formatCurrency(value: string): string {
-  if (!value) return ""
+export function formatCurrency(value: string | number): string {
+  if (value === null || value === undefined || value === "") return ""
 
-  const num = Number.parseFloat(value)
-  if (isNaN(num)) return value
+  const num = typeof value === "string" ? Number.parseFloat(value) : value
+  if (isNaN(num)) return String(value)
 
-  // 使用对象映射替代多个if条件
-  const formats = [
-    { threshold: 0.000001, format: (n: number) => n.toExponential(4) },
-    { threshold: 0.001, format: (n: number) => n.toFixed(6) },
-    { threshold: 1, format: (n: number) => n.toFixed(4) },
-    { threshold: 10000, format: (n: number) => n.toFixed(2) },
-    {
-      threshold: Number.POSITIVE_INFINITY,
-      format: (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: 2 }),
-    },
-  ]
-
-  for (const { threshold, format } of formats) {
-    if (num < threshold) return format(num)
+  // Handle very small numbers with exponential notation
+  if (num > 0 && num < 0.000001) {
+    return num.toExponential(4)
   }
 
-  // 默认情况，不应该到达这里
-  return value
+  // Use toLocaleString for general formatting with up to 6 decimal places,
+  // and no minimum decimal places to avoid trailing zeros for integers.
+  return num.toLocaleString("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 6,
+  })
 }
 
 /**
- * Format dollar value
+ * Format dollar value with 2 decimal places
  */
 export function formatDollarValue(value: number): string {
-  if (value < 0.01) return "<$0.01"
+  if (value < 0.01 && value > 0) return "<$0.01"
+  if (value === 0) return "$0.00"
   return `$${value.toFixed(2)}`
+}
+
+/**
+ * Format dollar value with 6 decimal places
+ */
+export function formatDollarValueSixDecimals(value: number): string {
+  if (value === null || value === undefined || isNaN(value)) return ""
+  if (value > 0 && value < 0.000001) {
+    return `$${value.toExponential(4)}` // For very small numbers
+  }
+  return `$${value.toFixed(6)}`
 }
 
 /**
@@ -69,10 +74,11 @@ export function formatDateTime(dateTimeStr: string): string {
 }
 
 /**
- * Format market cap
+ * Format market cap with K, M, B suffixes and 2 decimal places
  */
 export function formatMarketCap(value: number): string {
-  if (value >= 1000000) return `${(value / 1000000).toFixed(2)}M`
-  if (value >= 1000) return `${(value / 1000).toFixed(2)}K`
-  return `${value}`
+  if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(2)}B`
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M`
+  if (value >= 1_000) return `${(value / 1_000).toFixed(2)}K`
+  return value.toFixed(2)
 }

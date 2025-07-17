@@ -12,10 +12,6 @@ export default function Home() {
   const { scrollYProgress } = useScroll()
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // 移除这一行，因为它没有被使用
-  // const gridOpacity = useTransform(scrollYProgress, [0, 0.2], [0.5, 0])
-
-  // 创建一个通用的按钮样式类名
   const primaryButtonClass =
     "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-full px-8 h-12 text-base shadow-[0_0_15px_rgba(168,85,247,0.5)]"
 
@@ -47,8 +43,7 @@ export default function Home() {
                 </h1>
 
                 <p className="text-xl md:text-2xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
-                  Unlock higher, more flexible, and safer DeFi yields, Memecoin participation opportunities and a
-                  diverse range of Web3 experiences.
+                  Unlock higher and capital-efficient DeFi yields for users and drive mass adoption of DAOs in Web3 and the real world.
                 </p>
               </motion.div>
 
@@ -102,8 +97,7 @@ export default function Home() {
               The Outrun Ecosystem
             </h2>
             <p className="text-zinc-300 text-lg md:text-xl leading-relaxed">
-              The Outrun ecosystem currently consists of four major modules, encompassing yield tokenization, liquid
-              staking derivatives, RWAfi, decentralized exchange, a next-generation token financing paradigm, and
+              The Outrun ecosystem currently consists of four major modules, encompassing yield tokenization, stablecoin, RWAfi, decentralized exchange, a next-generation token financing paradigm, and
               Memecoin × DeFi × DAO.
             </p>
           </div>
@@ -111,7 +105,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             <ModuleCard
               title="OutStake"
-              description="A protocol built entirely around yield-bearing tokens, introducing a new type of non-USD stablecoin model tied to yield rates."
+              description="A yield tokenization and stablecoin module built entirely around yield-bearing assets with higher capital efficiency."
               icon="Coins"
               href="/outstake"
               gradient="from-purple-500 to-indigo-600"
@@ -138,7 +132,7 @@ export default function Home() {
 
             <ModuleCard
               title="Memeverse"
-              description="An OmniChain memecoin launchpad built on the concept of FFLaunch, featuring memecoin staking and DAO governance."
+              description="An OmniChain consensus DAO launchpad built on the concept of FFLaunch, featuring memecoin staking and DAO governance."
               icon="Stars"
               href="/memeverse"
               gradient="from-cyan-500 to-blue-600"
@@ -157,7 +151,7 @@ export default function Home() {
               Key Features
             </h2>
             <p className="text-zinc-300 text-lg md:text-xl leading-relaxed">
-              Outrun combines innovative yield tokenization, fair launch models, and sustainable Memecoin development.
+              Outrun combines innovative yield tokenization, stable coin, fair launch models, and sustainable community development.
             </p>
           </div>
 

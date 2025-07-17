@@ -3,9 +3,9 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { SectionHeading } from "@/components/ui/section-heading"
-import { ReferralStats } from "@/components/referral/referral-stats"
-import { ReferralLink } from "@/components/referral/referral-link"
-import { ReferralHistory } from "@/components/referral/referral-history"
+import { ReferralStats } from "@/components/outswap/referral-stats"
+import { ReferralLink } from "@/components/outswap/referral-link"
+import { ReferralHistory } from "@/components/outswap/referral-history"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { useMobile } from "@/hooks/use-mobile"
 

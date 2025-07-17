@@ -3,6 +3,7 @@
 import { useRef } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { ArrowRight, Coins, TrendingUp, Layers, Clock, Globe, Lock } from "lucide-react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { FeatureCard } from "@/components/ui/feature-card"
@@ -43,8 +44,7 @@ export default function OutStakePage() {
                 </h1>
 
                 <p className="text-xl md:text-2xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
-                  A protocol built entirely around yield-bearing tokens, introducing the first non-USD stablecoin model
-                  tied to yield rates.
+                  A yield tokenization and stablecoin module built entirely around yield-bearing assets with higher capital efficiency.
                 </p>
               </motion.div>
 
@@ -57,9 +57,12 @@ export default function OutStakePage() {
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-full px-8 h-12 text-base shadow-[0_0_15px_rgba(168,85,247,0.5)]"
+                  asChild
                 >
-                  Start Staking
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <Link href="/outstake/markets">
+                    Start Staking
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </Button>
               </motion.div>
 
@@ -167,12 +170,12 @@ export default function OutStakePage() {
           />
 
           <FeatureCard
-            title="Non-USD Stablecoin Model"
-            description="First non-USD stablecoin model tied to yield rates, allowing users to take long or short positions on yield rates."
+            title="Omnichain Stablecoin"
+            description="An Omnichain Stablecoin fully collateralized by yield-bearing assets, requiring no interest payments, providing higher capital efficiency."
             bulletPoints={[
-              "YT serves as yield rate stablecoin",
-              "Mitigated risk of price manipulation",
-              "Decentralized yield rate trading",
+              "Unlock liquidity for yield-bearing assets instantly",
+              "No interest payments requiredn",
+              "Earn more yields through composability",
             ]}
             icon={<Lock className="h-6 w-6 text-purple-500" />}
             color="#a855f7"
@@ -193,9 +196,7 @@ export default function OutStakePage() {
             className="mb-16"
           />
 
-          {/* 流程图 - 完全重新设计 */}
           <div className="max-w-5xl mx-auto">
-            {/* 步骤1 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -257,11 +258,10 @@ export default function OutStakePage() {
               </div>
             </motion.div>
 
-            {/* 连接箭头 */}
             <div className="flex justify-center my-4">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
-                  d="M12 5L12 19M12 19L5 12M12 19L19 12"
+                  d="M12 -1L12 17M12 17L5 10M12 17L19 10"
                   stroke="url(#arrow-gradient)"
                   strokeWidth="2"
                   strokeLinecap="round"
@@ -276,7 +276,6 @@ export default function OutStakePage() {
               </svg>
             </div>
 
-            {/* 步骤2 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -330,11 +329,10 @@ export default function OutStakePage() {
               </div>
             </motion.div>
 
-            {/* 连接箭头 */}
             <div className="flex justify-center my-4">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
-                  d="M12 5L12 19M12 19L5 12M12 19L19 12"
+                  d="M12 -1L12 17M12 17L5 10M12 17L19 10"
                   stroke="url(#arrow-gradient-2)"
                   strokeWidth="2"
                   strokeLinecap="round"
@@ -349,7 +347,6 @@ export default function OutStakePage() {
               </svg>
             </div>
 
-            {/* 步骤3 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -377,9 +374,9 @@ export default function OutStakePage() {
                       <div className="grid grid-cols-3 gap-3 mb-4">
                         <div className="bg-purple-900/30 rounded-lg p-3 border border-purple-500/20">
                           <div className="text-center mb-1">
-                            <span className="text-purple-400 font-bold">PT</span>
+                            <span className="text-purple-400 font-bold">SP</span>
                           </div>
-                          <p className="text-xs text-zinc-400 text-center">Principal Token</p>
+                          <p className="text-xs text-zinc-400 text-center">Staking Position</p>
                         </div>
                         <div className="bg-pink-900/30 rounded-lg p-3 border border-pink-500/20">
                           <div className="text-center mb-1">
@@ -397,29 +394,30 @@ export default function OutStakePage() {
 
                       <div className="bg-black/40 rounded-lg p-4 border border-white/5 mb-4">
                         <div className="font-mono text-sm">
-                          <span className="text-cyan-400">SY-sUSDE</span>
+                          <span className="text-cyan-400">SY-sUSDe</span>
                           <span className="text-zinc-500 mx-2">→</span>
-                          <span className="text-purple-400">PT-sUSDE</span>
+                          <span className="text-purple-400">SP-sUSDe</span>
                           <span className="text-zinc-500 mx-1">+</span>
-                          <span className="text-pink-400">YT-sUSDE</span>
+                          <span className="text-pink-400">YT-sUSDe</span>
                           <span className="text-zinc-500 mx-1">+</span>
-                          <span className="text-blue-400">PYT-sUSDE</span>
+                          <span className="text-blue-400">PYT-sUSDe</span>
                         </div>
                       </div>
 
                       <div className="text-sm text-zinc-400">
-                        <span className="text-pink-400">Example:</span> 10 SY-sUSDE with a 100 days lock generates 9.8
-                        PT-sUSDE, 1000 YT-sUSDE, and 1 PYT-sUSDE
+                        <span className="text-pink-400">Example:</span> 10 SY-sUSDe with a 100 days lock generates 10
+                        SP-sUSDe, 1000 YT-sUSDe, and 10 PYT-sUSDe
                       </div>
                     </div>
 
                     <div className="space-y-4 h-full flex flex-col justify-center">
                       <div className="bg-gradient-to-r from-purple-900/40 to-purple-800/40 rounded-lg border border-purple-500/30 p-3">
                         <div className="text-sm text-purple-300 font-semibold mb-1 inline-block">
-                          PT (Principal Token)
+                          SP (Staking Position)
                         </div>
                         <p className="text-xs text-white">
-                          Represents the principal portion of yield-bearing tokens. Can be encapsulated as SP.
+                          Represents the redemption right of the principal for a locked position upon maturity. Can be
+                          split into PT.
                         </p>
                       </div>
 
@@ -445,11 +443,10 @@ export default function OutStakePage() {
               </div>
             </motion.div>
 
-            {/* 连接箭头 */}
             <div className="flex justify-center my-4">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
-                  d="M12 5L12 19M12 19L5 12M12 19L19 12"
+                  d="M12 -1L12 17M12 17L5 10M12 17L19 10"
                   stroke="url(#arrow-gradient-3)"
                   strokeWidth="2"
                   strokeLinecap="round"
@@ -464,7 +461,6 @@ export default function OutStakePage() {
               </svg>
             </div>
 
-            {/* 步骤4 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -479,22 +475,24 @@ export default function OutStakePage() {
                     <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-green-600 to-cyan-600 text-white font-bold text-lg mr-4">
                       4
                     </div>
-                    <h3 className="text-2xl font-bold text-white inline-flex">Encapsulate PT into SP (Optional)</h3>
+                    <h3 className="text-2xl font-bold text-white inline-flex">
+                      Split SP into PT and non-transferable SP (Optional)
+                    </h3>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="col-span-1 md:col-span-2">
                       <p className="text-zinc-300 mb-4">
-                        Users holding positions can encapsulate PT tokens, thereby minting the position and PT tokens
-                        into transferable SP (Staking Position) tokens, representing the right to redeem the principal
-                        upon position maturity.
+                        Users can split their SP tokens into PT(UPT) according to the position's mode (which is
+                        unchangeable). This operation makes the original SP non-transferable but does not destroy it,
+                        allowing it to still be tracked.
                       </p>
 
                       <div className="bg-black/40 rounded-lg p-4 border border-white/5 mb-4">
                         <div className="font-mono text-sm">
-                          <span className="text-purple-400">PT-stETH</span>
+                          <span className="text-purple-400">SP-stETH</span>
                           <span className="text-zinc-500 mx-2">→</span>
-                          <span className="text-green-400">SP-stETH</span>
+                          <span className="text-green-400">PT-stETH or UETH</span>
                         </div>
                       </div>
                     </div>
@@ -503,9 +501,9 @@ export default function OutStakePage() {
                       <div className="flex-1 flex flex-col justify-center p-4">
                         <div className="text-sm text-green-300 font-medium mb-2 inline-block">What is SP?</div>
                         <p className="text-white text-sm">
-                          SP is a token based on the ERC6909 standard used to encapsulate staked positions. It
-                          represents ownership of principal redemption rights upon maturity, creating fixed-rate returns
-                          based on its trading price.
+                          SP represents the principal redemption rights for locked positions upon maturity. Holders can
+                          sell it, effectively enabling an "early redemption" operation, while buyers can obtain
+                          fixed-rate returns based on their purchase price.
                         </p>
                       </div>
                     </div>
@@ -514,11 +512,10 @@ export default function OutStakePage() {
               </div>
             </motion.div>
 
-            {/* 连接箭头 */}
             <div className="flex justify-center my-4">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
-                  d="M12 5L12 19M12 19L5 12M12 19L19 12"
+                  d="M12 -1L12 17M12 17L5 10M12 17L19 10"
                   stroke="url(#arrow-gradient-4)"
                   strokeWidth="2"
                   strokeLinecap="round"
@@ -533,7 +530,6 @@ export default function OutStakePage() {
               </svg>
             </div>
 
-            {/* 步骤5 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -575,9 +571,9 @@ export default function OutStakePage() {
                             </svg>
                           </div>
                           <div>
-                            <div className="text-pink-400 font-medium">Trade YT tokens</div>
+                            <div className="text-pink-400 font-medium">Boosted Interest Rates</div>
                             <p className="text-zinc-300 text-sm">
-                              Earn from yield rate fluctuations. YT value increases over time as yield accumulates.
+                              Lock in higher interest rates with YT. YT value increases over time as yield accumulates.
                             </p>
                           </div>
                         </div>
@@ -598,7 +594,7 @@ export default function OutStakePage() {
                             </svg>
                           </div>
                           <div>
-                            <div className="text-green-400 font-medium">Sell SP tokens</div>
+                            <div className="text-green-400 font-medium">Trade SP tokens</div>
                             <p className="text-zinc-300 text-sm">
                               Get fixed-rate returns before maturity by trading SP tokens on the market.
                             </p>
@@ -636,12 +632,13 @@ export default function OutStakePage() {
                           OutStake's Unique Advantage
                         </div>
                         <p className="text-white text-sm mb-3">
-                          Unlike other protocols, OutStake's tokens have no expiration dates, allowing for greater
-                          composability and liquidity in the DeFi ecosystem.
+                          Compared to other yield tokenization protocols, OutStake offers greater composability,
+                          flexibility, liquidity, and capital efficiency, enabling higher returns for users.
                         </p>
                         <div className="text-xs text-blue-200">
-                          YT serves as the first non-USD stablecoin model tied to yield rates, enabling users to take
-                          positions on yield rate movements.
+                          UPT is not only an innovative omnichain universal principal token but also the omnichain
+                          stablecoin of the Outrun ecosystem. UPT aims to be a cornerstone of DeFi, bringing ultimate
+                          capital efficiency to the Outrun ecosystem.
                         </div>
                       </div>
                     </div>
@@ -655,86 +652,11 @@ export default function OutStakePage() {
           <div className="mt-16">
             <h3 className="text-2xl font-bold text-center text-white mb-8">OutStake Token Ecosystem</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* SY Card (Green) */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="group"
-              >
-                <div className="relative h-full">
-                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-purple-600/30 to-purple-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
-                  <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-purple-500/20 p-6 overflow-hidden group-hover:border-purple-500/40 transition duration-300">
-                    <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-purple-600/10"></div>
-                    <div className="flex items-center mb-4">
-                      <div className="w-10 h-10 rounded-full bg-purple-600/20 flex items-center justify-center mr-3">
-                        <span className="text-purple-400 font-bold">PT</span>
-                      </div>
-                      <h4 className="text-xl font-bold text-white">Principal Token</h4>
-                    </div>
-                    <p className="text-zinc-300 text-sm leading-relaxed">
-                      Represents the principal portion of yield-bearing tokens. PT has no expiration date, allowing for
-                      greater composability with other DeFi protocols.
-                    </p>
-                    <div className="mt-4 pt-4 border-t border-white/5">
-                      <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-2 py-1 bg-purple-900/20 rounded-md text-xs text-purple-400">
-                          No Expiration
-                        </span>
-                        <span className="px-2 py-1 bg-purple-900/20 rounded-md text-xs text-purple-400">
-                          ERC20 Standard
-                        </span>
-                        <span className="px-2 py-1 bg-purple-900/20 rounded-md text-xs text-purple-400">
-                          Redeemable
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                viewport={{ once: true }}
-                className="group"
-              >
-                <div className="relative h-full">
-                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-pink-600/30 to-pink-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
-                  <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-pink-500/20 p-6 overflow-hidden group-hover:border-pink-500/40 transition duration-300">
-                    <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-pink-600/10"></div>
-                    <div className="flex items-center mb-4">
-                      <div className="w-10 h-10 rounded-full bg-pink-600/20 flex items-center justify-center mr-3">
-                        <span className="text-pink-400 font-bold">YT</span>
-                      </div>
-                      <h4 className="text-xl font-bold text-white">Yield Rate Token</h4>
-                    </div>
-                    <p className="text-zinc-300 text-sm leading-relaxed">
-                      Represents ownership of all yield generated by the underlying assets. YT's value increases over
-                      time as the yield pool accumulates, creating a non-USD stablecoin tied to yield rates.
-                    </p>
-                    <div className="mt-4 pt-4 border-t border-white/5">
-                      <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-2 py-1 bg-pink-900/20 rounded-md text-xs text-pink-400">
-                          Yield Correlated
-                        </span>
-                        <span className="px-2 py-1 bg-pink-900/20 rounded-md text-xs text-pink-400">
-                          Universal Token
-                        </span>
-                        <span className="px-2 py-1 bg-pink-900/20 rounded-md text-xs text-pink-400">No Expiration</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.0 }}
                 viewport={{ once: true }}
                 className="group"
               >
@@ -744,22 +666,185 @@ export default function OutStakePage() {
                     <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-green-600/10"></div>
                     <div className="flex items-center mb-4">
                       <div className="w-10 h-10 rounded-full bg-green-600/20 flex items-center justify-center mr-3">
-                        <span className="text-green-400 font-bold">SP</span>
+                        <span className="text-green-400 font-bold">SY</span>
                       </div>
-                      <h4 className="text-xl font-bold text-white">Staking Position</h4>
+                      <h4 className="text-xl font-bold text-white">Standardized Yield</h4>
                     </div>
                     <p className="text-zinc-300 text-sm leading-relaxed">
-                      An ERC6909 token that encapsulates staked positions. SP represents ownership of principal
-                      redemption rights upon maturity, creating fixed-rate returns based on trading price.
+                      SY is a vault token based on the ERC5115 standard designed to encapsulate yield-bearing tokens,
+                      providing a unified interface.
                     </p>
                     <div className="mt-4 pt-4 border-t border-white/5">
                       <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
                       <div className="flex flex-wrap gap-2">
                         <span className="px-2 py-1 bg-green-900/20 rounded-md text-xs text-green-400">
-                          Transferable
+                          ERC5115 Standard
                         </span>
-                        <span className="px-2 py-1 bg-green-900/20 rounded-md text-xs text-green-400">Fixed Rate</span>
-                        <span className="px-2 py-1 bg-green-900/20 rounded-md text-xs text-green-400">ERC6909</span>
+                        <span className="px-2 py-1 bg-green-900/20 rounded-md text-xs text-green-400">
+                          Unified Interface
+                        </span>
+                        <span className="px-2 py-1 bg-green-900/20 rounded-md text-xs text-green-400">
+                          Encapsulates Yield
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* SP Card (Purple) */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
+                className="group"
+              >
+                <div className="relative h-full">
+                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-purple-600/30 to-purple-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
+                  <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-purple-500/20 p-6 overflow-hidden group-hover:border-purple-500/40 transition duration-300">
+                    <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-purple-600/10"></div>
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 rounded-full bg-purple-600/20 flex items-center justify-center mr-3">
+                        <span className="text-purple-400 font-bold">SP</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white">Staking Position</h4>
+                    </div>
+                    <p className="text-zinc-300 text-sm leading-relaxed">
+                      SP represents the principal redemption rights for locked positions upon maturity. Holders can sell
+                      it, effectively enabling an "early redemption" operation, while buyers can obtain fixed-rate
+                      returns based on their purchase price.
+                    </p>
+                    <div className="mt-4 pt-4 border-t border-white/5">
+                      <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-2 py-1 bg-purple-900/20 rounded-md text-xs text-purple-400">
+                          Fixed Rate
+                        </span>
+                        <span className="px-2 py-1 bg-purple-900/20 rounded-md text-xs text-purple-400">ERC6909</span>
+                        <span className="px-2 py-1 bg-purple-900/20 rounded-md text-xs text-purple-400">
+                          Redeemable
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* YT Card (Sky Blue) */}
+              <motion.div className="group">
+                <div className="relative h-full">
+                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-sky-600/30 to-sky-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
+                  <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-sky-500/20 p-6 overflow-hidden group-hover:border-sky-500/40 transition duration-300">
+                    <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-sky-600/10"></div>
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 rounded-full bg-sky-600/20 flex items-center justify-center mr-3">
+                        <span className="text-sky-400 font-bold">YT</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white">Yield Rate Token</h4>
+                    </div>
+                    <p className="text-zinc-300 text-sm leading-relaxed">
+                      Represents ownership of all yield generated by the yield-bearing assets. YT's value increases over
+                      time as the yield pool accumulates.
+                    </p>
+                    <div className="mt-4 pt-4 border-t border-white/5">
+                      <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-2 py-1 bg-sky-900/20 rounded-md text-xs text-sky-400">
+                          Yield Correlated
+                        </span>
+                        <span className="px-2 py-1 bg-sky-900/20 rounded-md text-xs text-sky-400">No Expiration</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* PT Card (Blue) */}
+              <motion.div className="group">
+                <div className="relative h-full">
+                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-blue-600/30 to-blue-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
+                  <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-blue-500/20 p-6 overflow-hidden group-hover:border-blue-500/40 transition duration-300">
+                    <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-blue-600/10"></div>
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center mr-3">
+                        <span className="text-blue-400 font-bold">PT</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white">Principal Token</h4>
+                    </div>
+                    <p className="text-zinc-300 text-sm leading-relaxed">
+                      PT is a principal token split from the SP token, a type of liquid staking token that represents
+                      the initial liquidity value of the SP token, designed to unlock the liquidity of staked assets.
+                    </p>
+                    <div className="mt-4 pt-4 border-t border-white/5">
+                      <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-2 py-1 bg-blue-900/20 rounded-md text-xs text-blue-400">No Expiration</span>
+                        <span className="px-2 py-1 bg-blue-900/20 rounded-md text-xs text-blue-400">
+                          Liquid Staking Token
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* UPT Card (Pink) */}
+              <motion.div className="group">
+                <div className="relative h-full">
+                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-pink-600/30 to-pink-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
+                  <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-pink-500/20 p-6 overflow-hidden group-hover:border-pink-500/40 transition duration-300">
+                    <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-pink-600/10"></div>
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 rounded-full bg-pink-600/20 flex items-center justify-center mr-3">
+                        <span className="text-pink-400 font-bold">UPT</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white">Universal Principal Token</h4>
+                    </div>
+                    <p className="text-zinc-300 text-sm leading-relaxed">
+                      UPT is not only an innovative omnichain universal principal token but also the omnichain
+                      stablecoin of the Outrun ecosystem. UPT aims to be a cornerstone of DeFi, bringing ultimate
+                      capital efficiency to the Outrun ecosystem.
+                    </p>
+                    <div className="mt-4 pt-4 border-t border-white/5">
+                      <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-2 py-1 bg-pink-900/20 rounded-md text-xs text-pink-400">Omnichain</span>
+                        <span className="px-2 py-1 bg-pink-900/20 rounded-md text-xs text-pink-400">Stablecoin</span>
+                        <span className="px-2 py-1 bg-pink-900/20 rounded-md text-xs text-pink-400">
+                          Capital Efficient
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* PYT Card (Orange) */}
+              <motion.div className="group">
+                <div className="relative h-full">
+                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-600/30 to-orange-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
+                  <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-orange-500/20 p-6 overflow-hidden group-hover:border-orange-500/40 transition duration-300">
+                    <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-orange-600/10"></div>
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 rounded-full bg-orange-600/20 flex items-center justify-center mr-3">
+                        <span className="text-orange-400 font-bold">PYT</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white">Points Yield Token</h4>
+                    </div>
+                    <p className="text-zinc-300 text-sm leading-relaxed">
+                      Represents external protocol points yields, allowing users to benefit from additional rewards.
+                    </p>
+                    <div className="mt-4 pt-4 border-t border-white/5">
+                      <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-2 py-1 bg-orange-900/20 rounded-md text-xs text-orange-400">
+                          External Rewards
+                        </span>
+                        <span className="px-2 py-1 bg-orange-900/20 rounded-md text-xs text-orange-400">Tradable</span>
+                        <span className="px-2 py-1 bg-orange-900/20 rounded-md text-xs text-orange-400">
+                          Yield Accumulation
+                        </span>
                       </div>
                     </div>
                   </div>

@@ -6,9 +6,8 @@ import { useState, useMemo, useCallback } from "react"
 import { ChevronDown, RefreshCw, Settings, ArrowDownUp, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TokenIcon } from "@/components/ui/token-icon"
-import { TokenSelectionModal } from "@/components/token-selection-modal"
-import { InfoTooltip } from "@/components/ui/info-tooltip"
-import { RouteModal } from "@/components/route-modal"
+import { TokenSelectionModal } from "@/components/outswap/token-selection-modal"
+import { RouteModal } from "@/components/outswap/route-modal"
 import { useTokenSwap } from "@/hooks/use-token-swap"
 import { formatCurrency, formatDollarValue, getPriceImpactColor } from "@/utils/format"
 import { COMMON_TOKENS } from "@/constants/tokens"
@@ -76,7 +75,6 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
   const [slippage, setSlippage] = useState("0.5")
   const [showSettings, setShowSettings] = useState(false)
   const [transactionDeadline, setTransactionDeadline] = useState("10")
-  const [antiMEV, setAntiMEV] = useState(false)
   const [showRouteModal, setShowRouteModal] = useState(false)
   const [tokensSwapped, setTokensSwapped] = useState(false)
 
@@ -115,11 +113,7 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
 
   return (
     <div className="w-full h-full">
-      <GradientBackgroundCard
-        contentClassName="p-3 h-full flex flex-col"
-        border
-        shadow
-      >
+      <GradientBackgroundCard contentClassName="p-3 h-full flex flex-col" border shadow>
         {/* Header */}
         <div className="relative mb-2">
           {/* SWAP标题 - 绝对定位在容器中央 */}
@@ -129,41 +123,7 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
 
           {/* 左右两侧的控件 */}
           <div className="flex items-center justify-between h-10">
-            <div className="flex items-center h-7">
-              <InfoTooltip
-                content={
-                  <div>
-                    Enable AntiMEV when the input is greater than 0.5% of reserves.
-                    <br />
-                    Anti-MEV cannot be enabled during the initial liquidity protection period.
-                    <br />
-                    <a
-                      href="https://outrun.gitbook.io/doc/outswap/mev-guard/working-principle"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block mt-1"
-                    >
-                      Learn more
-                    </a>
-                  </div>
-                }
-                position="top"
-                className="mr-1"
-                width={240}
-                iconClassName="text-purple-400 hover:text-purple-300 transition-colors scale-90"
-              />
-              <span className="text-xs font-medium mr-1 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-pink-300 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]">
-                AntiMEV
-              </span>
-              <button
-                className={`w-7 h-4 rounded-md p-0.5 transition-colors duration-300 ${antiMEV ? "bg-gradient-to-r from-purple-600/70 to-pink-600/70" : "bg-white/10"}`}
-                onClick={() => setAntiMEV(!antiMEV)}
-              >
-                <div
-                  className={`w-3 h-3 rounded-md bg-white transition-transform duration-300 ${antiMEV ? "translate-x-3" : "translate-x-0"} my-auto`}
-                />
-              </button>
-            </div>
+            <div className="flex items-center h-7"></div>
 
             <button
               className="p-1.5 text-purple-400 hover:text-purple-300 relative"
@@ -490,7 +450,6 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
         fromToken={fromToken}
         toToken={toToken}
         route={routeData}
-        antiMEV={antiMEV}
       />
     </div>
   )

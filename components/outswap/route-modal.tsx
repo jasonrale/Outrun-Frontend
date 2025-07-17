@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { TokenIcon } from "@/components/ui/token-icon"
 import type { RouteModalProps } from "@/types"
 
-export function RouteModal({ isOpen, onClose, fromToken, toToken, route, antiMEV = false }: RouteModalProps) {
+export function RouteModal({ isOpen, onClose, fromToken, toToken, route }: RouteModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
 
   // Handle click outside to close modal
@@ -156,14 +156,7 @@ export function RouteModal({ isOpen, onClose, fromToken, toToken, route, antiMEV
                       </div>
                       <div className="absolute -bottom-5 sm:-bottom-6 left-1/2 transform -translate-x-1/2">
                         <div className="px-1 sm:px-2 py-0.5 rounded-md bg-purple-900/50 border border-pink-500/20 text-[8px] sm:text-[9px] text-center whitespace-nowrap">
-                          {antiMEV ? (
-                            <span>
-                              <span className="line-through opacity-70">0.3%</span>{" "}
-                              <span className="text-purple-300">0.45%</span>
-                            </span>
-                          ) : (
-                            <span>0.3%</span>
-                          )}
+                          <span>0.3%</span>
                         </div>
                       </div>
                     </div>
@@ -191,14 +184,7 @@ export function RouteModal({ isOpen, onClose, fromToken, toToken, route, antiMEV
                       </div>
                       <div className="absolute -bottom-5 sm:-bottom-6 left-1/2 transform -translate-x-1/2">
                         <div className="px-1 sm:px-2 py-0.5 rounded-md bg-purple-900/50 border border-pink-500/20 text-[8px] sm:text-[9px] text-center whitespace-nowrap">
-                          {antiMEV ? (
-                            <span>
-                              <span className="line-through opacity-70">0.3%</span>{" "}
-                              <span className="text-purple-300">0.45%</span>
-                            </span>
-                          ) : (
-                            <span>0.3%</span>
-                          )}
+                          <span>0.3%</span>
                         </div>
                       </div>
                     </div>

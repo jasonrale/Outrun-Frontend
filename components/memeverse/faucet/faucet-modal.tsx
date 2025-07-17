@@ -4,7 +4,7 @@ import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { GradientBackgroundCard } from "@/components/ui/gradient-background-card"
 import { useState } from "react"
-import { GetUETHModal } from "@/components/get-ueth-modal"
+import { GetUETHModal } from "@/components/memeverse/faucet/get-ueth-modal"
 
 interface FaucetModalProps {
   isOpen: boolean

@@ -5,9 +5,8 @@ import { motion } from "framer-motion"
 import { ChevronDown, RefreshCw, Settings, ArrowDownUp, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TokenIcon } from "@/components/ui/token-icon"
-import { TokenSelectionModal } from "@/components/token-selection-modal"
-import { InfoTooltip } from "@/components/ui/info-tooltip"
-import { RouteModal } from "@/components/route-modal"
+import { TokenSelectionModal } from "@/components/outswap/token-selection-modal"
+import { RouteModal } from "@/components/outswap/route-modal"
 import { useTokenSwap } from "@/hooks/use-token-swap"
 import { formatCurrency, formatDollarValue, getPriceImpactColor } from "@/utils/format"
 import { COMMON_TOKENS } from "@/constants/tokens"
@@ -47,7 +46,6 @@ export function EnhancedSwapInterface() {
   const [showSettings, setShowSettings] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
   const [swapDeadline, setSwapDeadline] = useState("10")
-  const [antiMEV, setAntiMEV] = useState(false)
   const [showRouteModal, setShowRouteModal] = useState(false)
 
   // Use useWallet hook
@@ -124,42 +122,7 @@ export function EnhancedSwapInterface() {
         <GradientBackgroundCard shadow border>
           <div className="p-5">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center h-8">
-                <InfoTooltip
-                  content={
-                    <div>
-                      Enable AntiMEV when the input is greater than 0.5% of reserves.
-                      <br />
-                      Anti-MEV cannot be enabled during the initial liquidity protection period.
-                      <br />
-                      <a
-                        href="https://outrun.gitbook.io/doc/outswap/mev-guard/working-principle"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block mt-1"
-                      >
-                        Learn more
-                      </a>
-                    </div>
-                  }
-                  position="top"
-                  className="mr-1"
-                  iconClassName="text-purple-400 hover:text-purple-300 transition-colors"
-                />
-                <span className="text-sm font-medium mr-1 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-pink-300 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]">
-                  AntiMEV
-                </span>
-                <button
-                  className={`w-8 h-5 rounded-md p-0.5 transition-colors duration-300 ${antiMEV ? "bg-gradient-to-r from-purple-600/70 to-pink-600/70" : "bg-white/10"}`}
-                  onClick={() => setAntiMEV(!antiMEV)}
-                >
-                  <div
-                    className={`w-4 h-4 rounded-md bg-white transition-transform duration-300 ${antiMEV ? "translate-x-3" : "translate-x-0"} my-auto`}
-                  />
-                </button>
-              </div>
-
+            <div className="flex items-center justify-end mb-4">
               <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] uppercase absolute left-1/2 top-5 -translate-x-1/2">
                 Swap
               </h2>
@@ -386,7 +349,6 @@ export function EnhancedSwapInterface() {
         fromToken={fromToken}
         toToken={toToken}
         route={routeData}
-        antiMEV={antiMEV}
       />
     </div>
   )
