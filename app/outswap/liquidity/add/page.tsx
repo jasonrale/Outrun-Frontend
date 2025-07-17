@@ -9,7 +9,7 @@ import { ArrowLeft, Settings, ChevronDown, ChevronUp, ArrowRightLeft } from "luc
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { TokenIcon } from "@/components/ui/token-icon"
-import { TokenSelectionModal } from "@/components/token-selection-modal"
+import { TokenSelectionModal } from "@/components/outswap/token-selection-modal"
 import { COMMON_TOKENS } from "@/constants/tokens"
 import { Button } from "@/components/ui/button"
 import { useWallet } from "@/contexts/wallet-context"
