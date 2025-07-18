@@ -296,17 +296,20 @@ export function StakeCard({
         <div className="pt-4 border-t border-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20">
           <div className="space-y-4">
             <div className="py-2 px-3 bg-gradient-to-r from-black/40 to-black/20 rounded-lg border border-white/10">
-              <div className="flex items-center justify-end gap-2">
-                <Input
-                  type="number"
-                  min="0"
-                  max="365"
-                  value={lockPeriodInput}
-                  onChange={(e) => handleLockPeriodInputChange(e.target.value)}
-                  onBlur={handleLockPeriodInputBlur}
-                  className="w-14 h-7 text-center text-xl font-bold font-mono text-white border border-white/20 rounded-md bg-black/20 focus:border-cyan-400/50 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none px-0.5"
-                />
-                <span className="text-white/60 font-medium text-sm">Days</span>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-white/70 font-medium text-sm">Lock Period</span>
+                <div className="flex items-center justify-end gap-2">
+                  <Input
+                    type="number"
+                    min="0"
+                    max="365"
+                    value={lockPeriodInput}
+                    onChange={(e) => handleLockPeriodInputChange(e.target.value)}
+                    onBlur={handleLockPeriodInputBlur}
+                    className="w-14 h-7 text-center text-xl font-bold font-mono text-white border border-white/20 rounded-md bg-black/20 focus:border-cyan-400/50 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none px-0.5"
+                  />
+                  <span className="text-white/60 font-medium text-sm">Days</span>
+                </div>
               </div>
 
               {/* Slider */}

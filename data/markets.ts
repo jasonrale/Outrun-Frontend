@@ -131,7 +131,7 @@ export const marketsData = [
           { symbol: "ETH", address: "0xETH" },
         ],
         exchangeRate: 1.125219,
-        ytTotalSupply: 5231583
+        ytTotalSupply: 5231583,
         totalRedeemableValue: 182.368,
       },
     ],

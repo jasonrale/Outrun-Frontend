@@ -20,8 +20,6 @@ interface MarketInfoCardProps {
   uptMode: boolean
 }
 
-const customBreakpoint = 500 // Define the custom breakpoint here
-
 export function MarketInfoCard({ marketData, mintPT, uptMode }: MarketInfoCardProps) {
   const networkData = CHAIN_FILTERS.find((chain) => chain.name === marketData.network)
   const networkIcon = networkData?.icon || "/placeholder.svg"
@@ -39,7 +37,7 @@ export function MarketInfoCard({ marketData, mintPT, uptMode }: MarketInfoCardPr
 
           <div className="flex items-start gap-3 p-2 bg-gradient-to-r from-black/40 to-black/20 rounded-lg border border-white/10 mb-4">
             <div
-              className={`flex-1 flex flex-col min-[${customBreakpoint}px]:flex-row items-center min-[${customBreakpoint}px]:items-center min-[${customBreakpoint}px]:justify-between`}
+              className={`flex-1 flex flex-col min-[500px]:flex-row items-center min-[500px]:items-center min-[500px]:justify-between`}
             >
               <div className="flex items-center gap-2">
                 <div className="relative">
@@ -68,7 +66,7 @@ export function MarketInfoCard({ marketData, mintPT, uptMode }: MarketInfoCardPr
             </div>
           </div>
 
-          <div className={`grid grid-cols-1 min-[${customBreakpoint}px]:grid-cols-2 gap-3`}>
+          <div className={`grid grid-cols-1 min-[500px]:grid-cols-2 gap-3`}>
             <div className="flex flex-col justify-between items-center p-2.5 bg-gradient-to-r from-black/30 to-black/10 rounded-lg border border-cyan-400/20">
               <span className="text-white/80 text-sm font-medium">Underlying Asset TVL</span>
               <span className="text-cyan-400 font-bold font-mono text-base">$4.41B</span>

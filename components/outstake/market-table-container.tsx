@@ -223,7 +223,7 @@ export function MarketTableContainer({
           favoritedMarkets={favoritedMarkets}
           handleFavoriteToggle={handleFavoriteToggle}
           handleMarketClick={handleMarketClick}
-          filteredMarketsData={filteredMarketsData} // Needed to find syTokenPriceUSD for YT Redeemable Value calc
+          filteredMarketsData={filteredMarketsData}
         />
       )}
     </>

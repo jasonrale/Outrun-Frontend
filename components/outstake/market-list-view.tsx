@@ -5,7 +5,7 @@ import type React from "react"
 import { Star, ChevronDown, ChevronUp } from "lucide-react"
 import { TokenIcon } from "@/components/ui/token-icon"
 import { GradientBackgroundCard } from "@/components/ui/gradient-background-card"
-import { CHAIN_FILTERS, COLUMN_WIDTHS } from "@/constants/markets"
+import { CHAIN_FILTERS } from "@/constants/markets"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 
 interface MarketListViewProps {
@@ -47,9 +47,9 @@ export function MarketListView({
     >
       {/* Table Headers */}
       <div className="flex gap-4 py-3 px-6 border-b border-white/10 bg-white/5">
-        <div className={`${COLUMN_WIDTHS.market} text-[13px] font-medium text-white/70 flex items-center`}>Market</div>
+        <div className={`w-[14%] text-[13px] font-medium text-white/70 flex items-center`}>Market</div>
         <div
-          className={`${COLUMN_WIDTHS.totalValueLocked} text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[14%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("totalValueLocked")}
         >
           Total Value Locked
@@ -65,7 +65,7 @@ export function MarketListView({
           </span>
         </div>
         <div
-          className={`${COLUMN_WIDTHS.underlyingAPY} text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[13%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("underlyingAPY")}
         >
           Underlying APY
@@ -81,7 +81,7 @@ export function MarketListView({
           </span>
         </div>
         <div
-          className={`${COLUMN_WIDTHS.impliedRealAPY} text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[14%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("impliedRealAPY")}
         >
           <span>Implied Real APY</span>
@@ -118,7 +118,7 @@ export function MarketListView({
           </span>
         </div>
         <div
-          className={`${COLUMN_WIDTHS.ytAnchorRate} text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[13%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("ytAnchorRate")}
         >
           <span>YT Anchor Rate</span>
@@ -154,7 +154,7 @@ export function MarketListView({
           </span>
         </div>
         <div
-          className={`${COLUMN_WIDTHS.ytRedeemableValue} text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[17%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("ytRedeemableValue")}
         >
           <span>YT Redeemable Value</span>
@@ -193,7 +193,7 @@ export function MarketListView({
           </span>
         </div>
         <div
-          className={`${COLUMN_WIDTHS.ytRVGrowthRate} text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[15%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("ytRVGrowthRate")}
         >
           <span>YT RV Growth Rate</span>
@@ -244,7 +244,7 @@ export function MarketListView({
               onClick={() => handleMarketClick(market)}
             >
               {/* Market Column */}
-              <div className={`${COLUMN_WIDTHS.market} flex items-center`}>
+              <div className={`w-[14%] flex items-center`}>
                 <img
                   src={networkIconSrc || "/placeholder.svg"}
                   alt={market.network || "Network"}
@@ -267,34 +267,34 @@ export function MarketListView({
               </div>
 
               {/* Total Value Locked Column */}
-              <div className={`${COLUMN_WIDTHS.totalValueLocked} text-center`}>
+              <div className={`w-[14%] text-center`}>
                 <div className="text-white font-semibold font-mono text-sm">{market.totalValueLocked}</div>
               </div>
 
               {/* Underlying APY Column */}
-              <div className={`${COLUMN_WIDTHS.underlyingAPY} text-center`}>
+              <div className={`w-[13%] text-center`}>
                 <div className="flex items-center justify-center gap-1">
                   <span className="text-purple-300 font-semibold font-mono text-sm">{market.underlyingAPY}</span>
                 </div>
               </div>
 
               {/* Implied Real APY Column */}
-              <div className={`${COLUMN_WIDTHS.impliedRealAPY} text-center`}>
+              <div className={`w-[14%] text-center`}>
                 <div className="text-cyan-400 font-semibold font-mono text-sm">{market.impliedRealAPY}</div>
               </div>
 
               {/* YT Anchor Rate Column */}
-              <div className={`${COLUMN_WIDTHS.ytAnchorRate} text-center`}>
+              <div className={`w-[13%] text-center`}>
                 <div className="text-pink-400 font-semibold font-mono text-sm ">{market.ytAnchorRate}</div>
               </div>
 
               {/* YT Redeemable Value Column */}
-              <div className={`${COLUMN_WIDTHS.ytRedeemableValue} text-center`}>
+              <div className={`w-[17%] text-center`}>
                 <div className="text-white font-semibold font-mono text-sm">{market.ytRedeemableValueFormatted}</div>
               </div>
 
               {/* YT RV Growth Rate Column */}
-              <div className={`${COLUMN_WIDTHS.ytRVGrowthRate} text-center`}>
+              <div className={`w-[15%] text-center`}>
                 <div
                   className={`font-semibold font-mono text-sm flex items-center justify-center gap-1 ${isNegativeRVGrowth ? "text-red-400" : "text-green-400"}`}
                 >

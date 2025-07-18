@@ -92,10 +92,6 @@ export default function MintPage() {
   const networkData = CHAIN_FILTERS.find((chain) => chain.name === marketData.network)
   const networkIcon = networkData?.icon || "/placeholder.svg"
 
-  // Define custom breakpoint for Mint tab stacking
-  // This breakpoint (e.g., 860px) is between md (768px) and lg (1024px)
-  const mintStackBreakpoint = 900
-
   return (
     <div className="min-h-screen relative">
       <div className="relative z-10 pt-16 pb-8">
@@ -112,8 +108,8 @@ export default function MintPage() {
                        hover:ring-1 hover:ring-purple-500/40 hover:shadow-lg hover:shadow-purple-500/20
                        backdrop-blur-sm"
                 >
-                  <ArrowLeft size={20} className="mr-0.5" /> {/* Changed size to 20 and added mr-0.5 */}
-                  {isMobile ? "Back" : "Back to Markets"} {/* Conditional text rendering */}
+                  <ArrowLeft size={20} className="mr-0.5" />
+                  {isMobile ? "Back" : "Back to Markets"}
                 </Button>
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -158,14 +154,14 @@ export default function MintPage() {
               >
                 <div
                   // Default to flex-col (stacked) on small screens
-                  // For Mint tab: switch to flex-row at mintStackBreakpoint (e.g., 900px)
+                  // For Mint tab: switch to flex-row at min-[860px] (860px)
                   // For Yield Pool tab: switch to flex-row at lg (1024px)
-                  className={`flex flex-col ${activeTab === "mint" ? `min-[${mintStackBreakpoint}px]:flex-row` : "lg:flex-row"}`}
+                  className={`flex flex-col ${activeTab === "mint" ? `min-[860px]:flex-row` : "lg:flex-row"}`}
                 >
                   <div
                     // This div contains StakeCard/YieldPoolCard
                     // It should be w-full when stacked, and flex-1 when side-by-side
-                    className={`px-4 sm:px-6 py-0 lg:px-6 w-full ${activeTab === "mint" ? `min-[${mintStackBreakpoint}px]:flex-1` : "lg:flex-1"}`}
+                    className={`px-4 sm:px-6 py-0 lg:px-6 w-full ${activeTab === "mint" ? `min-[860px]:flex-1` : "lg:flex-1"}`}
                   >
                     {/* Enhanced Tab Header */}
                     <div className="flex items-center justify-center pt-4 pb-4 border-b border-white/10">
@@ -223,19 +219,15 @@ export default function MintPage() {
 
                   {/* Separator */}
                   <div
-                    // Vertical separator: hidden by default, block at respective breakpoints
-                    className={`${activeTab === "mint" ? `hidden min-[${mintStackBreakpoint}px]:block` : "hidden lg:block"} w-[2px] bg-gradient-to-b from-cyan-400/20 via-purple-400/20 to-pink-400/20 my-4`}
+                    className={`${activeTab === "mint" ? `hidden min-[860px]:block` : "hidden lg:block"} w-[2px] bg-gradient-to-b from-cyan-400/20 via-purple-400/20 to-pink-400/20 my-4`}
                   ></div>
-                  {/* New wrapper for horizontal separator for proper padding/margin */}
                   <div
-                    className={`${activeTab === "mint" ? `min-[${mintStackBreakpoint}px]:hidden` : "lg:hidden"} w-full px-4 mt-2 -mb-1`}
+                    className={`${activeTab === "mint" ? `min-[860px]:hidden` : "lg:hidden"} w-full px-4 mt-2 -mb-1`}
                   >
                     <div
-                      // The actual line, now takes full width of its padded parent
                       className="h-[2px] bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20"
                     ></div>
                   </div>
-
                   {/* Right side - always shows MarketInfoCard */}
                   <MarketInfoCard marketData={marketData} mintPT={mintPT} uptMode={uptMode} />
                 </div>

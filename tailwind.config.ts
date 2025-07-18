@@ -55,15 +55,14 @@ const config = {
         },
       },
       borderRadius: {
-        lg: "0.3rem", // 减小圆角
-        md: "0.2rem", // 减小圆角
-        sm: "0.15rem", // 减小圆角
-        // 调整所有圆角值，使其更加凌厉
-        xl: "0.4rem", // 从0.75rem减小
-        "2xl": "0.5rem", // 从0.75rem减小
-        "3xl": "0.6rem", // 从1rem减小
-        full: "9999px", // 保持圆形
-        DEFAULT: "0.2rem", // 默认值减小
+        lg: "0.3rem",
+        md: "0.2rem",
+        sm: "0.15rem",
+        xl: "0.4rem",
+        "2xl": "0.5rem",
+        "3xl": "0.6rem",
+        full: "9999px",
+        DEFAULT: "0.2rem",
       },
       keyframes: {
         "accordion-down": {

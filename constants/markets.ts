@@ -26,13 +26,3 @@ export const CHAIN_FILTERS = [
 ]
 
 export const CATEGORIES = ["All Categories", "ETH", "Stables", "RWA", "Others"]
-
-export const COLUMN_WIDTHS = {
-  market: "w-[14%]",
-  totalValueLocked: "w-[14%]",
-  underlyingAPY: "w-[13%]",
-  impliedRealAPY: "w-[14%]",
-  ytAnchorRate: "w-[13%]",
-  ytRedeemableValue: "w-[17%]",
-  ytRVGrowthRate: "w-[15%]",
-}
