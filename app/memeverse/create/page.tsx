@@ -474,7 +474,7 @@ export default function CreateMemecoinPage() {
           </button>
 
           {/* Page title */}
-          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent text-center">
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-500 text-gradient-fill text-center">
             Consensus Launch
           </h1>
 

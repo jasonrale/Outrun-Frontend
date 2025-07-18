@@ -216,7 +216,7 @@ export function POLTab({ project }: POLTabProps) {
         <div className="mb-4">
           {/* 桌面端布局 */}
           <div className="hidden lg:flex items-center justify-center relative">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent absolute left-0">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill absolute left-0">
               POL Overview
             </h3>
             <div className="text-center">
@@ -227,7 +227,7 @@ export function POLTab({ project }: POLTabProps) {
 
           {/* 移动端布局 */}
           <div className="lg:hidden flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent flex-shrink-0">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill flex-shrink-0">
               POL Overview
             </h3>
             <div className="flex items-center justify-center gap-1 flex-shrink-0">
@@ -295,7 +295,7 @@ export function POLTab({ project }: POLTabProps) {
       {/* Your POL */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
         <div className="flex items-center mb-4">
-          <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill">
             Your POL
           </h3>
           <Button
@@ -317,8 +317,8 @@ export function POLTab({ project }: POLTabProps) {
                 <div className="flex items-center gap-2">
                   <div className="text-lg font-bold text-white">
                     {userPolBalance.toLocaleString()}{" "}
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-                      POL-{project.symbol}
+                    <span className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
+                      POL {project.symbol}
                     </span>
                   </div>
                   <div className="text-sm text-pink-300/80">
@@ -356,8 +356,8 @@ export function POLTab({ project }: POLTabProps) {
               <div className="flex items-center gap-2">
                 <div className="text-lg font-bold text-white">
                   {userPolBalance.toLocaleString()}{" "}
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-                    POL-{project.symbol}
+                  <span className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
+                    POL {project.symbol}
                   </span>
                 </div>
                 <div className="text-sm text-pink-300/80">
@@ -392,14 +392,14 @@ export function POLTab({ project }: POLTabProps) {
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsClaimModalOpen(false)} />
           <GradientBackgroundCard className="relative z-10 max-w-md w-full" border shadow>
             <div className="p-6 space-y-6">
-              <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 text-center">
+              <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400 text-center">
                 Claim POL Tokens
               </h2>
               <p className="text-white/90 text-center leading-relaxed">
                 Because you participated in the Genesis, you can claim{" "}
                 <span className="font-bold text-pink-300">{polData.claimablePOL.toLocaleString()} </span>
-                <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-                  POL-{project.symbol}
+                <span className="font-bold text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
+                  POL {project.symbol}
                 </span>
               </p>
               <div className="flex justify-center">
@@ -426,7 +426,7 @@ export function POLTab({ project }: POLTabProps) {
             <div className="space-y-6">
               {/* Header */}
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
+                <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
                   MINT POL
                 </h2>
                 <div className="flex items-center gap-2">
@@ -628,7 +628,7 @@ export function POLTab({ project }: POLTabProps) {
             <div className="space-y-6">
               {/* Header */}
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-400 via-pink-500 to-orange-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+                <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-red-400 via-pink-500 to-orange-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
                   REDEEM POL
                 </h2>
                 <div className="flex items-center gap-2">

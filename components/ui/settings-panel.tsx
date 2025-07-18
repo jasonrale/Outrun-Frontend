@@ -68,7 +68,7 @@ export function SettingsPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center">
-                  <span className="text-sm bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                  <span className="text-sm text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
                     Max slippage
                   </span>
                   <InfoTooltip
@@ -127,7 +127,7 @@ export function SettingsPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center">
-                  <span className="text-sm bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                  <span className="text-sm text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
                     Transaction deadline
                   </span>
                   <InfoTooltip

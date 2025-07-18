@@ -124,7 +124,7 @@ export function StakeCard({
           <div className="flex items-center justify-between mb-3">
             {marketData.UPT?.isAuthorized ? (
               <div className="flex items-center gap-1">
-                <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
+                <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
                   UPT Mode
                 </span>
                 <button
@@ -212,7 +212,7 @@ export function StakeCard({
         {/* Enhanced Output Section */}
         <div className="space-y-2 pt-8">
           <div className="flex items-center gap-1 mb-3">
-            <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
+            <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
               Mint PT
             </span>
             <button

@@ -123,7 +123,7 @@ export function EnhancedSwapInterface() {
           <div className="p-5">
             {/* Header */}
             <div className="flex items-center justify-end mb-4">
-              <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] uppercase absolute left-1/2 top-5 -translate-x-1/2">
+              <h2 className="text-2xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] uppercase absolute left-1/2 top-5 -translate-x-1/2">
                 Swap
               </h2>
 

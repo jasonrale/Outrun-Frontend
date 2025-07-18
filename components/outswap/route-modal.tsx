@@ -86,7 +86,7 @@ export function RouteModal({ isOpen, onClose, fromToken, toToken, route }: Route
             {/* Header */}
             <div className="relative flex items-center justify-between border-b border-pink-500/20 py-1.5 px-4">
               <h2
-                className="text-base font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500"
+                className="text-base font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500"
                 style={{
                   textShadow: "0 0 6px rgba(236,72,153,0.4), 0 0 10px rgba(236,72,153,0.2)",
                 }}

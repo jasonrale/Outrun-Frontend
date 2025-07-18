@@ -13,7 +13,7 @@ export function Footer() {
                   <span className="text-white font-bold text-lg">O</span>
                 </div>
               </div>
-              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
+              <span className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
                 Outrun
               </span>
             </div>

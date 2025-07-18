@@ -152,7 +152,7 @@ export function InfoTooltip({
             ) {
               return React.cloneElement(child, {
                 className:
-                  "bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 font-medium inline-block",
+                  "text-gradient-fill bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 font-medium inline-block",
                 style: {
                   textShadow: "0 0 5px rgba(236, 72, 153, 0.5)",
                   transition: "all 0.2s ease",

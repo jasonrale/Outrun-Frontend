@@ -427,7 +427,7 @@ export default function AddLiquidityPage(): ReactElement {
                       <path d="m8 7-5 5 5 5" />
                     </svg>
                   </Link>
-                  <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
+                  <h1 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
                     ADD LIQUIDITY
                   </h1>
                   <button
@@ -442,7 +442,7 @@ export default function AddLiquidityPage(): ReactElement {
                 <>
                   {/* Original desktop layout */}
                   <div className="flex items-center">
-                    <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
+                    <h1 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
                       ADD LIQUIDITY
                     </h1>
                   </div>

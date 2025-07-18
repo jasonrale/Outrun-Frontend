@@ -151,7 +151,7 @@ export function DAOTab({ project }: DAOTabProps) {
         <div className="mb-4">
           {/* 桌面端布局 */}
           <div className="hidden lg:flex items-center justify-center relative">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent absolute left-0">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill absolute left-0">
               DAO Overview
             </h3>
             <div className="text-center">
@@ -169,7 +169,7 @@ export function DAOTab({ project }: DAOTabProps) {
 
           {/* 移动端布局 */}
           <div className="lg:hidden flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent flex-shrink-0">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill flex-shrink-0">
               DAO Overview
             </h3>
             <div className="flex items-center justify-center gap-1 flex-shrink-0">
@@ -253,7 +253,7 @@ export function DAOTab({ project }: DAOTabProps) {
         <div className="mb-4">
           {/* 桌面端布局 */}
           <div className="hidden lg:flex items-center justify-center relative">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent absolute left-0">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill absolute left-0">
               Current Cycle Incentive
             </h3>
             <div className="text-center">
@@ -305,7 +305,7 @@ export function DAOTab({ project }: DAOTabProps) {
 
           {/* 移动端布局 */}
           <div className="lg:hidden flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent flex-shrink-0">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill flex-shrink-0">
               Current Cycle Incentive
             </h3>
             <div className="flex items-center justify-center gap-1 flex-shrink-0">
@@ -477,7 +477,7 @@ export function DAOTab({ project }: DAOTabProps) {
       {/* Last Cycle Incentive Card */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
         <div className="mb-4">
-          <h3 className="inline-block text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+          <h3 className="inline-block text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill">
             Last Cycle Incentive
           </h3>
         </div>

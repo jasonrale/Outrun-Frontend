@@ -78,7 +78,7 @@ export function RefundSection({ totalRefundAmount, userRefundAmount, refundToken
               <div className="text-center text-indigo-300 mb-0.5 text-xs whitespace-nowrap font-medium">
                 Total Remaining Refund:
               </div>
-              <div className="text-center text-white text-base font-bold bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
+              <div className="text-center text-white text-base font-bold bg-gradient-to-r from-blue-400 to-indigo-300 text-gradient-fill drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
                 {totalRefundAmount.toFixed(2)} {refundToken}
               </div>
             </div>
@@ -88,7 +88,7 @@ export function RefundSection({ totalRefundAmount, userRefundAmount, refundToken
               <div className="text-center text-indigo-300 mb-0.5 text-xs whitespace-nowrap font-medium">
                 Your Refund Amount:
               </div>
-              <div className="text-center bg-gradient-to-r from-orange-500 to-amber-400 bg-clip-text text-transparent text-base font-bold drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
+              <div className="text-center bg-gradient-to-r from-orange-500 to-amber-400 text-gradient-fill text-base font-bold drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
                 {userRefundAmount.toFixed(2)} {refundToken}
               </div>
             </div>

@@ -51,7 +51,7 @@ export function FaucetModal({ isOpen, onClose }: FaucetModalProps) {
           <div className="p-6 pt-4">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent uppercase">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill uppercase">
                 Mock Faucet
               </h2>
               <X

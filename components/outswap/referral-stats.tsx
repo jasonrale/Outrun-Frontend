@@ -26,7 +26,7 @@ export function ReferralStats({ data }: ReferralStatsProps) {
         shadowColor="rgba(236,72,153,0.4)"
         contentClassName="p-6"
       >
-        <h2 className="text-xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+        <h2 className="text-xl font-bold mb-6 text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500">
           Your Referral Stats
         </h2>
 
@@ -68,7 +68,7 @@ function StatCard({ title, value, tooltip, gradient, delay }: StatCardProps) {
       className="bg-black/40 rounded-lg p-4 border border-white/5"
     >
       <div className="flex items-center mb-2">
-        <h3 className="text-sm bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">{title}</h3>
+        <h3 className="text-sm text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">{title}</h3>
         <InfoTooltip
           content={tooltip}
           position="top"
@@ -76,7 +76,7 @@ function StatCard({ title, value, tooltip, gradient, delay }: StatCardProps) {
           iconClassName="text-purple-400 hover:text-purple-400 transition-colors"
         />
       </div>
-      <p className={`text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${gradient}`}>
+      <p className={`text-xl md:text-2xl font-bold text-gradient-fill bg-gradient-to-r ${gradient}`}>
         {value}
       </p>
     </motion.div>

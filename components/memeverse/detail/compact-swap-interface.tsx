@@ -117,7 +117,7 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
         {/* Header */}
         <div className="relative mb-2">
           {/* SWAP标题 - 绝对定位在容器中央 */}
-          <h2 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] uppercase z-10">
+          <h2 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] uppercase z-10">
             SWAP
           </h2>
 

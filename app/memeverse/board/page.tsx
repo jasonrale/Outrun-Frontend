@@ -184,7 +184,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
             onClick={() => setIsFaucetModalOpen(true)}
           >
             <div className="flex items-center justify-center gap-2 relative z-10">
-              <span className="text-base font-semibold bg-gradient-to-r from-emerald-300 via-white to-emerald-300 bg-clip-text text-transparent">
+              <span className="text-base font-semibold bg-gradient-to-r from-emerald-300 via-white to-emerald-300 text-gradient-fill">
                 Faucet
               </span>
             </div>
@@ -203,7 +203,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 onClick={() => router.push("/memeverse/create")}
               >
                 <div className="flex items-center justify-center gap-2 relative z-10">
-                  <span className="text-base font-semibold bg-gradient-to-r from-cyan-300 via-white to-cyan-300 bg-clip-text text-transparent">
+                  <span className="text-base font-semibold bg-gradient-to-r from-cyan-300 via-white to-cyan-300 text-gradient-fill">
                     Consensus Launch
                   </span>
                 </div>
@@ -373,7 +373,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 onClick={() => router.push("/memeverse/create")}
               >
                 <div className="flex items-center gap-2 relative z-10">
-                  <span className="text-base font-semibold bg-gradient-to-r from-cyan-300 via-white to-cyan-300 bg-clip-text text-transparent">
+                  <span className="text-base font-semibold bg-gradient-to-r from-cyan-300 via-white to-cyan-300 text-gradient-fill">
                     Consensus Launch
                   </span>
                 </div>

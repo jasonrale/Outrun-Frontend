@@ -30,7 +30,7 @@ export function ReferralLink({ code, link }: ReferralLinkProps) {
       contentClassName="p-6"
     >
       <div className="flex items-center mb-6">
-        <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+        <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500">
           Your Referral Link
         </h2>
         <InfoTooltip

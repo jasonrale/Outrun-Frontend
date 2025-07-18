@@ -42,7 +42,7 @@ export default function MemeversePage() {
                   </div>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-gradient-fill bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
                   Memeverse
                 </h1>
 
@@ -368,7 +368,7 @@ export default function MemeversePage() {
               <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-25" />
               <div className="relative p-8 md:p-12 lg:p-16">
                 <div className="text-center max-w-3xl mx-auto">
-                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 mb-6">
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 mb-6">
                     Ready to Join the Memeverse?
                   </h2>
                   <p className="text-zinc-300 text-lg leading-relaxed mb-8">

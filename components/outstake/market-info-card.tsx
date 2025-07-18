@@ -30,7 +30,7 @@ export function MarketInfoCard({ marketData, mintPT, uptMode }: MarketInfoCardPr
         {/* Market Overview Section */}
         <div>
           <div className="flex items-center justify-between border-b border-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20 pb-3 mb-4">
-            <h3 className="text-white font-bold text-lg bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+            <h3 className="text-white font-bold text-lg bg-gradient-to-r from-cyan-400 to-purple-400 text-gradient-fill">
               Market Overview
             </h3>
           </div>
@@ -116,7 +116,7 @@ export function MarketInfoCard({ marketData, mintPT, uptMode }: MarketInfoCardPr
         {/* Market Description Section */}
         <div className="border-t border-white/10 pt-4">
           <div className="flex items-center gap-2 mb-3">
-            <h3 className="text-white font-bold text-base bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h3 className="text-white font-bold text-base bg-gradient-to-r from-purple-400 to-pink-400 text-gradient-fill">
               Market Description
             </h3>
           </div>

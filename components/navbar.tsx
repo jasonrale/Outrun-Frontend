@@ -199,7 +199,7 @@ export function Navbar() {
                   <span className="text-white font-bold text-lg">O</span>
                 </div>
               </div>
-              <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_12px_rgba(168,85,247,0.7)]">
+              <span className="text-2xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_12px_rgba(168,85,247,0.7)]">
                 Outrun
               </span>
             </Link>

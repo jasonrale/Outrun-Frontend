@@ -29,7 +29,7 @@ export function SectionHeading({
       )}
       <h2
         className={cn(
-          "text-[1.7rem] md:text-[2.1rem] font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r",
+          "text-[1.7rem] md:text-[2.1rem] font-bold tracking-tight text-gradient-fill bg-gradient-to-r",
           gradient,
           "mb-4",
           titleClassName,

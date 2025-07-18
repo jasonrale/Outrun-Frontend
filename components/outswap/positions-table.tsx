@@ -264,7 +264,7 @@ export function PositionsTable() {
           </div>
           <div>
             <div className="text-xs text-zinc-400">APR</div>
-            <div className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+            <div className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500">
               {position.apr}
             </div>
           </div>
@@ -657,7 +657,7 @@ export function PositionsTable() {
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-right">{position.value}</td>
                   <td className="px-4 py-4 whitespace-nowrap text-right">
-                    <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]">
+                    <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]">
                       {position.apr}
                     </span>
                   </td>

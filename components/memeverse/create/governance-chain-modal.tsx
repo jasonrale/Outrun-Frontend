@@ -52,7 +52,7 @@ export const NetworkModal = React.memo(
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-bold">
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                    <span className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500">
                       {title}
                     </span>
                   </h3>

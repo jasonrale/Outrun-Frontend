@@ -63,7 +63,6 @@ const OUTSTAKE_PROVIDERS = [
   { id: "lido", name: "stETH (Lido)" },
 ]
 
-// 定义可用的标签，根据项目阶段动态设置
 const getTabsForStage = (stage: string) => {
   if (stage === "Locked" || stage === "Unlocked") {
     return [
@@ -77,7 +76,6 @@ const getTabsForStage = (stage: string) => {
   return [{ id: "overview", label: "Overview" }]
 }
 
-// 确保所有项目都有社交媒体链接
 const DEFAULT_SOCIAL_LINKS = {
   website: "https://outrun.build",
   x: "https://x.com/outrunbuild",
@@ -85,7 +83,6 @@ const DEFAULT_SOCIAL_LINKS = {
   discord: "https://discord.gg/outrunbuild",
 }
 
-// 添加时间格式化函数
 function useLocalTimeZoneFormatter() {
   const timeZoneOffset = useMemo(() => {
     const offsetMinutes = new Date().getTimezoneOffset()
@@ -112,7 +109,6 @@ function useLocalTimeZoneFormatter() {
   )
 }
 
-// 添加加载组件
 function DetailPageSkeleton() {
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -132,7 +128,6 @@ export default function VerseDetailPage() {
   )
 }
 
-// 将原来的组件逻辑移到这里
 function VerseDetailContent() {
   const router = useRouter()
   const params = useParams()
@@ -142,11 +137,8 @@ function VerseDetailContent() {
   const [tabs, setTabs] = useState([{ id: "overview", label: "Overview" }])
   const [activeTab, setActiveTab] = useState("overview")
   const [myGenesisFunds, setMyGenesisFunds] = useState(0)
-
-  // 新增移动端主标签状态
   const [mobileMainTab, setMobileMainTab] = useState<"info" | "chart" | "trade">("info")
 
-  // 在组件内部添加
   const formatCustomDateTime = useLocalTimeZoneFormatter()
 
   useEffect(() => {
@@ -161,7 +153,6 @@ function VerseDetailContent() {
     setTimeout(() => {
       const foundVerse = MOCK_PROJECTS.find((p) => p.id.toString() === verseId.toString())
       if (foundVerse) {
-        // 确保项目有社交媒体链接和必要的时间字段
         const currentDate = new Date()
         const threeMonthsLater = new Date(currentDate)
         threeMonthsLater.setMonth(currentDate.getMonth() + 3)
@@ -172,7 +163,6 @@ function VerseDetailContent() {
           x: foundVerse.x || DEFAULT_SOCIAL_LINKS.x,
           telegram: foundVerse.telegram || DEFAULT_SOCIAL_LINKS.telegram,
           discord: foundVerse.discord || DEFAULT_SOCIAL_LINKS.discord,
-          // 确保时间字段存在
           createdAt: foundVerse.createdAt || currentDate.toISOString(),
           genesisEndTime: foundVerse.genesisEndTime || currentDate.toISOString(),
           unlockTime: foundVerse.unlockTime || threeMonthsLater.toISOString(),
@@ -266,34 +256,17 @@ function VerseDetailContent() {
     gradient: "from-gray-600 to-gray-500",
   }
 
-  // 确保控制台输出社交媒体链接，以便调试
-
   // Locked阶段使用与原来locked页面完全相同的布局
   if (verse.stage === "Locked" || verse.stage === "Unlocked") {
     return (
       <div className="min-h-screen">
         {/* Page content - increased top spacing */}
         <div className="max-w-6xl px-2 md:px-4 mx-auto py-12 pt-28">
-          {/* 返回按钮 - 使用CSS媒体查询控制显示 */}
           <Button
             onClick={handleBackClick}
             variant="outline"
             className="hidden min-[1114px]:flex relative overflow-hidden group w-auto mr-auto mr-0 absolute left-0 w-auto relative overflow-hidden desktop-back-button mb-6 bg-transparent"
           >
-            {/* 背景渐变效果 */}
-            <span className="absolute inset-0 block opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out"></span>
-
-            {/* 发光边框效果 */}
-            <span
-              className="absolute inset-0 block rounded-full opacity-80 group-hover:opacity-100 transition-all duration-500 ease-in-out"
-              style={{
-                boxShadow:
-                  "0 0 5px rgba(236, 72, 153, 0.6), 0 0 15px rgba(236, 72, 153, 0.4), 0 0 25px rgba(168, 85, 247, 0.2)",
-                border: "1px solid rgba(236, 72, 153, 0.7)",
-              }}
-            ></span>
-
-            {/* 按钮内容 */}
             <div className="flex items-center relative z-10">
               <ChevronLeft className="mr-1 h-4 w-4 text-pink-300 group-hover:text-pink-200 transition-colors duration-500" />
               <span className="text-pink-300 group-hover:text-pink-200 transition-colors duration-500 font-medium">
@@ -528,26 +501,11 @@ function VerseDetailContent() {
     <div className="min-h-screen">
       {/* Page content - increased top spacing */}
       <div className="max-w-5xl px-4 md:px-6 mx-auto py-12 pt-28">
-        {/* PC端按钮 - 只在md及以上屏幕显示 */}
         <Button
           onClick={handleBackClick}
           variant="outline"
           className="hidden md:flex relative overflow-hidden group w-auto mr-auto md:mr-0 md:absolute md:left-0 md:w-auto md:relative md:overflow-hidden desktop-back-button mb-6 bg-transparent"
         >
-          {/* 背景渐变效果 */}
-          <span className="absolute inset-0 block opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out"></span>
-
-          {/* 发光边框效果 */}
-          <span
-            className="absolute inset-0 block rounded-full opacity-80 group-hover:opacity-100 transition-all duration-500 ease-in-out"
-            style={{
-              boxShadow:
-                "0 0 5px rgba(236, 72, 153, 0.6), 0 0 15px rgba(236, 72, 153, 0.4), 0 0 25px rgba(168, 85, 247, 0.2)",
-              border: "1px solid rgba(236, 72, 153, 0.7)",
-            }}
-          ></span>
-
-          {/* 按钮内容 */}
           <div className="flex items-center relative z-10">
             <ChevronLeft className="mr-1 h-4 w-4 text-pink-300 group-hover:text-pink-200 transition-colors duration-500" />
             <span className="text-pink-300 group-hover:text-pink-200 transition-colors duration-500 font-medium">

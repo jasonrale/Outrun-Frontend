@@ -45,7 +45,7 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
         <div className="mb-4">
           {/* 桌面端布局 */}
           <div className="hidden lg:flex items-center justify-center relative">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent absolute left-0">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill absolute left-0">
               Yield Vault Overview
             </h3>
             <div className="text-center">
@@ -67,7 +67,7 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
 
           {/* 移动端布局 */}
           <div className="lg:hidden flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent flex-shrink-0">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill flex-shrink-0">
               Yield Vault Overview
             </h3>
             <div className="flex items-center justify-center gap-1 flex-shrink-0">
@@ -116,7 +116,7 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
             <div className="flex items-center gap-2">
               <div className="text-lg font-bold text-white">
                 {formatMarketCap(vaultData.totalStaked)}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                <span className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
                   {" "}
                   {project.symbol}
                 </span>
@@ -131,12 +131,12 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
             <div className="text-sm text-pink-300/80 mb-1">Exchange Rate</div>
             <div className="text-lg font-bold text-white">
               1
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+              <span className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
                 {" "}
                 s{project.symbol}
               </span>{" "}
               ≈ {vaultData.exchangeRate.toFixed(4)}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+              <span className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
                 {" "}
                 {project.symbol}
               </span>

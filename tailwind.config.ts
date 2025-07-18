@@ -86,7 +86,20 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    ({ addUtilities }) => {
+      const newUtilities = {
+        ".text-gradient-fill": {
+          "background-clip": "text",
+          "-webkit-background-clip": "text",
+          color: "transparent",
+          "-webkit-text-fill-color": "transparent",
+        },
+      }
+      addUtilities(newUtilities, ["responsive", "hover"])
+    },
+  ],
 } satisfies Config
 
 export default config

@@ -160,7 +160,7 @@ export function MobileMarketList({
             <Button
               size="sm"
               className={cn(
-                "p-0 whitespace-nowrap transition-all duration-300 font-bold text-2xl bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg",
+                "p-0 whitespace-nowrap transition-all duration-300 font-bold text-2xl bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 text-gradient-fill drop-shadow-lg",
                 activeHeaderTab === "Markets" ? "opacity-100" : "opacity-40",
               )}
               onClick={() => setActiveHeaderTab("Markets")}
@@ -170,7 +170,7 @@ export function MobileMarketList({
             <Button
               size="sm"
               className={cn(
-                "p-0 whitespace-nowrap transition-all duration-300 font-bold text-2xl bg-gradient-to-r from-pink-400 via-rose-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg",
+                "p-0 whitespace-nowrap transition-all duration-300 font-bold text-2xl bg-gradient-to-r from-pink-400 via-rose-400 to-orange-400 text-gradient-fill drop-shadow-lg",
                 activeHeaderTab === "Featured" ? "opacity-100" : "opacity-40",
               )}
               onClick={() => setActiveHeaderTab("Featured")}

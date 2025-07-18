@@ -11,7 +11,7 @@ import { StakeCard } from "@/components/outstake/stake-card"
 import { MarketInfoCard } from "@/components/outstake/market-info-card"
 import { YieldPoolCard } from "@/components/outstake/yield-pool-card"
 import { GradientBackgroundCard } from "@/components/ui/gradient-background-card"
-import { useMobile } from "@/hooks/use-mobile" // Import useMobile hook
+import { useMobile } from "@/hooks/use-mobile"
 
 interface MarketData {
   assetName: string
@@ -24,7 +24,7 @@ interface MarketData {
   ytRVGrowthRate: string
   totalRedeemableValue: number
   ytTotalSupply: number
-  syTokenPriceUSD: number // Changed to number type
+  syTokenPriceUSD: number
   syContractAddress: string
   protocol: { name: string; website: string }
   description?: string
@@ -37,7 +37,7 @@ export default function MintPage() {
   const params = useParams()
   const router = useRouter()
   const syContractAddress = params.syContractAddress as string
-  const isMobile = useMobile() // Use the useMobile hook
+  const isMobile = useMobile()
 
   const [marketData, setMarketData] = useState<MarketData | null>(null)
   const [isConnected, setIsConnected] = useState(false)
@@ -62,7 +62,7 @@ export default function MintPage() {
             supportedInputTokens: market.supportedInputTokens,
             exchangeRate: market.exchangeRate,
             UPT: asset.UPT,
-            syTokenPriceUSD: Number.parseFloat(asset.syTokenPriceUSD), // Parse to number
+            syTokenPriceUSD: Number.parseFloat(asset.syTokenPriceUSD),
             totalRedeemableValue: market.totalRedeemableValue,
             ytTotalSupply: market.ytTotalSupply,
           }
@@ -101,15 +101,17 @@ export default function MintPage() {
               <div className="">
                 <Button
                   onClick={() => router.push("/outstake/markets")}
-                  className="group mb-6 flex items-center gap-1 text-white px-4 py-2 rounded-md font-semibold transition-all duration-300
-                       bg-gradient-to-r from-purple-800/10 to-pink-800/10
-                       ring-1 ring-inset ring-purple-500/50
-                       hover:bg-gradient-to-r hover:from-purple-700/30 hover:to-pink-700/30
-                       hover:ring-1 hover:ring-purple-500/40 hover:shadow-lg hover:shadow-purple-500/20
-                       backdrop-blur-sm"
+                  className="group mb-6 flex items-center gap-1 px-4 py-2 rounded-md font-semibold transition-all duration-300
+                       bg-[#0f0326]/80 border border-purple-400/30
+                       shadow-[0_0_20px_rgba(168,85,247,0.4)]
+                       hover:bg-[#190a2d]/90 backdrop-blur-sm relative overflow-hidden"
                 >
-                  <ArrowLeft size={20} className="mr-0.5" />
-                  {isMobile ? "Back" : "Back to Markets"}
+                  <div className="flex items-center relative z-10">
+                    <ArrowLeft className="mr-0.5 h-4 w-4 text-purple-400 group-hover:text-purple-300 transition-colors duration-500" />
+                    <span className="text-purple-400 group-hover:text-purple-300 transition-colors duration-500 font-medium">
+                      {isMobile ? "Back" : "Back to Markets"}
+                    </span>
+                  </div>
                 </Button>
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -124,7 +126,7 @@ export default function MintPage() {
                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400/20 to-purple-400/20 blur-lg"></div>
                   </div>
                   <div>
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 text-gradient-fill">
                       {marketData.assetName} Market
                     </h1>
                   </div>
@@ -224,9 +226,7 @@ export default function MintPage() {
                   <div
                     className={`${activeTab === "mint" ? `min-[860px]:hidden` : "lg:hidden"} w-full px-4 mt-2 -mb-1`}
                   >
-                    <div
-                      className="h-[2px] bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20"
-                    ></div>
+                    <div className="h-[2px] bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20"></div>
                   </div>
                   {/* Right side - always shows MarketInfoCard */}
                   <MarketInfoCard marketData={marketData} mintPT={mintPT} uptMode={uptMode} />

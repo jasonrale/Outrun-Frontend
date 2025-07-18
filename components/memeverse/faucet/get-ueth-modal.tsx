@@ -49,7 +49,7 @@ export function GetUETHModal({ isOpen, onClose }: GetUETHModalProps) {
           <div className="p-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent uppercase">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill uppercase">
                 Get UETH
               </h2>
               <X

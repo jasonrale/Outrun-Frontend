@@ -256,7 +256,7 @@ export function LiquidityPoolsTable({
             </div>
             <div className="bg-black/20 p-3 rounded-lg">
               <div className="text-xs text-zinc-400 mb-1">APR</div>
-              <div className="text-xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+              <div className="text-xl font-medium text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500">
                 {pool.apr}
               </div>
             </div>
@@ -313,7 +313,7 @@ export function LiquidityPoolsTable({
             <div className="text-right">
               <div className="flex items-center justify-end">
                 <span className="text-xs text-zinc-400 mr-1">APR:</span>
-                <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500">
                   {pool.apr}
                 </span>
               </div>
@@ -635,7 +635,7 @@ export function LiquidityPoolsTable({
               <td className="px-4 py-4 whitespace-nowrap text-sm text-zinc-300 text-right">{pool.tvl}</td>
               <td className="px-4 py-4 whitespace-nowrap text-right">
                 <div className="flex items-center justify-end">
-                  <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)] relative">
+                  <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)] relative">
                     {pool.apr}
                     <span className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-pink-500/30 to-transparent"></span>
                   </span>

@@ -96,7 +96,7 @@ export default function LiquidityPage() {
                   onClick={() => setActiveView("pools")}
                   className={`text-2xl font-bold relative ${
                     activeView === "pools"
-                      ? "bg-clip-text text-transparent bg-gradient-to-r from-[#ff6b6b] to-[#ff8e8e] drop-shadow-[0_0_8px_rgba(255,107,107,0.5)]"
+                      ? "text-gradient-fill bg-gradient-to-r from-[#ff6b6b] to-[#ff8e8e] drop-shadow-[0_0_8px_rgba(255,107,107,0.5)]"
                       : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
@@ -109,7 +109,7 @@ export default function LiquidityPage() {
                   onClick={() => setActiveView("positions")}
                   className={`text-2xl font-bold relative ${
                     activeView === "positions"
-                      ? "bg-clip-text text-transparent bg-gradient-to-r from-[#ff6b6b] to-[#ff8e8e] drop-shadow-[0_0_8px_rgba(255,107,107,0.5)]"
+                      ? "text-gradient-fill bg-gradient-to-r from-[#ff6b6b] to-[#ff8e8e] drop-shadow-[0_0_8px_rgba(255,107,107,0.5)]"
                       : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
@@ -137,7 +137,7 @@ export default function LiquidityPage() {
                     onClick={() => setActiveView("pools")}
                     className={`text-base font-bold relative h-full flex items-center ${
                       activeView === "pools"
-                        ? "bg-clip-text text-transparent bg-gradient-to-r from-[#ff6b6b] to-[#ff8e8e] drop-shadow-[0_0_8px_rgba(255,107,107,0.5)]"
+                        ? "text-gradient-fill bg-gradient-to-r from-[#ff6b6b] to-[#ff8e8e] drop-shadow-[0_0_8px_rgba(255,107,107,0.5)]"
                         : "text-zinc-400 hover:text-zinc-200"
                     }`}
                   >
@@ -150,7 +150,7 @@ export default function LiquidityPage() {
                     onClick={() => setActiveView("positions")}
                     className={`text-base font-bold relative h-full flex items-center ${
                       activeView === "positions"
-                        ? "bg-clip-text text-transparent bg-gradient-to-r from-[#ff6b6b] to-[#ff8e8e] drop-shadow-[0_0_8px_rgba(255,107,107,0.5)]"
+                        ? "text-gradient-fill bg-gradient-to-r from-[#ff6b6b] to-[#ff8e8e] drop-shadow-[0_0_8px_rgba(255,107,107,0.5)]"
                         : "text-zinc-400 hover:text-zinc-200"
                     }`}
                   >

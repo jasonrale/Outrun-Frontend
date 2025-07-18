@@ -36,7 +36,7 @@ export function CategorySelectionModal({
           <div className="w-12 h-1 bg-white/30 rounded-full mx-auto mb-4" />
 
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-center bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+            <DialogTitle className="text-xl font-bold text-center bg-gradient-to-r from-cyan-400 to-purple-400 text-gradient-fill">
               Select Category
             </DialogTitle>
           </DialogHeader>

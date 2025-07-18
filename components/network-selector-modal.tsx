@@ -74,7 +74,7 @@ export function NetworkSelectorModal({
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-white">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                  <span className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500">
                     Select Network
                   </span>
                 </h3>
