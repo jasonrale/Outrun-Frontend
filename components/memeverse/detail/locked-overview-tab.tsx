@@ -36,7 +36,7 @@ export function LockedOverviewTab({
 
         <div className="flex-1 min-w-0 bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)] flex flex-col min-h-[220px]">
           <h2 className="text-xl font-bold mb-4 flex items-center">
-            <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 text-transparent bg-clip-text">
+            <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 text-gradient-fill">
               {name}
             </span>
             {symbol && <span className="text-pink-300 ml-2">{symbol}</span>}

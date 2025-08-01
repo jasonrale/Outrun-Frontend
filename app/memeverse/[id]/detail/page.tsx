@@ -712,7 +712,7 @@ function VerseDetailContent() {
                   {/* Title area */}
                   <div className="h-[38px] flex p-0 m-0 overflow-visible">
                     <div className="flex p-0 m-0 overflow-visible">
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 text-xl font-bold leading-none mt-[-2px]">
+                      <span className="text-gradient-fill bg-gradient-to-r from-pink-400 to-purple-400 text-xl font-bold leading-none mt-[-2px]">
                         {verse.symbol}
                       </span>
                       <span className="max-w-[300px] truncate text-pink-300 text-xl font-bold leading-none ml-1 mt-[-2px]">

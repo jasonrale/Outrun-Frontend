@@ -54,7 +54,7 @@ export function MemeverseSocialShare({ isOpen, onClose, project, isGenesis }: Me
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
       <GradientBackgroundCard className="relative p-6 max-w-md w-full mx-4 text-white">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+          <h2 className="text-xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-gradient-fill">
             Boost Your Community
           </h2>
           <button
@@ -112,11 +112,11 @@ export function MemeverseSocialShare({ isOpen, onClose, project, isGenesis }: Me
             <div className="flex-1 w-[60%] min-w-0">
               <div className="flex items-center mb-1">
                 <img src="/placeholder.svg?height=16&width=16" className="w-4 h-4 mr-1" />
-                <span className="font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 bg-clip-text text-transparent text-sm">
+                <span className="font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-gradient-fill text-sm">
                   Outrun
                 </span>
               </div>
-              <h3 className="text-xl font-extrabold mb-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+              <h3 className="text-xl font-extrabold mb-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-gradient-fill">
                 {project.symbol}
               </h3>
               <p className="text-sm font-semibold text-pink-300 mb-1">{project.name}</p>

@@ -159,7 +159,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               <div className="flex justify-between items-center mb-1.5">
                 <div className="flex items-center max-w-[180px] overflow-hidden">
                   <span
-                    className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 text-base whitespace-nowrap overflow-hidden text-ellipsis max-w-[100px] sm:max-w-[100px]"
+                    className="font-bold text-gradient-fill bg-gradient-to-r from-pink-400 to-purple-400 text-base whitespace-nowrap overflow-hidden text-ellipsis max-w-[100px] sm:max-w-[100px]"
                     title={project.symbol}
                   >
                     {project.symbol}

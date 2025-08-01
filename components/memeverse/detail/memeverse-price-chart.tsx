@@ -148,7 +148,7 @@ export const MemeversePriceChart = React.memo(({ project }: MemeversePriceChartP
           {/* 桌面端布局 - 保持原有结构 */}
           <div className="hidden lg:block">
             <div className="flex items-center gap-4 mb-2">
-              <h3 className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 text-transparent bg-clip-text">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 text-gradient-fill">
                 {project.symbol || "TOKEN"}
               </h3>
               <div className="flex flex-wrap gap-2 text-xs">
@@ -282,7 +282,7 @@ export const MemeversePriceChart = React.memo(({ project }: MemeversePriceChartP
             <div>
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1 flex-1 min-w-0">
-                  <span className="text-base font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 text-transparent bg-clip-text whitespace-nowrap">
+                  <span className="text-base font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 text-gradient-fill whitespace-nowrap">
                     {project.symbol || "TOKEN"}
                   </span>
                   <span className="text-base font-bold text-white whitespace-nowrap">
