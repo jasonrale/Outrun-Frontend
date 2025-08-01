@@ -147,7 +147,9 @@ function VerseDetailContent() {
   const [activeTab, setActiveTab] = useState("overview")
   const [myGenesisFunds, setMyGenesisFunds] = useState(0)
   const [mobileMainTab, setMobileMainTab] = useState<"info" | "chart" | "trade">("info")
-  const [showShareModal, setShowShareModal] = useState(false) // State for share modal
+  const [showShareModal, setShowShareModal] = useState(false)
+
+  const userRefundAmount = 2.5
 
   const formatCustomDateTime = useLocalTimeZoneFormatter()
 
@@ -159,6 +161,8 @@ function VerseDetailContent() {
       randomShareMessageWidth: selected.width,
     }
   }, [])
+
+  // Removed useEffect that reads returnTo from URL, as it's no longer needed
 
   useEffect(() => {
     const verseId = params.id
@@ -182,7 +186,7 @@ function VerseDetailContent() {
           x: foundVerse.x || DEFAULT_SOCIAL_LINKS.x,
           telegram: foundVerse.telegram || DEFAULT_SOCIAL_LINKS.telegram,
           discord: foundVerse.discord || DEFAULT_SOCIAL_LINKS.discord,
-          createdAt: foundVerse.createdAt || currentDate.toISOString(),
+          createdTime: foundVerse.createdTime || currentDate.toISOString(),
           genesisEndTime: foundVerse.genesisEndTime || currentDate.toISOString(),
           unlockTime: foundVerse.unlockTime || threeMonthsLater.toISOString(),
         }
@@ -198,7 +202,19 @@ function VerseDetailContent() {
 
   // Handle back button click
   const handleBackClick = () => {
-    router.push("/memeverse/board")
+    if (typeof window !== "undefined") {
+      const storedParams = sessionStorage.getItem("memeverseBoardFilters")
+      if (storedParams) {
+        // If there are saved filter conditions, return to the Board page with them
+        router.push(`/memeverse/board${storedParams}`)
+      } else {
+        // Otherwise, return to the default Board page
+        router.push("/memeverse/board")
+      }
+    } else {
+      // Fallback for server-side rendering or environments without window
+      router.push("/memeverse/board")
+    }
   }
 
   // Handle deposit
@@ -218,7 +234,7 @@ function VerseDetailContent() {
   // Handle refund
   const handleRefund = () => {
     // In a real app, this would call a contract function to process the refund
-    alert(`Successfully claimed refund of ${verse?.refundAmount} ${verse?.raisedToken}`)
+    alert(`Successfully claimed refund of ${userRefundAmount} ${verse?.raisedToken}`)
   }
 
   if (loading) {
@@ -652,7 +668,7 @@ function VerseDetailContent() {
               {verse.stage === "Refund" ? (
                 <RefundSection
                   totalRefundAmount={verse.raisedAmount}
-                  userRefundAmount={verse.refundAmount}
+                  userRefundAmount={userRefundAmount}
                   refundToken={verse.raisedToken}
                   onRefund={handleRefund}
                 />
@@ -784,7 +800,7 @@ function VerseDetailContent() {
                         <div className="px-3 py-2">
                           <div className="text-xs text-pink-300/80 font-medium">Genesis End Time</div>
                           <div className="text-sm font-semibold text-pink-100 overflow-hidden text-ellipsis whitespace-nowrap">
-                            {formatCustomDateTime(verse.genesisEndTime || verse.createdAt || new Date())}
+                            {formatCustomDateTime(verse.genesisEndTime || verse.createdTime || new Date())}
                           </div>
                         </div>
                       </div>
@@ -796,7 +812,7 @@ function VerseDetailContent() {
                           <div className="text-sm font-semibold text-pink-100 overflow-hidden text-ellipsis whitespace-nowrap">
                             {formatCustomDateTime(
                               verse.unlockTime ||
-                                new Date(verse.createdAt).setMonth(new Date(verse.createdAt).getMonth() + 3),
+                                new Date(verse.createdTime).setMonth(new Date(verse.createdTime).getMonth() + 3),
                             )}
                           </div>
                         </div>
@@ -811,7 +827,7 @@ function VerseDetailContent() {
                 {verse.stage === "Refund" ? (
                   <RefundSection
                     totalRefundAmount={verse.raisedAmount}
-                    userRefundAmount={verse.refundAmount}
+                    userRefundAmount={userRefundAmount}
                     refundToken={verse.raisedToken}
                     onRefund={handleRefund}
                   />
@@ -832,7 +848,7 @@ function VerseDetailContent() {
               {verse.stage === "Refund" ? (
                 <RefundSection
                   totalRefundAmount={verse.raisedAmount}
-                  userRefundAmount={verse.refundAmount}
+                  userRefundAmount={userRefundAmount}
                   refundToken={verse.raisedToken}
                   onRefund={handleRefund}
                 />

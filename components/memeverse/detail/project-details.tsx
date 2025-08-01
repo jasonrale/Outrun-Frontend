@@ -163,12 +163,12 @@ export const ProjectDetails = React.memo(({ project, stageStyle, onBackClick }: 
 
           {/* Third row: time information */}
           <div className="flex flex-col md:flex-row gap-2 flex-1 relative z-10">
-            {/* Genesis End Time / Created At card */}
+            {/* Genesis End Time / Created Time card */}
             <div className="flex-1 bg-black/20 rounded-lg border border-purple-500/30 flex flex-col justify-center backdrop-blur-sm hover:border-purple-500/50 transition-all duration-300">
               <div className="px-3 py-2">
                 <div className="text-xs text-pink-300/80 font-medium">Genesis End Time</div>
                 <div className="text-sm font-semibold text-pink-100 overflow-hidden text-ellipsis whitespace-nowrap">
-                  {formatCustomDateTime(project.genesisEndTime || project.createdAt || new Date())}
+                  {formatCustomDateTime(project.genesisEndTime || project.createdTime || new Date())}
                 </div>
               </div>
             </div>
@@ -180,7 +180,7 @@ export const ProjectDetails = React.memo(({ project, stageStyle, onBackClick }: 
                 <div className="text-sm font-semibold text-pink-100 overflow-hidden text-ellipsis whitespace-nowrap">
                   {formatCustomDateTime(
                     project.unlockTime ||
-                      new Date(project.createdAt).setMonth(new Date(project.createdAt).getMonth() + 3),
+                      new Date(project.createdTime).setMonth(new Date(project.createdTime).getMonth() + 3),
                   )}
                 </div>
               </div>

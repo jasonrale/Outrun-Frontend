@@ -62,19 +62,18 @@ export interface MemeProject {
   population: number
   marketCap: number
   progress?: number
-  createdAt: string
+  createdTime: string
   genesisEndTime?: string
   unlockTime?: string
-  // Removed stakingApy and treasuryFund from top level
-  listedOnOutSwap?: boolean
   image?: string
-  // Added nested data structures
   vaultData?: {
     stakingAPY: number
   }
   daoData?: {
     treasuryValue: number
   }
+  volume?: number // Added for Locked and Unlocked stages
+  unrefundedAmount?: number // Added for Refund stage
 }
 
 // 代币类型

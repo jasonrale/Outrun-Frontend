@@ -43,6 +43,8 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const router = useRouter()
+  // No need to use useMemeVerse here for saving state, as we'll save the raw URL search string
+  // const { activeChainFilter, activeStageFilter, selectedMode, sortOption, sortDirection, searchQuery, currentPage } = useMemeVerse()
 
   const stageStyle = STAGE_COLORS[project.stage] || {
     bg: "bg-gray-600",
@@ -120,11 +122,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   // Handle card click event
   const handleCardClick = () => {
-    // 立即进行乐观路由切换，不等待RSC
-    router.push(`/memeverse/${project.id}/detail/`, { scroll: false })
+    // Save the current board page's search parameters to sessionStorage
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("memeverseBoardFilters", window.location.search)
+    }
 
-    // 或者使用 router.prefetch 预加载
-    // router.prefetch(`/memeverse/${project.id}/detail/`)
+    // Navigate to the detail page without adding any extra query parameters
+    router.push(`/memeverse/${project.id}/detail`, { scroll: false })
   }
 
   return (
@@ -235,6 +239,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
                         Total Raised:{" "}
                         <span className="text-pink-200 font-medium">
                           {project.raisedAmount.toFixed(2)} {project.raisedToken}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Unrefunded Amount - 仅限Refund阶段 */}
+                    {project.stage === "Refund" && project.unrefundedAmount !== undefined && (
+                      <div className="text-pink-300/70 text-xs max-[450px]:text-[10px]">
+                        Unrefunded Amount:{" "}
+                        <span className="text-pink-200 font-medium">
+                          {project.unrefundedAmount.toFixed(2)} {project.raisedToken}
                         </span>
                       </div>
                     )}

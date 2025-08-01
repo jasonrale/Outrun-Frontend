@@ -80,7 +80,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
     const chain = searchParams.get("chain") || "all"
     const stage = searchParams.get("stage") || "genesis"
     const mode = searchParams.get("mode") || "normal"
-    const sort = searchParams.get("sort") || "createdAt"
+    const sort = searchParams.get("sort") || "createdTime"
     const direction = searchParams.get("direction") || "desc"
     const search = searchParams.get("search") || ""
     const page = Number.parseInt(searchParams.get("page") || "1")
@@ -151,12 +151,12 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
     (stageId: string) => {
       updateFilters({
         activeStageFilter: stageId,
-        sortOption: "createdAt", // 重置为默认排序
+        sortOption: "createdTime", // 重置为默认排序
       })
 
       // 如果不是genesis阶段，需要移除mode参数
       const shouldRemoveMode = stageId !== "genesis"
-      updateURL({ stage: stageId, sort: "createdAt", page: 1 }, shouldRemoveMode)
+      updateURL({ stage: stageId, sort: "createdTime", page: 1 }, shouldRemoveMode)
       closeAllDropdowns()
     },
     [updateFilters, updateURL, closeAllDropdowns],

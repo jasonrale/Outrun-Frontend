@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react"
 import type { MemeProject, ProjectMode, SortDirection, ChainFilter, StageFilter, SortOption } from "@/types/memeverse"
 import { MOCK_PROJECTS } from "@/data/memeverse-projects"
 import { useMediaQuery } from "@/hooks/use-media-query" // Import useMediaQuery
@@ -25,15 +25,15 @@ const STAGE_FILTERS: StageFilter[] = [
 const SORT_OPTIONS: any = {
   genesis: {
     normal: [
-      { id: "createdAt", label: "Creation Time" },
+      { id: "createdTime", label: "Created Time" },
       { id: "genesisEndTime", label: "Genesis Endtime" },
       { id: "unlockTime", label: "Unlock Time" },
       { id: "raisedAmount", label: "Total Raised" },
       { id: "population", label: "Population" },
-      { id: "progress", label: "Progress" }, // Added Progress sort option for Genesis normal mode
+      { id: "progress", label: "Progress" },
     ],
     flash: [
-      { id: "createdAt", label: "Creation Time" },
+      { id: "createdTime", label: "Created Time" },
       { id: "genesisEndTime", label: "Genesis Endtime" },
       { id: "unlockTime", label: "Unlock Time" },
       { id: "raisedAmount", label: "Total Raised" },
@@ -41,9 +41,12 @@ const SORT_OPTIONS: any = {
       { id: "progress", label: "Progress" },
     ],
   },
-  refund: [],
+  refund: [
+    { id: "createdTime", label: "Created Time" },
+    { id: "unrefundedAmount", label: "Unrefunded Amount" },
+  ],
   locked: [
-    { id: "createdAt", label: "Creation Time" },
+    { id: "createdTime", label: "Created Time" },
     { id: "unlockTime", label: "Unlock Time" },
     { id: "volume", label: "Trading Volume" },
     { id: "marketCap", label: "Market Cap" },
@@ -51,7 +54,7 @@ const SORT_OPTIONS: any = {
     { id: "treasuryValue", label: "Treasury Fund" },
   ],
   unlocked: [
-    { id: "createdAt", label: "Creation Time" },
+    { id: "createdTime", label: "Created Time" },
     { id: "volume", label: "Trading Volume" },
     { id: "marketCap", label: "Market Cap" },
     { id: "stakingAPY", label: "Staking APY" },
@@ -129,7 +132,7 @@ interface MemeVerseContextType {
 const MemeVerseContext = createContext<MemeVerseContextType | undefined>(undefined)
 
 // Provider component
-export function MemeVerseProvider({ children }: { children: ReactNode }) {
+export function MemeVerseProvider({ children }: { ReactNode }) {
   // Determine PROJECTS_PER_PAGE dynamically based on screen width
   const isThreeColumnLayout = useMediaQuery("(min-width: 1320px)")
   PROJECTS_PER_PAGE = isThreeColumnLayout ? 15 : 10
@@ -142,7 +145,7 @@ export function MemeVerseProvider({ children }: { children: ReactNode }) {
     searchQuery: "",
     selectedMode: "normal",
     showListedOnOutSwap: false,
-    sortOption: "createdAt",
+    sortOption: "createdTime",
     sortDirection: "desc",
     currentPage: 1,
   })
@@ -206,18 +209,22 @@ export function MemeVerseProvider({ children }: { children: ReactNode }) {
         let valueA: any
         let valueB: any
 
-        // Special handling for 'volume', 'stakingAPY', and 'treasuryValue'
+        // Special handling for 'volume', 'stakingAPY', 'treasuryValue', and 'unrefundedAmount'
         if (filterState.sortOption === "volume") {
-          valueA = a.marketCap
-          valueB = b.marketCap
+          valueA = a.volume ?? 0
+          valueB = b.volume ?? 0
         } else if (filterState.sortOption === "stakingAPY") {
           valueA = a.vaultData?.stakingAPY ?? 0
           valueB = b.vaultData?.stakingAPY ?? 0
         } else if (filterState.sortOption === "treasuryValue") {
           valueA = a.daoData?.treasuryValue ?? 0
           valueB = b.daoData?.treasuryValue ?? 0
+        } else if (filterState.sortOption === "unrefundedAmount") {
+          // Added unrefundedAmount sorting logic
+          valueA = a.unrefundedAmount ?? 0
+          valueB = b.unrefundedAmount ?? 0
         } else {
-          // Default access for properties like 'marketCap', 'createdAt', etc.
+          // Default access for properties like 'marketCap', 'createdTime', etc.
           valueA = a[filterState.sortOption as keyof MemeProject]
           valueB = b[filterState.sortOption as keyof MemeProject]
         }
@@ -225,7 +232,7 @@ export function MemeVerseProvider({ children }: { children: ReactNode }) {
         // Handle date strings
         if (
           typeof valueA === "string" &&
-          (filterState.sortOption === "createdAt" ||
+          (filterState.sortOption === "createdTime" ||
             filterState.sortOption === "genesisEndTime" ||
             filterState.sortOption === "unlockTime")
         ) {
@@ -292,6 +299,11 @@ export function MemeVerseProvider({ children }: { children: ReactNode }) {
 
         if (hasFilterChange && !updates.hasOwnProperty("currentPage")) {
           newState.currentPage = 1
+        }
+
+        // Special handling: If changing to Refund stage, set default sort option to 'createdTime'
+        if (updates.activeStageFilter === "refund" && prev.activeStageFilter !== "refund") {
+          newState.sortOption = "createdTime"
         }
 
         return newState
@@ -375,7 +387,7 @@ export function MemeVerseProvider({ children }: { children: ReactNode }) {
   const getCurrentSortLabel = useCallback(() => {
     const options = getSortOptions()
     const option = options.find((opt: SortOption) => opt.id === filterState.sortOption)
-    return option ? option.label : "Creation Time"
+    return option ? option.label : "Created Time"
   }, [getSortOptions, filterState.sortOption])
 
   // Click outside to close dropdowns
