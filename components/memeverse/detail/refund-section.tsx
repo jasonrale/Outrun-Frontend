@@ -29,7 +29,6 @@ export function RefundSection({ totalRefundAmount, userRefundAmount, refundToken
     }, 2000)
   }
 
-  // 更精细���响应���布局控制
   const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">("desktop")
 
   useEffect(() => {
@@ -58,14 +57,13 @@ export function RefundSection({ totalRefundAmount, userRefundAmount, refundToken
 
   return (
     <div className="w-full lg:w-1/4 flex-shrink-0 deposit-section-container" style={{ overflow: "visible" }}>
-      {/* 主��器 - 创建一个新的堆叠上���文 */}
       <div
         className="bg-[#0f0326]/90 rounded-lg border border-purple-500/40 flex flex-col shadow-[0_4px_20px_-4px_rgba(168,85,247,0.25)]"
         style={{
           aspectRatio: !isDesktop ? "auto" : "1/1",
           height: "auto",
-          position: "relative", // 创建新的堆叠上下文
-          overflow: "visible", // 确保溢出内容可见
+          position: "relative",
+          overflow: "visible",
         }}
       >
         {/* 内容容器 */}
@@ -78,7 +76,7 @@ export function RefundSection({ totalRefundAmount, userRefundAmount, refundToken
               <div className="text-center text-indigo-300 mb-0.5 text-xs whitespace-nowrap font-medium">
                 Total Remaining Refund:
               </div>
-              <div className="text-center text-white text-base font-bold bg-gradient-to-r from-blue-400 to-indigo-300 text-gradient-fill drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
+              <div className="w-fit mx-auto text-white text-base font-bold bg-gradient-to-r from-blue-400 to-indigo-300 text-gradient-fill drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
                 {totalRefundAmount.toFixed(2)} {refundToken}
               </div>
             </div>
@@ -88,13 +86,13 @@ export function RefundSection({ totalRefundAmount, userRefundAmount, refundToken
               <div className="text-center text-indigo-300 mb-0.5 text-xs whitespace-nowrap font-medium">
                 Your Refund Amount:
               </div>
-              <div className="text-center bg-gradient-to-r from-orange-500 to-amber-400 text-gradient-fill text-base font-bold drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
+              <div className="w-fit mx-auto bg-gradient-to-r from-orange-500 to-amber-400 text-gradient-fill text-base font-bold drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
                 {userRefundAmount.toFixed(2)} {refundToken}
               </div>
             </div>
           </div>
 
-          {/* Claim Refund按钮 */}
+          {/* Claim Refund */}
           <div className="mt-auto mb-1 pt-3 px-2">
             <button
               onClick={handleRefund}
@@ -102,7 +100,7 @@ export function RefundSection({ totalRefundAmount, userRefundAmount, refundToken
               className={`w-[95%] mx-auto h-9 rounded-lg ${
                 complete
                   ? "bg-green-600 hover:bg-green-700"
-                  : "bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700"
+                  : "bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600"
               } disabled:opacity-50 disabled:cursor-not-allowed text-white text-base font-medium flex items-center justify-center transition-all duration-300`}
             >
               {processing ? (

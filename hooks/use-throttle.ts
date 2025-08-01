@@ -29,7 +29,7 @@ export function useThrottleFn<T extends (...args: any[]) => any>(
           clearTimeout(timeoutRef.current)
         }
 
-        // 设置新的定时器
+        // 设��新的定时器
         timeoutRef.current = setTimeout(() => {
           lastExecTime.current = Date.now()
           fn(...args)

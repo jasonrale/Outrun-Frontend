@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo, useCallback, Suspense } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, Info, TrendingUp, DollarSign } from "lucide-react"
+import { ChevronLeft, Info, TrendingUp, DollarSign, Share2 } from "lucide-react"
 
 import { ProjectDetails } from "@/components/memeverse/detail/project-details"
 import { DepositSection } from "@/components/memeverse/detail/deposit-section"
@@ -21,6 +21,8 @@ import { MemeversePriceChart } from "@/components/memeverse/detail/memeverse-pri
 import { CompactSwapInterface } from "@/components/memeverse/detail/compact-swap-interface"
 import { formatMarketCap } from "@/utils/format"
 import { ChainTooltip } from "@/components/ui/universal-tooltip"
+import { MemeverseSocialShare } from "@/components/memeverse/detail/memeverse-social-share"
+import { InfoTooltip } from "@/components/ui/info-tooltip"
 
 const STAGE_COLORS: Record<string, { bg: string; text: string; glow: string; gradient: string }> = {
   Genesis: {
@@ -83,6 +85,13 @@ const DEFAULT_SOCIAL_LINKS = {
   discord: "https://discord.gg/outrunbuild",
 }
 
+const SHARE_TOOLTIP_MESSAGES = [
+  { message: "Your share fuels your community’s rise—unleash exponential growth!", width: 225 },
+  { message: "One share can spark 10x community power—start now!", width: 236 },
+  { message: "More shares, stronger community, bigger rewards for all!", width: 223 },
+  { message: "Sharing builds value—grow your community, own its future!", width: 212 },
+]
+
 function useLocalTimeZoneFormatter() {
   const timeZoneOffset = useMemo(() => {
     const offsetMinutes = new Date().getTimezoneOffset()
@@ -138,8 +147,18 @@ function VerseDetailContent() {
   const [activeTab, setActiveTab] = useState("overview")
   const [myGenesisFunds, setMyGenesisFunds] = useState(0)
   const [mobileMainTab, setMobileMainTab] = useState<"info" | "chart" | "trade">("info")
+  const [showShareModal, setShowShareModal] = useState(false) // State for share modal
 
   const formatCustomDateTime = useLocalTimeZoneFormatter()
+
+  const { randomShareMessage, randomShareMessageWidth } = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * SHARE_TOOLTIP_MESSAGES.length)
+    const selected = SHARE_TOOLTIP_MESSAGES[randomIndex]
+    return {
+      randomShareMessage: selected.message,
+      randomShareMessageWidth: selected.width,
+    }
+  }, [])
 
   useEffect(() => {
     const verseId = params.id
@@ -256,7 +275,6 @@ function VerseDetailContent() {
     gradient: "from-gray-600 to-gray-500",
   }
 
-  // Locked阶段使用与原来locked页面完全相同的布局
   if (verse.stage === "Locked" || verse.stage === "Unlocked") {
     return (
       <div className="min-h-screen">
@@ -284,9 +302,7 @@ function VerseDetailContent() {
             <span className="font-medium">Back</span>
           </button>
 
-          {/* 桌面端布局 - 使用CSS媒体查询 */}
           <div className="hidden min-[1114px]:block">
-            {/* 项目详情卡片 */}
             <GradientBackgroundCard
               className="mb-8"
               contentClassName="p-4 md:p-6"
@@ -309,9 +325,8 @@ function VerseDetailContent() {
               showGrid={true}
               gridOpacity={0.1}
             >
-              {/* 标签导航 */}
-              <div>
-                <div className="flex items-center px-6 pt-4 pb-0 space-x-1 overflow-x-auto scrollbar-hide">
+              <div className="flex justify-between items-center px-6 py-4">
+                <div className="flex items-center space-x-1 overflow-x-auto scrollbar-hide">
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
@@ -322,46 +337,57 @@ function VerseDetailContent() {
                           : "text-pink-300/80 hover:text-pink-200 hover:bg-purple-900/20"
                       }`}
                     >
-                      {/* 活动标签的背景效果 */}
                       {activeTab === tab.id && (
                         <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 animate-gradient-x"></span>
                       )}
-                      {/* 标签文本 */}
                       <span className="relative z-10">{tab.label}</span>
                     </button>
                   ))}
                 </div>
-
-                {/* 内容与标签导航之间的分隔线 */}
-                <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent mx-6 mt-4"></div>
-
-                {/* 标签内容 */}
-                <div className="relative pt-4 px-6 pb-6">
-                  {activeTab === "overview" && (
-                    <LockedOverviewTab
-                      description={verse.description}
-                      website={verse.website}
-                      x={verse.x}
-                      telegram={verse.telegram}
-                      discord={verse.discord}
-                      name={verse.name}
-                      symbol={verse.symbol}
-                      image="/placeholder.svg"
-                      omnichain={verse.omnichain}
-                    />
-                  )}
-                  {activeTab === "liquidity" && <LiquidityTab project={verse} />}
-                  {activeTab === "pol" && <POLTab project={verse} />}
-                  {activeTab === "yield-vault" && <YieldVaultTab project={verse} />}
-                  {activeTab === "dao" && <DAOTab project={verse} />}
+                {/* Share Button and Tooltip for desktop */}
+                <div className="flex items-center gap-0.5">
+                  <InfoTooltip
+                    content={randomShareMessage}
+                    position="top"
+                    maxWidth={randomShareMessageWidth}
+                    iconClassName="text-pink-300/80 hover:text-pink-300 animate-shake"
+                  />
+                  <Button
+                    onClick={() => setShowShareModal(true)}
+                    variant="ghost"
+                    className="flex items-center text-pink-300 hover:text-pink-100 p-2.5 rounded-full transition-colors duration-300 hover:bg-transparent px-[5px] py-[5px] animate-shake"
+                  >
+                    <Share2 size={20} />
+                  </Button>
                 </div>
+              </div>
+
+              <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent mx-6"></div>
+
+              <div className="relative pt-4 px-6 pb-6">
+                {activeTab === "overview" && (
+                  <LockedOverviewTab
+                    description={verse.description}
+                    website={verse.website}
+                    x={verse.x}
+                    telegram={verse.telegram}
+                    discord={verse.discord}
+                    name={verse.name}
+                    symbol={verse.symbol}
+                    image="/placeholder.svg"
+                    omnichain={verse.omnichain}
+                  />
+                )}
+                {activeTab === "liquidity" && <LiquidityTab project={verse} />}
+                {activeTab === "pol" && <POLTab project={verse} />}
+                {activeTab === "yield-vault" && <YieldVaultTab project={verse} />}
+                {activeTab === "dao" && <DAOTab project={verse} />}
               </div>
             </GradientBackgroundCard>
           </div>
 
-          {/* 移动端布局 - 使用CSS媒体查询 */}
+          {/* Mobile layout */}
           <div className="max-[1114px]:block hidden">
-            {/* 三标签导航 */}
             <div className="mb-4">
               <div className="flex bg-black/40 backdrop-blur-sm rounded-xl border border-purple-500/40 p-1">
                 <button
@@ -400,7 +426,6 @@ function VerseDetailContent() {
               </div>
             </div>
 
-            {/* 内容区域 */}
             <GradientBackgroundCard
               rounded="xl"
               shadow={true}
@@ -411,8 +436,7 @@ function VerseDetailContent() {
             >
               {mobileMainTab === "info" && (
                 <div>
-                  {/* Info标签的子标签导航 - 移动端两排显示 */}
-                  <div className="px-4 pt-4 pb-0">
+                  <div className="flex justify-between items-center px-4 py-4">
                     <div className="flex flex-wrap gap-2 justify-center">
                       {tabs.map((tab) => (
                         <button
@@ -424,21 +448,32 @@ function VerseDetailContent() {
                               : "text-pink-300/80 hover:text-pink-200 hover:bg-purple-900/20"
                           }`}
                         >
-                          {/* 活动标签的背景效果 */}
                           {activeTab === tab.id && (
                             <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 animate-gradient-x"></span>
                           )}
-                          {/* 标签文本 */}
                           <span className="relative z-10">{tab.label}</span>
                         </button>
                       ))}
                     </div>
+                    <div className="flex items-center gap-0.5">
+                      <InfoTooltip
+                        content={randomShareMessage}
+                        position="top"
+                        maxWidth={randomShareMessageWidth}
+                        iconClassName="text-pink-300/80 hover:text-pink-300 animate-shake"
+                      />
+                      <Button
+                        onClick={() => setShowShareModal(true)}
+                        variant="ghost"
+                        className="flex items-center text-pink-300 hover:text-pink-100 p-2.5 rounded-full transition-colors duration-300 hover:bg-transparent px-[5px] py-[5px] animate-shake"
+                      >
+                        <Share2 size={20} />
+                      </Button>
+                    </div>
                   </div>
 
-                  {/* 内容与标签导航之间的分隔线 */}
-                  <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent mx-4 mt-4"></div>
+                  <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent mx-4"></div>
 
-                  {/* 标签内容 */}
                   <div className="relative pt-4 px-4 pb-6">
                     {activeTab === "overview" && (
                       <LockedOverviewTab
@@ -476,27 +511,104 @@ function VerseDetailContent() {
           </div>
         </div>
 
-        <style jsx global>{`
-         .desktop-back-button {
-           background: rgba(15, 3, 38, 0.8);
-           border: 1px solid rgba(236, 72, 153, 0.4);
-           border-radius: 9999px;
-           box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
-           padding: 8px 16px;
-           transition: all 0.5s ease-in-out;
-         }
+        {showShareModal && (
+          <MemeverseSocialShare isOpen={showShareModal} onClose={() => setShowShareModal(false)} project={verse} />
+        )}
 
-         .desktop-back-button:hover {
-           background: rgba(25, 10, 45, 0.9);
-           color: #f9a8d4;
-           text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
-         }
-       `}</style>
+        <style jsx global>{`
+      .desktop-back-button {
+        background: rgba(15, 3, 38, 0.8);
+        border: 1px solid rgba(236, 72, 153, 0.4);
+        border-radius: 9999px;
+        box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
+        padding: 8px 16px;
+        transition: all 0.5s ease-in-out;
+      }
+
+      .desktop-back-button:hover {
+        background: rgba(25, 10, 45, 0.9);
+        color: #f9a8d4;
+        text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
+      }
+
+      @keyframes shake {
+        0%, 100% {
+          transform: translateX(0);
+          filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+        }
+        5% {
+          transform: translateX(-2.5px);
+          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+        }
+        10% {
+          transform: translateX(2.5px);
+          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+        }
+        15% {
+          transform: translateX(-2.5px);
+          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+        }
+        20% {
+          transform: translateX(2.5px);
+          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+        }
+        25% {
+          transform: translateX(-2.5px);
+          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+        }
+        30% {
+          transform: translateX(2.5px);
+          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+        }
+        35% {
+          transform: translateX(-2.5px);
+          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+        }
+        40% {
+          transform: translateX(2.5px);
+          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+        }
+        45% {
+          transform: translateX(-2.5px);
+          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+        }
+        50% {
+          transform: translateX(2.5px);
+          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+        }
+        55% {
+          transform: translateX(-2.5px);
+          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+        }
+        60% {
+          transform: translateX(2.5px);
+          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+        }
+        65% {
+          transform: translateX(-2.5px);
+          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+        }
+        70% {
+          transform: translateX(2.5px);
+          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+        }
+        80% {
+          transform: translateX(0);
+          filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+        }
+        81%, 99% { /* Pause phase */
+          transform: translateX(0);
+          filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+        }
+      }
+      .animate-shake {
+        animation: shake 1.5s infinite ease-in-out;
+      }
+    `}</style>
       </div>
     )
   }
 
-  // Genesis和Refund阶段使用原来的布局
   return (
     <div className="min-h-screen">
       {/* Page content - increased top spacing */}
@@ -514,7 +626,6 @@ function VerseDetailContent() {
           </div>
         </Button>
 
-        {/* 移动端按钮 - 只在小于md的屏幕显示 */}
         <button
           onClick={handleBackClick}
           type="button"
@@ -524,7 +635,6 @@ function VerseDetailContent() {
           <span className="font-medium">Back</span>
         </button>
 
-        {/* 调整项目头部信息卡片的背景透明度 */}
         <GradientBackgroundCard
           className="mb-8"
           contentClassName="p-4 md:p-6"
@@ -738,7 +848,6 @@ function VerseDetailContent() {
           </div>
         </GradientBackgroundCard>
 
-        {/* 同样调整标签内容区域的背景透明度 */}
         <GradientBackgroundCard
           rounded="xl"
           shadow={true}
@@ -748,66 +857,157 @@ function VerseDetailContent() {
           gridOpacity={0.1}
         >
           {/* 重新设计的标签导航 */}
-          <div>
-            {/* 标签导航 - 使用更加精致的设计 */}
-            <div className="flex items-center px-6 pt-4 pb-0 space-x-1">
+          <div className="flex justify-between items-center px-6 py-4">
+            <div className="flex items-center space-x-1">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`relative px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                     activeTab === tab.id ? "text-white" : "text-pink-300/80 hover:text-pink-200 hover:bg-purple-900/20"
                   }`}
                 >
-                  {/* 活动标签的背景效果 */}
                   {activeTab === tab.id && (
                     <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 animate-gradient-x"></span>
                   )}
-                  {/* 标签文本 - 确保在背景之上 */}
                   <span className="relative z-10">{tab.label}</span>
                 </button>
               ))}
             </div>
+            {/* Share Button and Tooltip for desktop */}
+            {verse.stage !== "Refund" && (
+              <div className="flex items-center gap-0.5">
+                <InfoTooltip
+                  content={randomShareMessage}
+                  position="top"
+                  maxWidth={randomShareMessageWidth}
+                  iconClassName="text-pink-300/80 hover:text-pink-300 animate-shake"
+                />
+                <Button
+                  onClick={() => setShowShareModal(true)}
+                  variant="ghost"
+                  className="flex items-center text-pink-300 hover:text-pink-100 p-2.5 rounded-full transition-colors duration-300 hover:bg-transparent px-[5px] py-[5px] animate-shake"
+                >
+                  <Share2 size={20} />
+                </Button>
+              </div>
+            )}
+          </div>
 
-            {/* 内容与标签导航之间的分隔线 */}
-            <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent mx-6 mt-4"></div>
+          <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent mx-6"></div>
 
-            {/* 标签内容 */}
-            <div className="relative pt-4 px-6 pb-6">
-              <OverviewTab
-                description={verse.description}
-                progress={verse.progress}
-                stage={verse.stage}
-                mode={verse.mode}
-                website={verse.website}
-                x={verse.x}
-                telegram={verse.telegram}
-                discord={verse.discord}
-                name={verse.name}
-                symbol={verse.symbol}
-                genesisFund={verse.raisedAmount}
-              />
-            </div>
+          <div className="relative pt-4 px-6 pb-6">
+            <OverviewTab
+              description={verse.description}
+              progress={verse.progress}
+              stage={verse.stage}
+              mode={verse.mode}
+              website={verse.website}
+              x={verse.x}
+              telegram={verse.telegram}
+              discord={verse.discord}
+              name={verse.name}
+              symbol={verse.symbol}
+              genesisFund={verse.raisedAmount}
+            />
           </div>
         </GradientBackgroundCard>
       </div>
 
-      <style jsx global>{`
-       .desktop-back-button {
-         background: rgba(15, 3, 38, 0.8);
-         border: 1px solid rgba(236, 72, 153, 0.4);
-         border-radius: 9999px;
-         box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
-         padding: 8px 16px;
-         transition: all 0.5s ease-in-out;
-       }
+      {showShareModal && (
+        <MemeverseSocialShare isOpen={showShareModal} onClose={() => setShowShareModal(false)} project={verse} />
+      )}
 
-       .desktop-back-button:hover {
-         background: rgba(25, 10, 45, 0.9);
-         color: #f9a8d4; /* 粉色 */
-         text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
-       }
-     `}</style>
+      <style jsx global>{`
+    .desktop-back-button {
+      background: rgba(15, 3, 38, 0.8);
+      border: 1px solid rgba(236, 72, 153, 0.4);
+      border-radius: 9999px;
+      box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
+      padding: 8px 16px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .desktop-back-button:hover {
+      background: rgba(25, 10, 45, 0.9);
+      color: #f9a8d4;
+      text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
+    }
+
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+        filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+      }
+      5% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      10% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      15% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      20% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      25% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      30% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      35% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      40% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      45% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      50% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      55% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      60% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      65% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      70% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      80% {
+        transform: translateX(0);
+        filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+      }
+      81%, 99% { /* Pause phase */
+        transform: translateX(0);
+        filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+      }
+    }
+    .animate-shake {
+      animation: shake 1.5s infinite ease-in-out;
+    }
+  `}</style>
     </div>
   )
 }

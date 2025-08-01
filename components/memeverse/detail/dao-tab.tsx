@@ -67,7 +67,7 @@ export function DAOTab({ project }: DAOTabProps) {
   // 将时间计算移到这里，确保正确转换为Date对象
   const cycleEndTime = useMemo(() => {
     const endTime = daoData.cycleEndTime
-    // 如果已经是Date对象，直接返回；如果是字符串，转换为Date对象
+    // 如果已经是Date对象，���接返回；如果是字符串，转换为Date对象
     if (endTime instanceof Date) {
       return endTime
     } else if (typeof endTime === "string") {

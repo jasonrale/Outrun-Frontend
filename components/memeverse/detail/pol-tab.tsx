@@ -212,7 +212,7 @@ export function POLTab({ project }: POLTabProps) {
     <div className="space-y-6">
       {/* POL Overview */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
-        {/* 头部布局 - 响应式设计 */}
+        {/* 头部布局 - 响应式���计 */}
         <div className="mb-4">
           {/* 桌面端布局 */}
           <div className="hidden lg:flex items-center justify-center relative">
@@ -433,7 +433,6 @@ export function POLTab({ project }: POLTabProps) {
                   <button
                     className="p-2 text-purple-400 hover:text-purple-300 relative"
                     onClick={() => setShowSettings(!showSettings)}
-                    title="Settings"
                   >
                     <Settings size={18} />
                   </button>
@@ -441,9 +440,8 @@ export function POLTab({ project }: POLTabProps) {
                   <button
                     className="md:hidden p-2 text-purple-400 hover:text-purple-300 relative"
                     onClick={() => setIsMintModalOpen(false)}
-                    title="Close"
                   >
-                    <X size={18} />
+                    <X size={20} />
                   </button>
                 </div>
               </div>
@@ -635,7 +633,6 @@ export function POLTab({ project }: POLTabProps) {
                   <button
                     className="p-2 text-red-400 hover:text-red-300 relative"
                     onClick={() => setShowSettings(!showSettings)}
-                    title="Settings"
                   >
                     <Settings size={18} />
                   </button>
@@ -643,9 +640,8 @@ export function POLTab({ project }: POLTabProps) {
                   <button
                     className="md:hidden p-2 text-red-400 hover:text-red-300 relative"
                     onClick={() => setIsRedeemModalOpen(false)}
-                    title="Close"
                   >
-                    <X size={18} />
+                    <X size={20} />
                   </button>
                 </div>
               </div>

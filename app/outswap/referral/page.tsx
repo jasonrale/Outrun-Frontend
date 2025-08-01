@@ -18,7 +18,7 @@ export default function ReferralPage() {
     totalEarned: "1,245.32",
     referralsCount: 28,
     code: "OUTRUN123",
-    link: "https://outrun.network/outswap/ref/OUTRUN123",
+    link: "https://testnet.outrun.build/ref/OUTRUN123",
   }
 
   const fadeIn = {

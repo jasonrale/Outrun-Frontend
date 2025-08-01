@@ -159,7 +159,7 @@ export const MOCK_PROJECTS = [
     marketCap: 225000,
     progress: 19.5,
     genesisEndTime: "2025-06-28T16:00:00Z",
-    unlockTime: "2025-03-02T16:00:00Z", // 设置���genesisEndTime后226天
+    unlockTime: "2025-03-02T16:00:00Z", // 设置为genesisEndTime后226天
     createdAt: "2025-05-25T10:30:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
@@ -179,7 +179,7 @@ export const MOCK_PROJECTS = [
     marketCap: 175000,
     progress: 16.8,
     genesisEndTime: "2025-07-01T14:30:00Z",
-    unlockTime: "2025-03-22T14:30:00Z", // 设置为genesisEndTime�����240天
+    unlockTime: "2025-03-22T14:30:00Z", // 设置为genesisEndTime后240天
     createdAt: "2025-05-28T09:45:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
@@ -425,7 +425,7 @@ export const MOCK_PROJECTS = [
     marketCap: 250000,
     progress: 25.0,
     genesisEndTime: "2025-06-05T12:00:00Z",
-    unlockTime: "2025-01-27T12:00:00Z", // 修���为genesisEndTime后226天
+    unlockTime: "2025-01-27T12:00:00Z", // 修改为genesisEndTime后226天
     createdAt: "2025-05-01T12:00:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
@@ -483,14 +483,11 @@ export const MOCK_PROJECTS = [
     description:
       "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
     stage: "Locked",
-    raisedAmount: 52000.25,
-    raisedToken: "UETH",
     population: 3856,
     marketCap: 5890000,
-    progress: 89.3,
+    volume: 5258392,
     unlockTime: "2025-07-15T10:00:00Z",
     createdAt: "2025-04-15T14:20:00Z",
-    genesisEndTime: "2025-05-10T10:00:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
       { name: "Base", chainid: 8453, icon: "/networks/base.svg" },
@@ -626,14 +623,11 @@ export const MOCK_PROJECTS = [
     symbol: "CWOLF",
     description: "Wolf-themed token with community-driven development and governance",
     stage: "Locked",
-    raisedAmount: 60000.35,
-    raisedToken: "UETH",
     population: 5145,
     marketCap: 8780000,
-    progress: 78.0,
+    volume: 15784287,
     unlockTime: "2025-08-05T16:00:00Z",
     createdAt: "2025-04-05T11:20:00Z",
-    genesisEndTime: "2025-05-15T16:00:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
       { name: "Base", chainid: 8453, icon: "/networks/base.svg" },
@@ -766,14 +760,11 @@ export const MOCK_PROJECTS = [
     symbol: "CMONK",
     description: "Space-exploring primates with interstellar governance model",
     stage: "Locked",
-    raisedAmount: 75000.55,
-    raisedToken: "UETH",
     population: 4230,
     marketCap: 9250000,
-    progress: 84.6,
+    volume: 7238437,
     unlockTime: "2025-07-25T12:00:00Z",
     createdAt: "2025-04-10T09:15:00Z",
-    genesisEndTime: "2025-05-20T12:00:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
       { name: "Arbitrum", chainid: 42161, icon: "/networks/arbitrum.svg" },
@@ -907,11 +898,9 @@ export const MOCK_PROJECTS = [
     symbol: "NSHIB",
     description: "Synthwave-inspired Shiba Inu token with yield farming",
     stage: "Unlocked",
-    raisedAmount: 85000.45,
-    raisedToken: "UETH",
     population: 7230,
     marketCap: 12500000,
-    progress: 100.0,
+    volume: 22320438,
     createdAt: "2025-03-20T10:15:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
@@ -1053,16 +1042,13 @@ export const MOCK_PROJECTS = [
     symbol: "QPEPE",
     description: "Quantum computing themed Pepe variant with cross-chain bridges",
     stage: "Refund",
-    raisedAmount: 8.5, // 修改为8.5 UETH
+    raisedAmount: 8.5,
+    refundAmount: 2.5
     raisedToken: "UETH",
     population: 18,
     marketCap: 64000,
-    progress: 6.4,
     genesisEndTime: "2025-06-10T12:00:00Z",
     createdAt: "2025-05-15T08:20:00Z",
-    refundReason: "Insufficient funds raised during Genesis phase",
-    refundDeadline: "2023-07-15T12:00:00Z",
-    refundAmount: 2.5, // 用户的退款金额
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
       { name: "Base", chainid: 8453, icon: "/networks/base.svg" },
@@ -1072,49 +1058,6 @@ export const MOCK_PROJECTS = [
     twitter: "https://twitter.com/quantumpepe",
     telegram: "https://t.me/quantumpepe",
     discord: "https://discord.gg/quantumpepe",
-  },
-
-  // 额外的项目数据
-  {
-    id: 29,
-    name: "Holographic Hamsters",
-    symbol: "HHAM",
-    description: "3D holographic rodent collectibles with virtual reality integration",
-    stage: "Genesis",
-    mode: "normal",
-    raisedAmount: 198.0,
-    raisedToken: "UETH",
-    population: 53,
-    marketCap: 230000,
-    progress: 19.8,
-    genesisEndTime: "2025-08-06T12:00:00Z",
-    unlockTime: "2025-09-21T12:00:00Z", // 设置为genesisEndTime后360天
-    createdAt: "2025-06-28T10:30:00Z",
-    omnichain: [
-      { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
-      { name: "Base", chainid: 8453, icon: "/networks/base.svg" },
-    ],
-  },
-  {
-    id: 30,
-    name: "Digital Dinosaurs",
-    symbol: "DDIN",
-    description: "Prehistoric reptilian token with evolutionary governance",
-    stage: "Genesis",
-    mode: "normal",
-    raisedAmount: 30.75,
-    raisedToken: "UETH",
-    population: 62,
-    marketCap: 270000,
-    progress: 21.5,
-    genesisEndTime: "2025-08-10T15:30:00Z",
-    unlockTime: "2025-09-26T15:30:00Z", // 设置为genesisEndTime后360天
-    createdAt: "2025-06-30T14:15:00Z",
-    omnichain: [
-      { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
-      { name: "Arbitrum", chainid: 42161, icon: "/networks/arbitrum.svg" },
-      { name: "Polygon", chainid: 137, icon: "/networks/polygon.svg" },
-    ],
   },
 ]
 

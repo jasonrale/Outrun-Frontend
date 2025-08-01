@@ -23,7 +23,7 @@ export function Footer() {
             </p>
 
             <div className="flex space-x-5">
-              <Link href="https://x.com/Outrunwave" className="text-zinc-500 hover:text-white transition-colors">
+              <Link href="https://x.com/OutrunBuild" className="text-zinc-500 hover:text-white transition-colors">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -49,7 +49,7 @@ export function Footer() {
                 </svg>
                 <span className="sr-only">Discord</span>
               </Link>
-              <Link href="https://t.me/outrundao" className="text-zinc-500 hover:text-white transition-colors">
+              <Link href="https://t.me/OutrunBuild" className="text-zinc-500 hover:text-white transition-colors">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -62,7 +62,7 @@ export function Footer() {
                 </svg>
                 <span className="sr-only">Telegram</span>
               </Link>
-              <Link href="https://medium.com/@outrundao" className="text-zinc-500 hover:text-white transition-colors">
+              <Link href="https://medium.com/@OutrunBuild" className="text-zinc-500 hover:text-white transition-colors">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -75,7 +75,7 @@ export function Footer() {
                 </svg>
                 <span className="sr-only">Medium</span>
               </Link>
-              <Link href="https://github.com/outrundao" className="text-zinc-500 hover:text-white transition-colors">
+              <Link href="https://github.com/OutrunBuild" className="text-zinc-500 hover:text-white transition-colors">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -134,7 +134,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="https://medium.com/@outrundao" className="text-zinc-400 hover:text-white transition-colors">
+                <Link href="https://medium.com/@OutrunBuild" className="text-zinc-400 hover:text-white transition-colors">
                   Blog
                 </Link>
               </li>

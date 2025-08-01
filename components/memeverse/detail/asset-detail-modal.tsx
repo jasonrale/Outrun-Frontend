@@ -12,7 +12,6 @@ interface Asset {
   usdValue: number
 }
 
-// 修改 AssetDetailModalProps 接口，添加 modalType 和 onClaim 属性
 interface AssetDetailModalProps {
   isOpen: boolean
   onClose: () => void
@@ -23,7 +22,6 @@ interface AssetDetailModalProps {
   onClaim?: () => void
 }
 
-// 更新函数参数，添加新的属性
 export function AssetDetailModal({
   isOpen,
   onClose,
@@ -91,10 +89,10 @@ export function AssetDetailModal({
               </h2>
             </div>
             <button
+              className="rounded-lg p-1 text-zinc-400 transition-all duration-300 hover:bg-white/10 hover:text-white flex items-center justify-center"
               onClick={onClose}
-              className="rounded-lg p-2 text-zinc-400 transition-all duration-300 hover:bg-white/10 hover:text-white hover:scale-110"
             >
-              <X size={20} />
+              <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110"/>
             </button>
           </div>
 

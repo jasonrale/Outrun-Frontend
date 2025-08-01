@@ -1,5 +1,6 @@
 import type React from "react"
 import ClientComponent from "./client"
+import "./globals.css"
 import "./hero-scaling.css"
 
 export const metadata = {

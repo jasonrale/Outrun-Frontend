@@ -65,10 +65,16 @@ export interface MemeProject {
   createdAt: string
   genesisEndTime?: string
   unlockTime?: string
-  stakingApy?: number
-  treasuryFund?: number
+  // Removed stakingApy and treasuryFund from top level
   listedOnOutSwap?: boolean
   image?: string
+  // Added nested data structures
+  vaultData?: {
+    stakingAPY: number
+  }
+  daoData?: {
+    treasuryValue: number
+  }
 }
 
 // 代币类型

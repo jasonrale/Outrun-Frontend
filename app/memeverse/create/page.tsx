@@ -208,7 +208,7 @@ export default function CreateMemecoinPage() {
     }))
   }, [])
 
-  // 处理社区链接变化
+  // 处理��区链接变化
   const handleCommunityLinkChange = useCallback((name: string, value: string) => {
     setFormState((prev) => ({
       ...prev,
@@ -444,7 +444,7 @@ export default function CreateMemecoinPage() {
             {/* 背景渐变效果 */}
             <span className="absolute inset-0 block opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out"></span>
 
-            {/* 发光边框效果 */}
+            {/* 发光边框效��� */}
             <span
               className="absolute inset-0 block rounded-full opacity-80 group-hover:opacity-100 transition-all duration-500 ease-in-out"
               style={{
@@ -658,7 +658,7 @@ export default function CreateMemecoinPage() {
 
         .desktop-back-button:hover {
           background: rgba(25, 10, 45, 0.9);
-          color: #f9a8d4; /* 粉色 */
+          color: #f9a8d4; /* ��色 */
           text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
         }
 

@@ -101,12 +101,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   // Calculate progress percentage for Genesis stage
   const calculateProgress = () => {
-    if (project.stage === "Genesis") {
-      // Calculate progress by dividing raisedAmount by MIN_TOTAL_FUND (10 UETH)
-      const progressPercent = (project.raisedAmount / MIN_TOTAL_FUND) * 100
-      // Don't limit maximum progress, allow exceeding 100%
-      return progressPercent
-    }
+    // Always use project.progress if available, regardless of stage
     return project.progress || 0
   }
 
@@ -225,6 +220,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
                         ))}
                       </div>
                     </div>
+
+                    {/* Volume (24h) - Locked and Unlocked stages */}
+                    {(project.stage === "Locked" || project.stage === "Unlocked") && project.volume && (
+                      <div className="text-pink-300/70 text-xs max-[450px]:text-[10px]">
+                        Volume (24h):{" "}
+                        <span className="text-pink-200 font-medium">{formatMarketCap(project.volume)}</span>
+                      </div>
+                    )}
 
                     {/* Total Raised - 仅限Genesis和Refund阶段 */}
                     {(project.stage === "Genesis" || project.stage === "Refund") && (

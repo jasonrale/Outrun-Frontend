@@ -54,10 +54,12 @@ export function FaucetModal({ isOpen, onClose }: FaucetModalProps) {
               <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill uppercase">
                 Mock Faucet
               </h2>
-              <X
-                className="h-5 w-5 text-pink-300 hover:text-pink-100 hover:scale-110 cursor-pointer transition-all duration-200"
+              <button
+                className="rounded-lg p-1 text-zinc-400 transition-all duration-300 hover:bg-white/10 hover:text-white flex items-center justify-center"
                 onClick={onClose}
-              />
+              >
+                <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110" />
+              </button>
             </div>
 
             {/* Buttons */}

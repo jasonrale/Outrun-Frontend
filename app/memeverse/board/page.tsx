@@ -3,10 +3,10 @@
 import { Search, ChevronDown, ChevronLeft, ChevronRight, SortDesc, SortAsc } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SectionHeading } from "@/components/ui/section-heading"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { ProjectCard } from "@/components/memeverse/board/project-card"
 import { MemeVerseProvider, useMemeVerse } from "@/contexts/memeverse-context"
-import { useMemo } from "react"
+import { useMemo, useEffect, Suspense, useCallback, useRef } from "react"
 import React, { useState } from "react"
 import { FaucetModal } from "@/components/memeverse/faucet/faucet-modal"
 
@@ -14,14 +14,18 @@ import { FaucetModal } from "@/components/memeverse/faucet/faucet-modal"
 export default function MemeverseBoardPage() {
   return (
     <MemeVerseProvider>
-      <MemeverseBoardContent />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MemeverseBoardContent />
+      </Suspense>
     </MemeVerseProvider>
   )
 }
 
-// 内容组件 - 使用Context
+// 内容组件 - 使用Context和URL同步
 const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+
   const {
     // 项目数据
     currentProjects,
@@ -34,7 +38,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
     selectedMode,
     sortDirection,
     currentPage,
-    sortOption, // Declare the sortOption variable
+    sortOption,
 
     // 下拉菜单状态
     isChainDropdownOpen,
@@ -46,11 +50,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
     STAGE_FILTERS,
 
     // 方法
-    setActiveChainFilter,
-    setActiveStageFilter,
-    setSearchQuery,
-    setSelectedMode,
-    setSortOption,
+    updateFilters,
     toggleSortDirection,
     handlePageChange,
     toggleChainDropdown,
@@ -59,47 +59,187 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
     closeAllDropdowns,
     getSortOptions,
     getCurrentSortLabel,
+    initializeFromURL,
   } = useMemeVerse()
 
   const [isFaucetModalOpen, setIsFaucetModalOpen] = useState(false)
 
+  // 防止URL更新时的循环调用
+  const isUpdatingURL = useRef(false)
+  const lastURLUpdate = useRef("")
+
+  // 初始化时从URL读取参数 - 只在初始化时执行一次
+  useEffect(() => {
+    const currentURL = searchParams.toString()
+
+    // 如果正在更新URL或URL没有变化，跳过
+    if (isUpdatingURL.current || currentURL === lastURLUpdate.current) {
+      return
+    }
+
+    const chain = searchParams.get("chain") || "all"
+    const stage = searchParams.get("stage") || "genesis"
+    const mode = searchParams.get("mode") || "normal"
+    const sort = searchParams.get("sort") || "createdAt"
+    const direction = searchParams.get("direction") || "desc"
+    const search = searchParams.get("search") || ""
+    const page = Number.parseInt(searchParams.get("page") || "1")
+
+    initializeFromURL({
+      chain,
+      stage,
+      mode: mode as any,
+      sort,
+      direction: direction as any,
+      search,
+      page,
+    })
+
+    lastURLUpdate.current = currentURL
+  }, [searchParams, initializeFromURL])
+
+  // 优化的URL更新函数 - 使用useCallback避免重复创建
+  const updateURL = useCallback(
+    (updates: Record<string, string | number>, removeMode = false) => {
+      // 防止循环调用
+      if (isUpdatingURL.current) return
+
+      isUpdatingURL.current = true
+
+      const params = new URLSearchParams(searchParams.toString())
+
+      // 如果需要移除mode参数
+      if (removeMode) {
+        params.delete("mode")
+      }
+
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value === "" || value === "all" || (key === "page" && value === 1)) {
+          params.delete(key)
+        } else {
+          params.set(key, String(value))
+        }
+      })
+
+      const queryString = params.toString()
+      const newUrl = queryString ? `/memeverse/board?${queryString}` : "/memeverse/board"
+
+      // 记录这次URL更新
+      lastURLUpdate.current = queryString
+
+      router.push(newUrl, { scroll: false })
+
+      // 延迟重置标志位
+      setTimeout(() => {
+        isUpdatingURL.current = false
+      }, 100)
+    },
+    [searchParams, router],
+  )
+
+  // 优化的事件处理函数 - 合并状态更新和URL更新
+  const handleChainFilterChange = useCallback(
+    (chainId: string) => {
+      updateFilters({ activeChainFilter: chainId })
+      updateURL({ chain: chainId, page: 1 })
+      closeAllDropdowns()
+    },
+    [updateFilters, updateURL, closeAllDropdowns],
+  )
+
+  const handleStageFilterChange = useCallback(
+    (stageId: string) => {
+      updateFilters({
+        activeStageFilter: stageId,
+        sortOption: "createdAt", // 重置为默认排序
+      })
+
+      // 如果不是genesis阶段，需要移除mode参数
+      const shouldRemoveMode = stageId !== "genesis"
+      updateURL({ stage: stageId, sort: "createdAt", page: 1 }, shouldRemoveMode)
+      closeAllDropdowns()
+    },
+    [updateFilters, updateURL, closeAllDropdowns],
+  )
+
+  const handleModeChange = useCallback(
+    (mode: any) => {
+      updateFilters({ selectedMode: mode })
+      updateURL({ mode, page: 1 })
+    },
+    [updateFilters, updateURL],
+  )
+
+  const handleSortChange = useCallback(
+    (sortId: string) => {
+      updateFilters({ sortOption: sortId })
+      updateURL({ sort: sortId, page: 1 })
+      closeAllDropdowns()
+    },
+    [updateFilters, updateURL, closeAllDropdowns],
+  )
+
+  const handleSortDirectionToggle = useCallback(() => {
+    const newDirection = sortDirection === "asc" ? "desc" : "asc"
+    toggleSortDirection()
+    updateURL({ direction: newDirection, page: 1 })
+  }, [sortDirection, toggleSortDirection, updateURL])
+
+  // 搜索处理 - 使用防抖优化
+  const searchTimeoutRef = useRef<NodeJS.Timeout>()
+  const handleSearchChange = useCallback(
+    (query: string) => {
+      updateFilters({ searchQuery: query })
+
+      // 清除之前的延时器
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current)
+      }
+
+      // 延迟更新URL，避免频繁更新
+      searchTimeoutRef.current = setTimeout(() => {
+        updateURL({ search: query, page: 1 })
+      }, 300)
+    },
+    [updateFilters, updateURL],
+  )
+
+  const handlePageChangeWithURL = useCallback(
+    (pageNumber: number) => {
+      handlePageChange(pageNumber)
+      updateURL({ page: pageNumber })
+    },
+    [handlePageChange, updateURL],
+  )
+
   // 使用useMemo优化分页计算
   const paginationData = useMemo(() => {
-    // 如果总页数小于等于1，不显示分页
     if (totalPages <= 1) return { showPagination: false }
 
     const pageNumbers = []
-
-    // 最多显示5个页码按钮
     const maxButtonsToShow = 5
     let startPage: number
     let endPage: number
 
     if (totalPages <= maxButtonsToShow) {
-      // 如果总页数小于等于最大显示按钮数，显示所有页码
       startPage = 1
       endPage = totalPages
     } else {
-      // 否则，计算起始和结束页码
       const maxPagesBeforeCurrentPage = Math.floor(maxButtonsToShow / 2)
       const maxPagesAfterCurrentPage = Math.ceil(maxButtonsToShow / 2) - 1
 
       if (currentPage <= maxPagesBeforeCurrentPage) {
-        // 当前页靠近开始
         startPage = 1
         endPage = maxButtonsToShow
       } else if (currentPage + maxPagesAfterCurrentPage >= totalPages) {
-        // 当前页靠近结束
         startPage = totalPages - maxButtonsToShow + 1
         endPage = totalPages
       } else {
-        // 当前页在中间
         startPage = currentPage - maxPagesBeforeCurrentPage
         endPage = currentPage + maxPagesAfterCurrentPage
       }
     }
 
-    // 生成页码按钮
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i)
     }
@@ -108,8 +248,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
   }, [totalPages, currentPage])
 
   // 生成页码按钮
-  const renderPagination = () => {
-    // 使用计算好的分页数据
+  const renderPagination = useCallback(() => {
     if (!paginationData.showPagination) return null
 
     return (
@@ -123,7 +262,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
               ? "border-purple-500/20 text-pink-300/50 cursor-not-allowed"
               : "border-purple-500/30 text-pink-300 hover:border-pink-400/50"
           }`}
-          onClick={() => handlePageChange(currentPage - 1)}
+          onClick={() => handlePageChangeWithURL(currentPage - 1)}
           disabled={currentPage === 1}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -140,7 +279,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 ? "bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 text-white border-transparent shadow-[0_0_10px_rgba(168,85,247,0.5)]"
                 : "bg-black/30 border border-purple-500/30 text-pink-300 hover:border-pink-400/50"
             }`}
-            onClick={() => handlePageChange(number)}
+            onClick={() => handlePageChangeWithURL(number)}
           >
             {number}
           </Button>
@@ -155,14 +294,14 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
               ? "border-purple-500/20 text-pink-300/50 cursor-not-allowed"
               : "border-purple-500/30 text-pink-300 hover:border-pink-400/50"
           }`}
-          onClick={() => handlePageChange(currentPage + 1)}
+          onClick={() => handlePageChangeWithURL(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
     )
-  }
+  }, [paginationData, currentPage, totalPages, handlePageChangeWithURL])
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -196,7 +335,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
         <div className="mb-8">
           {/* 移动端布局 - 在小于1120px的屏幕上显示 */}
           <div className="flex flex-col gap-6 max-[1120px]:flex min-[1120px]:hidden">
-            {/* Consensus Launch按钮 - 动端位置 */}
+            {/* Consensus Launch按钮 - 移动端位置 */}
             <div className="flex justify-center w-full mb-6">
               <Button
                 className="bg-gradient-to-r from-purple-600/80 via-pink-500/80 to-purple-600/80 border-[1.5px] border-cyan-400/70 hover:border-cyan-300 text-white font-bold py-2.5 px-6 rounded-lg shadow-[0_0_15px_rgba(236,72,153,0.6)] transition-all duration-300 hover:shadow-[0_0_20px_rgba(236,72,153,0.8)] relative overflow-hidden group"
@@ -222,7 +361,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 placeholder="Search projects..."
                 className="w-full pl-10 pr-4 py-2 bg-black/30 border border-purple-500/30 rounded-lg text-white placeholder:text-pink-300/50 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-300 focus:border-pink-500/50 hover:border-pink-400/30"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
               />
             </div>
 
@@ -262,10 +401,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                             ? "bg-gradient-to-r from-purple-600/40 to-pink-500/40 text-pink-200 shadow-[0_0_10px_rgba(168,85,247,0.2)_inset]"
                             : "text-pink-300 hover:bg-gradient-to-r hover:from-purple-600/30 hover:to-pink-500/30 hover:text-pink-200"
                         } transition-all duration-300`}
-                        onClick={() => {
-                          setActiveChainFilter(chain.id)
-                          closeAllDropdowns()
-                        }}
+                        onClick={() => handleChainFilterChange(chain.id)}
                       >
                         {chain.icon && (
                           <img src={chain.icon || "/placeholder.svg"} alt={chain.label} className="w-4 h-4 mr-2" />
@@ -300,11 +436,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                             ? "bg-gradient-to-r from-purple-600/40 to-pink-500/40 text-pink-200 shadow-[0_0_10px_rgba(168,85,247,0.2)_inset]"
                             : "text-pink-300 hover:bg-gradient-to-r hover:from-purple-600/30 hover:to-pink-500/30 hover:text-pink-200"
                         } transition-all duration-300`}
-                        onClick={() => {
-                          setActiveStageFilter(stage.id)
-                          closeAllDropdowns()
-                          setSortOption("createdAt") // 重置为默认排序
-                        }}
+                        onClick={() => handleStageFilterChange(stage.id)}
                       >
                         {stage.label}
                       </button>
@@ -336,10 +468,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                             ? "bg-gradient-to-r from-purple-600/40 to-pink-500/40 text-pink-200 shadow-[0_0_10px_rgba(168,85,247,0.2)_inset]"
                             : "text-pink-300 hover:bg-gradient-to-r hover:from-purple-600/30 hover:to-pink-500/30 hover:text-pink-200"
                         } transition-all duration-300`}
-                        onClick={() => {
-                          setSortOption(option.id)
-                          closeAllDropdowns()
-                        }}
+                        onClick={() => handleSortChange(option.id)}
                       >
                         {option.label}
                       </button>
@@ -353,7 +482,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 variant="outline"
                 size="sm"
                 className="p-0 w-8 h-8 flex justify-center items-center bg-black/30 border border-purple-500/30 rounded-full hover:bg-purple-900/30 hover:border-pink-400/50"
-                onClick={toggleSortDirection}
+                onClick={handleSortDirectionToggle}
               >
                 {sortDirection === "asc" ? (
                   <SortAsc className="h-4 w-4 text-pink-300" />
@@ -395,7 +524,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                     placeholder="Search projects..."
                     className="w-full pl-10 pr-4 py-2 bg-black/30 border border-purple-500/30 rounded-lg text-white placeholder:text-pink-300/50 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-300 focus:border-pink-500/50 hover:border-pink-400/30"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => handleSearchChange(e.target.value)}
                   />
                 </div>
               </div>
@@ -436,10 +565,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                               ? "bg-gradient-to-r from-purple-600/40 to-pink-500/40 text-pink-200 shadow-[0_0_10px_rgba(168,85,247,0.2)_inset]"
                               : "text-pink-300 hover:bg-gradient-to-r hover:from-purple-600/30 hover:to-pink-500/30 hover:text-pink-200"
                           } transition-all duration-300`}
-                          onClick={() => {
-                            setActiveChainFilter(chain.id)
-                            closeAllDropdowns()
-                          }}
+                          onClick={() => handleChainFilterChange(chain.id)}
                         >
                           {chain.icon && (
                             <img src={chain.icon || "/placeholder.svg"} alt={chain.label} className="w-4 h-4 mr-2" />
@@ -474,11 +600,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                               ? "bg-gradient-to-r from-purple-600/40 to-pink-500/40 text-pink-200 shadow-[0_0_10px_rgba(168,85,247,0.2)_inset]"
                               : "text-pink-300 hover:bg-gradient-to-r hover:from-purple-600/30 hover:to-pink-500/30 hover:text-pink-200"
                           } transition-all duration-300`}
-                          onClick={() => {
-                            setActiveStageFilter(stage.id)
-                            closeAllDropdowns()
-                            setSortOption("createdAt") // 重置为默认排序
-                          }}
+                          onClick={() => handleStageFilterChange(stage.id)}
                         >
                           {stage.label}
                         </button>
@@ -510,10 +632,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                               ? "bg-gradient-to-r from-purple-600/40 to-pink-500/40 text-pink-200 shadow-[0_0_10px_rgba(168,85,247,0.2)_inset]"
                               : "text-pink-300 hover:bg-gradient-to-r hover:from-purple-600/30 hover:to-pink-500/30 hover:text-pink-200"
                           } transition-all duration-300`}
-                          onClick={() => {
-                            setSortOption(option.id)
-                            closeAllDropdowns()
-                          }}
+                          onClick={() => handleSortChange(option.id)}
                         >
                           {option.label}
                         </button>
@@ -527,7 +646,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                   variant="outline"
                   size="sm"
                   className="p-0 w-8 h-8 flex justify-center items-center bg-black/30 border border-purple-500/30 rounded-full hover:bg-purple-900/30 hover:border-pink-400/50"
-                  onClick={toggleSortDirection}
+                  onClick={handleSortDirectionToggle}
                 >
                   {sortDirection === "asc" ? (
                     <SortAsc className="h-4 w-4 text-pink-300" />
@@ -551,7 +670,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                     ? "bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]"
                     : "text-pink-300 hover:text-pink-200"
                 }`}
-                onClick={() => setSelectedMode("normal")}
+                onClick={() => handleModeChange("normal")}
               >
                 Normal Mode
               </button>
@@ -561,7 +680,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                     ? "bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]"
                     : "text-pink-300 hover:text-pink-200"
                 }`}
-                onClick={() => setSelectedMode("flash")}
+                onClick={() => handleModeChange("flash")}
               >
                 Flash Mode
               </button>
