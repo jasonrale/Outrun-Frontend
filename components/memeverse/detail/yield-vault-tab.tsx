@@ -6,32 +6,29 @@ import { TokenIcon } from "@/components/ui/token-icon"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { useNetwork } from "@/contexts/network-context"
 import { USER_BALANCES } from "@/data/memeverse-projects"
-import { formatMarketCap } from "@/utils/format" // Import formatMarketCap
+import { formatMarketCap } from "@/utils/format"
+import { Loader2 } from "lucide-react"
 
 interface YieldVaultTabProps {
   project: any
+  onOpenShareModal: (source: "stake") => void // Added new prop
 }
 
-export function YieldVaultTab({ project }: YieldVaultTabProps) {
+export function YieldVaultTab({ project, onOpenShareModal }: YieldVaultTabProps) {
   const [activeTab, setActiveTab] = useState<"stake" | "redeem" | "withdraw">("stake")
   const [stakeAmount, setStakeAmount] = useState("")
   const [unstakeAmount, setUnstakeAmount] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
-  // Get current network context
   const { network, switchNetwork, networks } = useNetwork()
-
-  // 直接使用项目中的vaultData
   const vaultData = project.vaultData
 
-  // 获取用户余额
   const userMemecoinBalance = USER_BALANCES.memecoin[project.symbol] || 0
   const userSMemecoinBalance = USER_BALANCES.sMemecoin[`s${project.symbol}`] || 0
 
-  // Check if current network matches governance chain
   const isOnGovernanceChain = network.id === vaultData.governanceChain.id
   const governanceNetwork = networks.find((n) => n.id === vaultData.governanceChain.id)
 
-  // Handle network switch
   const handleNetworkSwitch = async () => {
     if (governanceNetwork && !isOnGovernanceChain) {
       await switchNetwork(governanceNetwork)
@@ -136,10 +133,7 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
                 s{project.symbol}
               </span>{" "}
               ≈ {vaultData.exchangeRate.toFixed(4)}
-              <span className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
-                {" "}
-                {project.symbol}
-              </span>
+              <span className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400"> {project.symbol}</span>
             </div>
           </div>
 
@@ -213,7 +207,7 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
                 <input
                   type="text"
                   value={stakeAmount}
-                  onChange={(e) => e.target.value.replace(/[^0-9.]/g, "")}
+                  onChange={(e) => setStakeAmount(e.target.value.replace(/[^0-9.]/g, ""))}
                   placeholder="0.00"
                   className="w-full bg-transparent text-2xl font-medium text-white outline-none"
                 />
@@ -260,14 +254,36 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
             </div>
 
             <Button
-              className={`w-full py-3 font-medium ${
+              className={`w-full py-3 font-medium relative overflow-hidden group ${isLoading ? "opacity-80 cursor-wait" : ""} ${
                 isOnGovernanceChain
                   ? "bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white"
                   : "bg-gradient-to-r from-blue-600 to-purple-500 hover:from-blue-700 hover:to-purple-600 text-white"
               }`}
-              disabled={!stakeAmount}
+              disabled={!stakeAmount || isLoading}
+              onClick={() => {
+                setIsLoading(true)
+                setTimeout(() => {
+                  setIsLoading(false)
+                  onOpenShareModal("stake") // Call the parent's handler
+                  setStakeAmount("") // Clear input after "staking"
+                }, 2000) // Simulate a 2-second staking process
+              }}
             >
-              {isOnGovernanceChain ? `Stake ${project.symbol}` : `Cross-chain Stake ${project.symbol}`}
+              <span
+                className={`relative z-10 font-medium tracking-wide text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] w-full text-center inline-flex items-center justify-center`}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <span className="animate-pulse">Staking...</span>
+                  </>
+                ) : isOnGovernanceChain ? (
+                  `Stake ${project.symbol}`
+                ) : (
+                  `Cross-chain Stake ${project.symbol}`
+                )}
+              </span>
+              {isLoading && <div className="absolute inset-0 bg-purple-500/10 z-0 animate-pulse rounded-md"></div>}
             </Button>
           </div>
         )}
@@ -431,6 +447,8 @@ export function YieldVaultTab({ project }: YieldVaultTabProps) {
           </div>
         )}
       </div>
+
+      {/* Removed: MemeverseSocialShare component from here */}
     </div>
   )
 }

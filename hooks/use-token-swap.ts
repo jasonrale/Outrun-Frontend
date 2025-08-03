@@ -19,13 +19,15 @@ interface UseTokenSwapReturn {
   isRateReversed: boolean
   setFromToken: (token: Token) => void
   setToToken: (token: Token) => void
-  handleSwapTokens: () => void
+  handleSwapTokens: () => void // This is now specifically for UI swap (reversal)
   handleFromAmountChange: (value: string) => void
   handleToAmountChange: (value: string) => void
   handleMaxClick: () => void
   getMinReceived: (slippage: string) => string
   toggleRateDirection: () => void
   calculateSwap: (fromToken: Token, toToken: Token, amount: number) => number
+  setFromAmount: (amount: string) => void // Expose setters for external control
+  setToAmount: (amount: string) => void // Expose setters for external control
 }
 
 export function useTokenSwap(
@@ -44,22 +46,19 @@ export function useTokenSwap(
   // Use useMemo to calculate the exchange rate to avoid unnecessary recalculations
   const exchangeRate = useMemo(() => {
     if (fromToken.price && toToken.price) {
-      return fromToken.price / toToken.price
+      return isRateReversed ? toToken.price / fromToken.price : fromToken.price / toToken.price
     }
     return 0
-  }, [fromToken.price, toToken.price])
-
-  // Update state when the calculated exchange rate changes
-  // useEffect(() => {
-  //   setExchangeRate(calculatedExchangeRate)
-  // }, [calculatedExchangeRate])
+  }, [fromToken.price, toToken.price, isRateReversed])
 
   // Use useCallback to optimize functions
+  // This function is intended for the UI "reverse" button
   const handleSwapTokens = useCallback(() => {
+    // Swap both token types AND their amounts
     setFromToken(toToken)
     setToToken(fromToken)
-    setFromAmount(toAmount)
-    setToAmount(fromAmount)
+    setFromAmount(toAmount) // Reverse the amounts
+    setToAmount(fromAmount) // Reverse the amounts
   }, [fromToken, toToken, fromAmount, toAmount, setFromToken, setToToken, setFromAmount, setToAmount])
 
   const handleFromAmountChange = useCallback(
@@ -132,12 +131,14 @@ export function useTokenSwap(
     isRateReversed,
     setFromToken,
     setToToken,
-    handleSwapTokens,
+    handleSwapTokens, // This is the UI reversal handler
     handleFromAmountChange,
     handleToAmountChange,
     handleMaxClick,
     getMinReceived,
     toggleRateDirection,
     calculateSwap,
+    setFromAmount, // Expose for external control (e.g., clearing after swap)
+    setToAmount, // Expose for external control (e.g., clearing after swap)
   }
 }

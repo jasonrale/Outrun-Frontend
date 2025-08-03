@@ -5,10 +5,11 @@ import { formatMarketCap } from "@/utils/format"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { useState, useEffect, useCallback } from "react"
 import { GradientBackgroundCard } from "@/components/ui/gradient-background-card"
-import { ChevronDown, RefreshCw, Settings, X } from "lucide-react"
+import { ChevronDown, RefreshCw, Settings, X, Loader2 } from "lucide-react"
 import { TokenIcon } from "@/components/ui/token-icon"
 import { SettingsPanel } from "@/components/ui/settings-panel"
 import { USER_BALANCES } from "@/data/memeverse-projects"
+import { MemeverseSocialShare } from "@/components/memeverse/detail/memeverse-social-share"
 
 // Add this function after the imports and before the component
 const formatNumberWithSubscriptZeros = (num: number): string => {
@@ -83,9 +84,15 @@ export function POLTab({ project }: POLTabProps) {
   // 获取用户POL余额
   const userPolBalance = USER_BALANCES.pol[`POL-${project.symbol}`] || 0
 
+  const [showSocialShareModal, setShowSocialShareModal] = useState(false)
+  const [socialShareTriggerSource, setSocialShareTriggerSource] = useState<"genesis" | "swap" | "general" | "claimPol">(
+    "general",
+  )
+
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
   const [isMintModalOpen, setIsMintModalOpen] = useState(false)
   const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false)
+  const [isClaiming, setIsClaiming] = useState(false) // New state for claiming animation
   const [countdown, setCountdown] = useState("")
   const [showDetails, setShowDetails] = useState(false)
   const [isRateReversed, setIsRateReversed] = useState(false)
@@ -212,7 +219,7 @@ export function POLTab({ project }: POLTabProps) {
     <div className="space-y-6">
       {/* POL Overview */}
       <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(168,85,247,0.2)]">
-        {/* 头部布局 - 响应式���计 */}
+        {/* 头部布局 - 响应式计 */}
         <div className="mb-4">
           {/* 桌面端布局 */}
           <div className="hidden lg:flex items-center justify-center relative">
@@ -406,11 +413,26 @@ export function POLTab({ project }: POLTabProps) {
                 <Button
                   className="h-8 text-base bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 px-6"
                   onClick={() => {
-                    // Handle claim logic here
-                    setIsClaimModalOpen(false)
+                    setIsClaiming(true)
+                    // Simulate an asynchronous claim operation
+                    setTimeout(() => {
+                      // Handle actual claim logic here
+                      setIsClaiming(false)
+                      setIsClaimModalOpen(false)
+                      setShowSocialShareModal(true)
+                      setSocialShareTriggerSource("claimPol")
+                    }, 2000) // Simulate 2-second claiming process
                   }}
+                  disabled={isClaiming} // Disable button during claiming
                 >
-                  Claim
+                  {isClaiming ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Claiming...
+                    </>
+                  ) : (
+                    "Claim"
+                  )}
                 </Button>
               </div>
             </div>
@@ -758,6 +780,14 @@ export function POLTab({ project }: POLTabProps) {
             </div>
           </GradientBackgroundCard>
         </div>
+      )}
+      {showSocialShareModal && (
+        <MemeverseSocialShare
+          isOpen={showSocialShareModal}
+          onClose={() => setShowSocialShareModal(false)}
+          project={project}
+          triggerSource={socialShareTriggerSource}
+        />
       )}
     </div>
   )

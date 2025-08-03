@@ -212,7 +212,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
     [handlePageChange, updateURL],
   )
 
-  // 使用useMemo优化分页计算
+  // ���用useMemo优化分页计算
   const paginationData = useMemo(() => {
     if (totalPages <= 1) return { showPagination: false }
 

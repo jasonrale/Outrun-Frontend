@@ -2,7 +2,6 @@
 
 import React from "react"
 import { useState, useMemo, useCallback } from "react"
-// motion 导入已移除，因为现在使用 GradientBackgroundCard
 import { ChevronDown, RefreshCw, Settings, ArrowDownUp, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TokenIcon } from "@/components/ui/token-icon"
@@ -14,29 +13,42 @@ import { COMMON_TOKENS } from "@/constants/tokens"
 import { useWallet } from "@/contexts/wallet-context"
 import { SettingsPanel } from "@/components/ui/settings-panel"
 import { GradientBackgroundCard } from "@/components/ui/gradient-background-card"
+import { MemeverseSocialShare } from "@/components/memeverse/detail/memeverse-social-share"
+import { SwapConfirmationModal } from "@/components/outswap/swap-confirmation-modal"
 
 interface CompactSwapInterfaceProps {
-  project?: any // 添加可选的project参数
+  project?: any
 }
 
 export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfaceProps) => {
-  // Mock token data
-  const tokens = useMemo(() => {
+  const projectTokens = useMemo(() => {
     if (project && project.symbol) {
-      // 创建项目代币并添加到tokens列表
-      const projectToken = {
-        symbol: project.symbol,
-        name: project.name || "Memecoin",
-        balance: "0.00",
-        price: project.price || 1,
-        address: project.tokenAddress || "0x0000000000000000000000000000000000000000",
-      }
-      return [...COMMON_TOKENS, projectToken]
+      const projectSymbol = project.symbol.toUpperCase()
+      const projectImage = project.image || "/placeholder.svg"
+      const projectPrice = project.price || 0.00012
+
+      return [
+        {
+          symbol: projectSymbol,
+          name: project.name || "Memecoin",
+          balance: "0.00",
+          price: projectPrice,
+          icon: projectImage,
+          address: "0x0000000000000000000000000000000000000000",
+        },
+        {
+          symbol: `POL-${projectSymbol}`,
+          name: `POL ${project.name || "Memecoin"}`,
+          balance: "0.00",
+          price: projectPrice * 1.25,
+          icon: projectImage,
+          address: "0xabcdef1234567890abcdef1234567890abcdef12",
+        },
+      ]
     }
-    return COMMON_TOKENS
+    return []
   }, [project])
 
-  // 使用我们的自定义hook进行token交换逻辑
   const {
     fromToken,
     toToken,
@@ -61,13 +73,7 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
       price: 3500,
       address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     },
-    initialToToken: {
-      symbol: "PFROG",
-      name: "Purple Frog",
-      balance: "0.00",
-      price: 0.00012,
-      address: "0x1234567890abcdef1234567890abcdef12345678",
-    },
+    initialToToken: projectTokens.length > 0 ? projectTokens[0] : undefined,
   })
 
   const [showFromTokenModal, setShowFromTokenModal] = useState(false)
@@ -76,23 +82,50 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
   const [showSettings, setShowSettings] = useState(false)
   const [transactionDeadline, setTransactionDeadline] = useState("10")
   const [showRouteModal, setShowRouteModal] = useState(false)
-  const [tokensSwapped, setTokensSwapped] = useState(false)
+  const [isSwapping, setIsSwapping] = useState(false)
+  const [showSocialShareModal, setShowSocialShareModal] = useState(false)
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+  const [isConfirming, setIsConfirming] = useState(false)
 
-  // 处理Max按钮点击
   const handleMaxClick = useCallback(() => {
     handleMaxClickFromHook()
   }, [handleMaxClickFromHook])
 
-  // 处理Swap All点击
-  const handleSwapAll = useCallback(() => {
-    handleSwapTokens()
-    setTokensSwapped(!tokensSwapped)
-  }, [handleSwapTokens, tokensSwapped])
+  // 点击Swap按钮，打开确认模态框
+  const handleOpenConfirmation = useCallback(() => {
+    if (!fromAmount || !toAmount) return
+    setShowConfirmationModal(true)
+  }, [fromAmount, toAmount])
 
-  // 使用 useWallet hook
+  // 检查是否在卖出Memecoin或POL代币
+  const isSellingMemecoinOrPOL = useMemo(() => {
+    if (!project) return false
+    const projectSymbol = project.symbol.toUpperCase()
+    return fromToken.symbol === projectSymbol || fromToken.symbol === `POL-${projectSymbol}`
+  }, [fromToken.symbol, project])
+
+  // 确认交易的处理函数
+  const handleConfirmSwap = useCallback(async () => {
+    setIsConfirming(true)
+    // 模拟交易处理时间
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    // 清空输入金额
+    handleFromAmountChange("")
+    setIsConfirming(false)
+
+    if (
+      !isSellingMemecoinOrPOL &&
+      project &&
+      (toToken.symbol === project.symbol.toUpperCase() || toToken.symbol === `POL-${project.symbol.toUpperCase()}`)
+    ) {
+      setShowConfirmationModal(false)
+      setShowSocialShareModal(true)
+    }
+  }, [handleFromAmountChange, project, toToken.symbol, isSellingMemecoinOrPOL])
+
   const { isConnected, isConnecting, connectWallet } = useWallet()
 
-  // Mock route data
   const routeData = useMemo(
     () => ({
       pools: [
@@ -114,14 +147,11 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
   return (
     <div className="w-full h-full">
       <GradientBackgroundCard contentClassName="p-3 h-full flex flex-col" border shadow>
-        {/* Header */}
         <div className="relative mb-2">
-          {/* SWAP标题 - 绝对定位在容器中央 */}
           <h2 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] uppercase z-10">
             SWAP
           </h2>
 
-          {/* 左右两侧的控件 */}
           <div className="flex items-center justify-between h-10">
             <div className="flex items-center h-7"></div>
 
@@ -144,9 +174,7 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
           onTransactionDeadlineChange={setTransactionDeadline}
         />
 
-        {/* 主要内容区域 - 使用flex-1确保它占据剩余空间 */}
         <div className="flex-1 flex flex-col">
-          {/* From Token */}
           <div
             className="mb-1 p-2 rounded-lg bg-black/40 border border-pink-500/20"
             style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
@@ -193,18 +221,16 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
             </div>
           </div>
 
-          {/* Swap Button */}
           <div className="flex justify-center z-10 relative" style={{ marginTop: "-8px", marginBottom: "-6px" }}>
             <button
               className="p-1.5 rounded-md bg-black/80 border border-pink-500/30 hover:bg-black/90 transition-colors"
-              onClick={handleSwapAll}
+              onClick={handleSwapTokens}
               style={{ boxShadow: "0 0 12px rgba(236,72,153,0.3)" }}
             >
               <ArrowDownUp size={14} className="text-purple-400" />
             </button>
           </div>
 
-          {/* To Token */}
           <div
             className="mb-2 p-2 rounded-lg bg-black/40 border border-pink-500/20"
             style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
@@ -245,7 +271,6 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
             </div>
           </div>
 
-          {/* Price Info - Always shown */}
           <div
             className="mb-2 p-2 rounded-lg bg-black/40 border border-pink-500/20"
             style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
@@ -254,15 +279,16 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
               <>
                 <div className="flex items-center text-xs text-zinc-400 py-0.5">
                   <span>
-                    1 {fromToken.symbol} = {formatCurrency(exchangeRate.toString())} {toToken.symbol} (
-                    {formatDollarValue(fromToken.price || 0)})
+                    1 {isRateReversed ? toToken.symbol : fromToken.symbol} ={" "}
+                    <span dangerouslySetInnerHTML={{ __html: formatCurrency(exchangeRate.toString()) }} />{" "}
+                    {isRateReversed ? fromToken.symbol : toToken.symbol} (
+                    {formatDollarValue(isRateReversed ? toToken.price || 0 : fromToken.price || 0)})
                   </span>
                   <button className="ml-1 text-zinc-400 hover:text-white flex-shrink-0" onClick={toggleRateDirection}>
                     <RefreshCw size={12} />
                   </button>
                 </div>
 
-                {/* Divider line */}
                 <div className="w-full h-px bg-zinc-700/50 my-1"></div>
 
                 <div className="flex justify-between items-center py-0.5">
@@ -315,22 +341,28 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
             )}
           </div>
 
-          {/* 添加弹性空间，确保底部按钮始终在底部 */}
           <div className="flex-grow"></div>
         </div>
 
-        {/* Swap Button - 始终在底部 */}
         <div className="mt-auto">
           {isConnected ? (
             <Button
               className="w-full bg-gradient-to-r from-purple-600/90 to-pink-600/90 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-md h-9 text-sm shadow-[0_0_10px_rgba(168,85,247,0.3)]"
-              disabled={!fromAmount || !toAmount}
+              disabled={!fromAmount || !toAmount || isSwapping}
               style={{
-                opacity: !fromAmount || !toAmount ? 0.8 : 1,
+                opacity: !fromAmount || !toAmount || isSwapping ? 0.8 : 1,
                 boxShadow: "0 0 15px rgba(168,85,247,0.4), 0 0 30px rgba(236,72,153,0.2)",
               }}
+              onClick={handleOpenConfirmation}
             >
-              Swap
+              {isSwapping ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Preparing Swap...
+                </>
+              ) : (
+                "Swap"
+              )}
             </Button>
           ) : (
             <Button
@@ -354,49 +386,14 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
         </div>
       </GradientBackgroundCard>
 
-      {/* Token Selection Modals */}
       <TokenSelectionModal
         isOpen={showFromTokenModal}
         onClose={() => setShowFromTokenModal(false)}
         onSelectToken={setFromToken}
         excludeToken={toToken.symbol}
-        tokens={
-          tokensSwapped
-            ? [
-                {
-                  symbol: "PFROG",
-                  name: "Purple Frog",
-                  balance: "0.00",
-                  price: 0.00012,
-                  address: "0x1234567890abcdef1234567890abcdef12345678",
-                },
-                {
-                  symbol: "POL-PFROG",
-                  name: "POL Purple Frog",
-                  balance: "0.00",
-                  price: 0.00015,
-                  address: "0xabcdef1234567890abcdef1234567890abcdef12",
-                },
-              ]
-            : [
-                {
-                  symbol: "ETH",
-                  name: "Ethereum",
-                  balance: "0.05",
-                  price: 3500,
-                  address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-                },
-                {
-                  symbol: "UETH",
-                  name: "Unwrapped Ethereum",
-                  balance: "0.00",
-                  price: 3500,
-                  address: "0x1111111111111111111111111111111111111111",
-                },
-              ]
-        }
+        tokens={COMMON_TOKENS}
         showTabs={false}
-        showSearch={tokensSwapped ? false : true} // 如果是PFROG代币，不显示搜索框
+        showSearch={true}
       />
 
       <TokenSelectionModal
@@ -404,46 +401,11 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
         onClose={() => setShowToTokenModal(false)}
         onSelectToken={setToToken}
         excludeToken={fromToken.symbol}
-        tokens={
-          tokensSwapped
-            ? [
-                {
-                  symbol: "ETH",
-                  name: "Ethereum",
-                  balance: "0.05",
-                  price: 3500,
-                  address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-                },
-                {
-                  symbol: "UETH",
-                  name: "Unwrapped Ethereum",
-                  balance: "0.00",
-                  price: 3500,
-                  address: "0x1111111111111111111111111111111111111111",
-                },
-              ]
-            : [
-                {
-                  symbol: "PFROG",
-                  name: "Purple Frog",
-                  balance: "0.00",
-                  price: 0.00012,
-                  address: "0x1234567890abcdef1234567890abcdef12345678",
-                },
-                {
-                  symbol: "POL-PFROG",
-                  name: "POL Purple Frog",
-                  balance: "0.00",
-                  price: 0.00015,
-                  address: "0xabcdef1234567890abcdef1234567890abcdef12",
-                },
-              ]
-        }
+        tokens={projectTokens.length > 0 ? projectTokens : COMMON_TOKENS}
         showTabs={false}
-        showSearch={tokensSwapped ? true : false} // 如果是PFROG代币，不显示搜索框
+        showSearch={projectTokens.length > 0 ? false : true}
       />
 
-      {/* Route Modal */}
       <RouteModal
         isOpen={showRouteModal}
         onClose={() => setShowRouteModal(false)}
@@ -451,6 +413,34 @@ export const CompactSwapInterface = React.memo(({ project }: CompactSwapInterfac
         toToken={toToken}
         route={routeData}
       />
+
+      <SwapConfirmationModal
+        isOpen={showConfirmationModal}
+        onClose={() => setShowConfirmationModal(false)}
+        onConfirm={handleConfirmSwap}
+        isConfirming={isConfirming}
+        fromToken={fromToken}
+        toToken={toToken}
+        fromAmount={fromAmount}
+        toAmount={toAmount}
+        priceImpact={priceImpact}
+        minReceived={getMinReceived(slippage)}
+        slippage={slippage}
+        exchangeRate={exchangeRate}
+        isRateReversed={isRateReversed}
+        toggleRateDirection={toggleRateDirection}
+        routeData={routeData}
+        isSellingMemecoinOrPOL={isSellingMemecoinOrPOL}
+      />
+
+      {project && (
+        <MemeverseSocialShare
+          isOpen={showSocialShareModal}
+          onClose={() => setShowSocialShareModal(false)}
+          project={project}
+          triggerSource="swap"
+        />
+      )}
     </div>
   )
 })

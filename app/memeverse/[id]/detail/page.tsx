@@ -148,6 +148,9 @@ function VerseDetailContent() {
   const [myGenesisFunds, setMyGenesisFunds] = useState(0)
   const [mobileMainTab, setMobileMainTab] = useState<"info" | "chart" | "trade">("info")
   const [showShareModal, setShowShareModal] = useState(false)
+  const [shareModalTriggerSource, setShareModalTriggerSource] = useState<
+    "genesis" | "swap" | "general" | "claimPol" | "stake" | "claimDAORewards"
+  >("general") // Added claimDAORewards type
 
   const userRefundAmount = 2.5
 
@@ -161,8 +164,6 @@ function VerseDetailContent() {
       randomShareMessageWidth: selected.width,
     }
   }, [])
-
-  // Removed useEffect that reads returnTo from URL, as it's no longer needed
 
   useEffect(() => {
     const verseId = params.id
@@ -227,14 +228,35 @@ function VerseDetailContent() {
     // Update my genesis funds (demo only, should call contract in real app)
     setMyGenesisFunds((prev) => prev + Number.parseFloat(amount))
 
-    // Show success message
-    alert(`Successfully deposited ${amount} ${token.symbol}`)
+    // Set trigger source and show the social share modal
+    setShareModalTriggerSource("genesis")
+    setShowShareModal(true)
   }
 
   // Handle refund
   const handleRefund = () => {
     // In a real app, this would call a contract function to process the refund
     alert(`Successfully claimed refund of ${userRefundAmount} ${verse?.raisedToken}`)
+  }
+
+  // Handle opening share modal from the general share button
+  const handleOpenShareModal = (
+    source: "general" | "genesis" | "swap" | "claimPol" | "stake" | "claimDAORewards" = "general",
+  ) => {
+    setShareModalTriggerSource(source) // Set trigger source based on caller
+    setShowShareModal(true)
+  }
+
+  // Handle opening share modal from YieldVaultTab (e.g., after staking)
+  const handleOpenShareModalFromYieldVault = (source: "stake") => {
+    setShareModalTriggerSource(source)
+    setShowShareModal(true)
+  }
+
+  // Handle opening share modal from DAOTab (e.g., after claiming DAO rewards)
+  const handleOpenShareModalFromDAOTab = (source: "claimDAORewards") => {
+    setShareModalTriggerSource(source)
+    setShowShareModal(true)
   }
 
   if (loading) {
@@ -369,7 +391,7 @@ function VerseDetailContent() {
                     iconClassName="text-pink-300/80 hover:text-pink-300 animate-shake"
                   />
                   <Button
-                    onClick={() => setShowShareModal(true)}
+                    onClick={handleOpenShareModal} // Use the new handler
                     variant="ghost"
                     className="flex items-center text-pink-300 hover:text-pink-100 p-2.5 rounded-full transition-colors duration-300 hover:bg-transparent px-[5px] py-[5px] animate-shake"
                   >
@@ -396,8 +418,10 @@ function VerseDetailContent() {
                 )}
                 {activeTab === "liquidity" && <LiquidityTab project={verse} />}
                 {activeTab === "pol" && <POLTab project={verse} />}
-                {activeTab === "yield-vault" && <YieldVaultTab project={verse} />}
-                {activeTab === "dao" && <DAOTab project={verse} />}
+                {activeTab === "yield-vault" && (
+                  <YieldVaultTab project={verse} onOpenShareModal={handleOpenShareModalFromYieldVault} />
+                )}
+                {activeTab === "dao" && <DAOTab project={verse} onOpenShareModal={handleOpenShareModalFromDAOTab} />}
               </div>
             </GradientBackgroundCard>
           </div>
@@ -479,7 +503,7 @@ function VerseDetailContent() {
                         iconClassName="text-pink-300/80 hover:text-pink-300 animate-shake"
                       />
                       <Button
-                        onClick={() => setShowShareModal(true)}
+                        onClick={handleOpenShareModal} // Use the new handler
                         variant="ghost"
                         className="flex items-center text-pink-300 hover:text-pink-100 p-2.5 rounded-full transition-colors duration-300 hover:bg-transparent px-[5px] py-[5px] animate-shake"
                       >
@@ -506,8 +530,12 @@ function VerseDetailContent() {
                     )}
                     {activeTab === "liquidity" && <LiquidityTab project={verse} />}
                     {activeTab === "pol" && <POLTab project={verse} />}
-                    {activeTab === "yield-vault" && <YieldVaultTab project={verse} />}
-                    {activeTab === "dao" && <DAOTab project={verse} />}
+                    {activeTab === "yield-vault" && (
+                      <YieldVaultTab project={verse} onOpenShareModal={handleOpenShareModalFromYieldVault} />
+                    )}
+                    {activeTab === "dao" && (
+                      <DAOTab project={verse} onOpenShareModal={handleOpenShareModalFromDAOTab} />
+                    )}
                   </div>
                 </div>
               )}
@@ -528,99 +556,104 @@ function VerseDetailContent() {
         </div>
 
         {showShareModal && (
-          <MemeverseSocialShare isOpen={showShareModal} onClose={() => setShowShareModal(false)} project={verse} />
+          <MemeverseSocialShare
+            isOpen={showShareModal}
+            onClose={() => setShowShareModal(false)}
+            project={verse}
+            triggerSource={shareModalTriggerSource}
+          />
         )}
 
         <style jsx global>{`
-      .desktop-back-button {
-        background: rgba(15, 3, 38, 0.8);
-        border: 1px solid rgba(236, 72, 153, 0.4);
-        border-radius: 9999px;
-        box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
-        padding: 8px 16px;
-        transition: all 0.5s ease-in-out;
-      }
+    .desktop-back-button {
+      background: rgba(15, 3, 38, 0.8);
+      border: 1px solid rgba(236, 72, 153, 0.4);
+      border-radius: 9999px;
+      box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
+      padding: 8px 16px;
+      transition: all 0.5s ease-in-out;
+    }
 
-      .desktop-back-button:hover {
-        background: rgba(25, 10, 45, 0.9);
-        color: #f9a8d4;
-        text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
-      }
+    .desktop-back-button:hover {
+      background: rgba(25, 10, 45, 0.9);
+      color: #f9a8d4;
+      text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
+    }
 
-      @keyframes shake {
-        0%, 100% {
-          transform: translateX(0);
-          filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
-        }
-        5% {
-          transform: translateX(-2.5px);
-          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-        }
-        10% {
-          transform: translateX(2.5px);
-          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-        }
-        15% {
-          transform: translateX(-2.5px);
-          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-        }
-        20% {
-          transform: translateX(2.5px);
-          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-        }
-        25% {
-          transform: translateX(-2.5px);
-          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-        }
-        30% {
-          transform: translateX(2.5px);
-          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-        }
-        35% {
-          transform: translateX(-2.5px);
-          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-        }
-        40% {
-          transform: translateX(2.5px);
-          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-        }
-        45% {
-          transform: translateX(-2.5px);
-          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-        }
-        50% {
-          transform: translateX(2.5px);
-          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-        }
-        55% {
-          transform: translateX(-2.5px);
-          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-        }
-        60% {
-          transform: translateX(2.5px);
-          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-        }
-        65% {
-          transform: translateX(-2.5px);
-          filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-        }
-        70% {
-          transform: translateX(2.5px);
-          filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-        }
-        80% {
-          transform: translateX(0);
-          filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
-        }
-        81%, 99% { /* Pause phase */
-          transform: translateX(0);
-          filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
-        }
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+        filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
       }
-      .animate-shake {
-        animation: shake 1.5s infinite ease-in-out;
+      5% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
       }
-    `}</style>
+      10% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      15% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      20% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      25% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      30% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      35% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      40% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      45% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      50% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      55% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      60% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      65% {
+        transform: translateX(-2.5px);
+        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+      }
+      70% {
+        transform: translateX(2.5px);
+        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+      }
+      80% {
+        transform: translateX(0);
+        filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+      }
+      81%, 99% { /* Pause phase */
+        transform: translateX(0);
+        filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+      }
+    }
+    .animate-shake {
+      animation: shake 1.5s infinite ease-in-out;
+    }
+  `}</style>
       </div>
     )
   }
@@ -695,7 +728,11 @@ function VerseDetailContent() {
                       width: "100%",
                     }}
                   >
-                    <img src="/placeholder.svg" alt={verse.name} className="w-full h-full object-cover relative z-10" />
+                    <img
+                      src="/placeholder.svg?height=160&width=160"
+                      alt={verse.name}
+                      className="w-full h-full object-cover relative z-10"
+                    />
                     {/* Stage label */}
                     <div className="absolute top-3 right-3 z-20">
                       <div
@@ -900,7 +937,7 @@ function VerseDetailContent() {
                   iconClassName="text-pink-300/80 hover:text-pink-300 animate-shake"
                 />
                 <Button
-                  onClick={() => setShowShareModal(true)}
+                  onClick={() => handleOpenShareModal("general")} // Explicitly set triggerSource here
                   variant="ghost"
                   className="flex items-center text-pink-300 hover:text-pink-100 p-2.5 rounded-full transition-colors duration-300 hover:bg-transparent px-[5px] py-[5px] animate-shake"
                 >
@@ -913,117 +950,124 @@ function VerseDetailContent() {
           <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent mx-6"></div>
 
           <div className="relative pt-4 px-6 pb-6">
-            <OverviewTab
-              description={verse.description}
-              progress={verse.progress}
-              stage={verse.stage}
-              mode={verse.mode}
-              website={verse.website}
-              x={verse.x}
-              telegram={verse.telegram}
-              discord={verse.discord}
-              name={verse.name}
-              symbol={verse.symbol}
-              genesisFund={verse.raisedAmount}
-            />
+            {activeTab === "overview" && (
+              <OverviewTab
+                description={verse.description}
+                progress={verse.progress}
+                stage={verse.stage}
+                mode={verse.mode}
+                website={verse.website}
+                x={verse.x}
+                telegram={verse.telegram}
+                discord={verse.discord}
+                name={verse.name}
+                symbol={verse.symbol}
+                genesisFund={verse.raisedAmount}
+              />
+            )}
           </div>
         </GradientBackgroundCard>
       </div>
 
       {showShareModal && (
-        <MemeverseSocialShare isOpen={showShareModal} onClose={() => setShowShareModal(false)} project={verse} />
+        <MemeverseSocialShare
+          isOpen={showShareModal}
+          onClose={() => setShowShareModal(false)}
+          project={verse}
+          triggerSource={shareModalTriggerSource}
+        />
       )}
 
       <style jsx global>{`
-    .desktop-back-button {
-      background: rgba(15, 3, 38, 0.8);
-      border: 1px solid rgba(236, 72, 153, 0.4);
-      border-radius: 9999px;
-      box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
-      padding: 8px 16px;
-      transition: all 0.5s ease-in-out;
-    }
+  .desktop-back-button {
+    background: rgba(15, 3, 38, 0.8);
+    border: 1px solid rgba(236, 72, 153, 0.4);
+    border-radius: 9999px;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
+    padding: 8px 16px;
+    transition: all 0.5s ease-in-out;
+  }
 
-    .desktop-back-button:hover {
-      background: rgba(25, 10, 45, 0.9);
-      color: #f9a8d4;
-      text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
-    }
+  .desktop-back-button:hover {
+    background: rgba(25, 10, 45, 0.9);
+    color: #f9a8d4;
+    text-shadow: 0 0 5px rgba(249, 168, 212, 0.4);
+  }
 
-    @keyframes shake {
-      0%, 100% {
-        transform: translateX(0);
-        filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
-      }
-      5% {
-        transform: translateX(-2.5px);
-        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-      }
-      10% {
-        transform: translateX(2.5px);
-        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-      }
-      15% {
-        transform: translateX(-2.5px);
-        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-      }
-      20% {
-        transform: translateX(2.5px);
-        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-      }
-      25% {
-        transform: translateX(-2.5px);
-        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-      }
-      30% {
-        transform: translateX(2.5px);
-        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-      }
-      35% {
-        transform: translateX(-2.5px);
-        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-      }
-      40% {
-        transform: translateX(2.5px);
-        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-      }
-      45% {
-        transform: translateX(-2.5px);
-        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-      }
-      50% {
-        transform: translateX(2.5px);
-        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-      }
-      55% {
-        transform: translateX(-2.5px);
-        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-      }
-      60% {
-        transform: translateX(2.5px);
-        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-      }
-      65% {
-        transform: translateX(-2.5px);
-        filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
-      }
-      70% {
-        transform: translateX(2.5px);
-        filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
-      }
-      80% {
-        transform: translateX(0);
-        filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
-      }
-      81%, 99% { /* Pause phase */
-        transform: translateX(0);
-        filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
-      }
+  @keyframes shake {
+    0%, 100% {
+      transform: translateX(0);
+      filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
     }
-    .animate-shake {
-      animation: shake 1.5s infinite ease-in-out;
+    5% {
+      transform: translateX(-2.5px);
+      filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
     }
-  `}</style>
+    10% {
+      transform: translateX(2.5px);
+      filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+    }
+    15% {
+      transform: translateX(-2.5px);
+      filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+    }
+    20% {
+      transform: translateX(2.5px);
+      filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+    }
+    25% {
+      transform: translateX(-2.5px);
+      filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+    }
+    30% {
+      transform: translateX(2.5px);
+      filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+    }
+    35% {
+      transform: translateX(-2.5px);
+      filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+    }
+    40% {
+      transform: translateX(2.5px);
+      filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+    }
+    45% {
+      transform: translateX(-2.5px);
+      filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+    }
+    50% {
+      transform: translateX(2.5px);
+      filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+    }
+    55% {
+      transform: translateX(-2.5px);
+      filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+    }
+    60% {
+      transform: translateX(2.5px);
+      filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+    }
+    65% {
+      transform: translateX(-2.5px);
+      filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.5));
+    }
+    70% {
+      transform: translateX(2.5px);
+      filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.5));
+    }
+    80% {
+      transform: translateX(0);
+      filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+    }
+    81%, 99% { /* Pause phase */
+      transform: translateX(0);
+      filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+    }
+  }
+  .animate-shake {
+    animation: shake 1.5s infinite ease-in-out;
+  }
+`}</style>
     </div>
   )
 }

@@ -2,12 +2,15 @@
 import { useState, useEffect, useMemo } from "react"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { AssetDetailModal } from "./asset-detail-modal"
+// MemeverseSocialShare is now rendered by the parent component (VerseDetailContent)
+// import { MemeverseSocialShare } from "./memeverse-social-share"
 
 interface DAOTabProps {
   project: any
+  onOpenShareModal: (source: "genesis" | "swap" | "general" | "claimPol" | "stake" | "claimDAORewards") => void
 }
 
-export function DAOTab({ project }: DAOTabProps) {
+export function DAOTab({ project, onOpenShareModal }: DAOTabProps) {
   const [countdown, setCountdown] = useState("")
   const [modalState, setModalState] = useState<{
     isOpen: boolean
@@ -16,6 +19,15 @@ export function DAOTab({ project }: DAOTabProps) {
     isOpen: false,
     type: null,
   })
+
+  // Removed socialShareState as it's now managed by the parent
+  // const [socialShareState, setSocialShareState] = useState<{
+  //   isOpen: boolean
+  //   triggerSource: "genesis" | "swap" | "general" | "claimPol" | "stake" | "claimDAORewards" | null
+  // }>({
+  //   isOpen: false,
+  //   triggerSource: null,
+  // })
 
   const daoData = project.daoData
 
@@ -64,16 +76,13 @@ export function DAOTab({ project }: DAOTabProps) {
     },
   }
 
-  // 将时间计算移到这里，确保正确转换为Date对象
   const cycleEndTime = useMemo(() => {
     const endTime = daoData.cycleEndTime
-    // 如果已经是Date对象，���接返回；如果是字符串，转换为Date对象
     if (endTime instanceof Date) {
       return endTime
     } else if (typeof endTime === "string") {
       return new Date(endTime)
     } else {
-      // 如果都不�����������一个默认的未来时间
       return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
     }
   }, [daoData.cycleEndTime])
@@ -132,14 +141,17 @@ export function DAOTab({ project }: DAOTabProps) {
     setModalState({ isOpen: false, type: null })
   }
 
-  // 在 DAOTab 组件中添加 handleClaim 函数
   const handleClaim = () => {
-    // 这里可以添加实际的领取奖励逻辑
-    console.log("Claiming rewards...")
-    // 关闭模态窗口
+    // Close the asset detail modal first
     closeModal()
-    // 可以添加一个成功提示或其他反馈
+    // Open the social share modal with the new trigger source via parent callback
+    onOpenShareModal("claimDAORewards")
   }
+
+  // Removed closeSocialShare as it's now managed by the parent
+  // const closeSocialShare = () => {
+  //   setSocialShareState({ isOpen: false, triggerSource: null })
+  // }
 
   const currentModalData = modalState.type ? assetData[modalState.type] : null
 
@@ -624,37 +636,47 @@ export function DAOTab({ project }: DAOTabProps) {
         />
       )}
 
+      {/* Removed social share modal rendering from here, now handled by parent */}
+      {/* {socialShareState.isOpen && socialShareState.triggerSource && (
+      <MemeverseSocialShare
+        isOpen={socialShareState.isOpen}
+        onClose={closeSocialShare}
+        project={project}
+        triggerSource={socialShareState.triggerSource}
+      />
+    )} */}
+
       <style jsx global>{`
-        @keyframes arrow-pulse-1 {
-          0%, 100% { opacity: 0.4; }
-          20%, 30% { opacity: 1.2; }
-          40% { opacity: 0.4; }
-        }
-        
-        @keyframes arrow-pulse-2 {
-          0%, 100% { opacity: 0.4; }
-          40%, 50% { opacity: 1.2; }
-          60% { opacity: 0.4; }
-        }
-        
-        @keyframes arrow-pulse-3 {
-          0%, 100% { opacity: 0.4; }
-          60%, 70% { opacity: 1.2; }
-          80% { opacity: 0.4; }
-        }
-        
-        .animate-arrow-1 {
-          animation: arrow-pulse-1 1.8s infinite linear;
-        }
-        
-        .animate-arrow-2 {
-          animation: arrow-pulse-2 1.8s infinite linear;
-        }
-        
-        .animate-arrow-3 {
-          animation: arrow-pulse-3 1.8s infinite linear;
-        }
-      `}</style>
+      @keyframes arrow-pulse-1 {
+        0%, 100% { opacity: 0.4; }
+        20%, 30% { opacity: 1.2; }
+        40% { opacity: 0.4; }
+      }
+      
+      @keyframes arrow-pulse-2 {
+        0%, 100% { opacity: 0.4; }
+        40%, 50% { opacity: 1.2; }
+        60% { opacity: 0.4; }
+      }
+      
+      @keyframes arrow-pulse-3 {
+        0%, 100% { opacity: 0.4; }
+        60%, 70% { opacity: 1.2; }
+        80% { opacity: 0.4; }
+      }
+      
+      .animate-arrow-1 {
+        animation: arrow-pulse-1 1.8s infinite linear;
+      }
+      
+      .animate-arrow-2 {
+        animation: arrow-pulse-2 1.8s infinite linear;
+      }
+      
+      .animate-arrow-3 {
+        animation: arrow-pulse-3 1.8s infinite linear;
+      }
+    `}</style>
     </div>
   )
 }

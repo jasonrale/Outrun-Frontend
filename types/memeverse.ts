@@ -81,7 +81,7 @@ export interface Token {
   symbol: string
   name: string
   icon: string
-  balance?: number
+  balance?: string // Changed from number to string to match COMMON_TOKENS
   price?: number
   address?: string
 }

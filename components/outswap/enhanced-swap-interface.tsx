@@ -13,6 +13,7 @@ import { COMMON_TOKENS } from "@/constants/tokens"
 import { useWallet } from "@/contexts/wallet-context"
 import { GradientBackgroundCard } from "@/components/ui/gradient-background-card"
 import { SettingsPanel } from "@/components/ui/settings-panel"
+import { SwapConfirmationModal } from "@/components/outswap/swap-confirmation-modal"
 
 // Mock token data
 const tokens = COMMON_TOKENS
@@ -29,12 +30,17 @@ export function EnhancedSwapInterface() {
     isRateReversed,
     setFromToken,
     setToToken,
-    handleSwapTokens,
+    handleSwapTokens: originalHandleSwapTokens, // Renamed to avoid conflict
     handleFromAmountChange,
     handleToAmountChange,
     handleMaxClick,
     getMinReceived,
     toggleRateDirection,
+    // We also need the direct setters for fromAmount and toAmount from the hook
+    // If useTokenSwap doesn't expose them, we can manage them locally, or adjust the hook.
+    // For now, assuming they are available or we pass them down.
+    setFromAmount, // Assuming this is passed down or can be accessed
+    setToAmount, // Assuming this is passed down or can be accessed
   } = useTokenSwap({
     initialFromToken: tokens[0], // ETH
     initialToToken: tokens[2], // USDC
@@ -47,6 +53,7 @@ export function EnhancedSwapInterface() {
   const [showDetails, setShowDetails] = useState(false)
   const [swapDeadline, setSwapDeadline] = useState("10")
   const [showRouteModal, setShowRouteModal] = useState(false)
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false) // New state for confirmation modal
 
   // Use useWallet hook
   const { isConnected, isConnecting, connectWallet } = useWallet()
@@ -70,6 +77,25 @@ export function EnhancedSwapInterface() {
     [fromToken.symbol, toToken.symbol],
   )
 
+  // This function is for the *main* "Swap" button
+  const handleInitiateSwapProcess = () => {
+    setShowConfirmationModal(true)
+  }
+
+  // This function is passed to the SwapConfirmationModal and is called when the user clicks "Confirm" inside it.
+  const handleConfirmSwap = async () => {
+    console.log("Executing actual swap transaction...")
+    // Here you would typically dispatch the actual blockchain transaction
+    // For demonstration, simulate a delay
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    console.log("Actual swap transaction completed!")
+    // Clear input/output fields after successful swap
+    setFromAmount("")
+    setToAmount("")
+    // The modal's internal logic will handle showing the success state.
+    // No need to close the modal here, it will manage its own state.
+  }
+
   // Get exchange rate display
   const getExchangeRateDisplay = useCallback(() => {
     if (!fromToken.price || !toToken.price) return null
@@ -85,7 +111,9 @@ export function EnhancedSwapInterface() {
       <div className="flex justify-between items-center py-0.5">
         <div className="flex items-center text-xs text-zinc-400">
           <span>
-            1 {baseToken.symbol} = {formatCurrency(rate.toString())} {quoteToken.symbol} (
+            1 {baseToken.symbol} ={" "}
+            <span dangerouslySetInnerHTML={{ __html: formatCurrency(rate.toString()) }} />{" "}
+            {quoteToken.symbol} (
             {formatDollarValue(dollarValue)})
           </span>
           <button
@@ -194,11 +222,11 @@ export function EnhancedSwapInterface() {
               </div>
             </div>
 
-            {/* Swap Button */}
+            {/* Swap Button (Reverses input/output fields visually) */}
             <div className="flex justify-center z-10 relative" style={{ marginTop: "-16px", marginBottom: "-10px" }}>
               <button
                 className="p-2 rounded-md bg-black/80 border border-pink-500/30 hover:bg-black/90 transition-colors"
-                onClick={handleSwapTokens}
+                onClick={originalHandleSwapTokens} // This correctly only reverses the tokens in the UI
                 style={{ boxShadow: "0 0 12px rgba(236,72,153,0.3)" }}
               >
                 <ArrowDownUp size={16} className="text-purple-400" />
@@ -295,6 +323,7 @@ export function EnhancedSwapInterface() {
               <Button
                 className="w-full bg-gradient-to-r from-purple-600/90 to-pink-600/90 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-md h-10 text-sm shadow-[0_0_10px_rgba(168,85,247,0.3)]"
                 disabled={!fromAmount || !toAmount}
+                onClick={handleInitiateSwapProcess} // Now correctly calls the process to initiate swap
                 style={{
                   opacity: !fromAmount || !toAmount ? 0.8 : 1,
                   boxShadow: "0 0 15px rgba(168,85,247,0.4), 0 0 30px rgba(236,72,153,0.2)",
@@ -349,6 +378,24 @@ export function EnhancedSwapInterface() {
         fromToken={fromToken}
         toToken={toToken}
         route={routeData}
+      />
+
+      {/* Swap Confirmation Modal */}
+      <SwapConfirmationModal
+        isOpen={showConfirmationModal}
+        onClose={() => setShowConfirmationModal(false)}
+        onConfirm={handleConfirmSwap}
+        fromToken={fromToken}
+        toToken={toToken}
+        fromAmount={fromAmount}
+        toAmount={toAmount}
+        priceImpact={priceImpact}
+        minReceived={getMinReceived(slippage)}
+        slippage={slippage}
+        exchangeRate={exchangeRate}
+        isRateReversed={isRateReversed}
+        toggleRateDirection={toggleRateDirection}
+        routeData={routeData}
       />
     </div>
   )

@@ -7,9 +7,27 @@ export function formatCurrency(value: string | number): string {
   const num = typeof value === "string" ? Number.parseFloat(value) : value
   if (isNaN(num)) return String(value)
 
-  // Handle very small numbers with exponential notation
+  // Handle very small numbers with custom notation (e.g., 0.0_n_XXXX)
   if (num > 0 && num < 0.000001) {
-    return num.toExponential(4)
+    const numStr = num.toFixed(20) // Get a string representation with enough precision
+    const parts = numStr.split(".")
+    if (parts.length === 2) {
+      const fraction = parts[1]
+      let zeroCount = 0
+      for (let i = 0; i < fraction.length; i++) {
+        if (fraction[i] === "0") {
+          zeroCount++
+        } else {
+          break
+        }
+      }
+
+      // If there are leading zeros and it's not just "0.0", use the custom format with <sub>
+      if (zeroCount > 0 && fraction.length > zeroCount) {
+        const significantDigits = fraction.substring(zeroCount).substring(0, 4) // Take up to 4 significant digits
+        return `0.0<sub>${zeroCount}</sub>${significantDigits}`
+      }
+    }
   }
 
   // Use toLocaleString for general formatting with up to 6 decimal places,
