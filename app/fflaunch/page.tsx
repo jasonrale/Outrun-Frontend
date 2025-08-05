@@ -286,15 +286,13 @@ export default function FFLaunchPage() {
                       <li className="flex items-start">
                         <Coins className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
                         <span className="text-zinc-300 text-sm">
-                          <span className="font-semibold text-blue-400">1/3</span> of funds used for POL (Protocol-Owned
-                          Liquidity)
+                          <span className="font-semibold text-blue-400">1/3</span> of funds used for POL (Proof Of Liquidity) pair
                         </span>
                       </li>
                       <li className="flex items-start">
                         <Coins className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
                         <span className="text-zinc-300 text-sm">
-                          <span className="font-semibold text-blue-400">2/3</span> of funds used for memecoin token
-                          generation
+                          <span className="font-semibold text-blue-400">2/3</span> of funds used for project token pair
                         </span>
                       </li>
                       <li className="flex items-start">
@@ -409,7 +407,7 @@ export default function FFLaunchPage() {
                       </li>
                       <li className="flex items-start">
                         <Clock className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">24-hour Liquidity Protection Period implemented</span>
+                        <span className="text-zinc-300 text-sm">48-hour Liquidity Protection Period implemented</span>
                       </li>
                     </ul>
                   </div>

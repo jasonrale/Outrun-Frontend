@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation" // 导��useRouter
+import { useRouter } from "next/navigation" // 导useRouter
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, ChevronDown, ChevronRight, ChevronUp } from "lucide-react"
 import { usePathname } from "next/navigation"
@@ -39,7 +39,6 @@ const navItems: NavItem[] = [
     children: [
       { title: "Swap", href: "/outswap/swap" },
       { title: "Liquidity", href: "/outswap/liquidity" },
-      { title: "Referral", href: "/outswap/referral" },
     ],
   },
   {
@@ -49,6 +48,10 @@ const navItems: NavItem[] = [
   {
     title: "Memeverse",
     href: "/memeverse",
+  },
+  {
+    title: "Referral",
+    href: "/referral",
   },
 ]
 

@@ -105,7 +105,7 @@ export function SwapConfirmationModal({
           <GradientBackgroundCard className="relative p-6 max-w-md w-full mx-4 text-white">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-gradient-fill">
-                {showSuccess ? "Transaction State" : "You're swapping"}
+                {showSuccess ? "Transaction Status" : "You're swapping"}
               </h2>
               <button
                 className="rounded-lg p-1 text-zinc-400 transition-all duration-300 hover:bg-white/10 hover:text-white flex items-center justify-center"

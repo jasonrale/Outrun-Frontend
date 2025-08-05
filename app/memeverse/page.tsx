@@ -34,8 +34,7 @@ export default function MemeversePage() {
               >
                 <div className="inline-block mb-6">
                   <div className="relative">
-                    <div className="absolute inset-0 blur-xl bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 opacity-70 rounded-full"
-                    />
+                    <div className="absolute inset-0 blur-xl bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 opacity-70 rounded-full" />
                     <div className="relative px-6 py-2 bg-black/65 backdrop-blur-sm border border-white/10 rounded-full text-sm font-medium text-white">
                       Memecoin × DeFi × DAO
                     </div>
@@ -47,7 +46,8 @@ export default function MemeversePage() {
                 </h1>
 
                 <p className="text-xl md:text-2xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
-                  A disruptive innovation platform for Consensus Launch, Staking and DAO governance, built around the sustainability ethos and based on the FFLaunch philosophy.
+                  A disruptive innovation platform for Consensus Launch, Staking and DAO governance, built around the
+                  sustainability ethos and based on the FFLaunch philosophy.
                 </p>
               </motion.div>
 
@@ -157,13 +157,21 @@ export default function MemeversePage() {
           <div className="relative mb-16 overflow-hidden rounded-2xl bg-black/40 backdrop-blur-sm border border-white/10 p-6">
             <div className="absolute inset-0 bg-grid-pattern bg-center opacity-10" />
             <div className="relative">
-              <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-                <div className="text-center md:text-left mb-4 md:mb-0">
-                  <h3 className="text-xl font-semibold text-purple-400 mb-2">Memeverse Event Lifecycle</h3>
-                  <p className="text-zinc-300">
-                    A simplified 4-stage process with only 2 entities: Creators and Investors
-                  </p>
+              <div className="flex flex-col items-center md:items-start mb-8 w-full">
+                <div className="flex justify-between items-center w-full mb-2">
+                  <h3 className="text-xl font-semibold text-purple-400">Memeverse Event Lifecycle</h3>
+                  <a
+                    href="https://outrun.gitbook.io/doc/memeverse/event-lifecycle"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent hover:from-purple-400 hover:to-pink-400 flex items-center text-lg font-medium whitespace-nowrap"
+                  >
+                    Learn more
+                  </a>
                 </div>
+                <p className="text-zinc-300 text-center md:text-left">
+                  A simplified 4-stage process with only 2 entities: Proposer and Participant
+                </p>
               </div>
 
               {/* Lifecycle Steps */}
@@ -177,7 +185,7 @@ export default function MemeversePage() {
                   <ul className="space-y-2 text-sm text-zinc-300">
                     <li className="flex items-start">
                       <span className="text-purple-400 mr-2">•</span>
-                      <span>Creator inputs information via website UI</span>
+                      <span>Proposer inputs information via website UI</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-purple-400 mr-2">•</span>
@@ -202,15 +210,15 @@ export default function MemeversePage() {
                   <ul className="space-y-2 text-sm text-zinc-300">
                     <li className="flex items-start">
                       <span className="text-pink-400 mr-2">•</span>
-                      <span>Investors deposit UPT tokens</span>
+                      <span>Participants deposit UPT tokens</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-pink-400 mr-2">•</span>
-                      <span>1/3 funds for POL liquidity</span>
+                      <span>1/5 funds for POL liquidity</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-pink-400 mr-2">•</span>
-                      <span>2/3 funds for memecoin liquidity</span>
+                      <span>4/5 funds for memecoin liquidity</span>
                     </li>
                   </ul>
                   <div className="absolute bottom-4 right-4">
@@ -260,7 +268,7 @@ export default function MemeversePage() {
                     </li>
                     <li className="flex items-start">
                       <span className="text-cyan-400 mr-2">•</span>
-                      <span>24-hour Liquidity Protection Period</span>
+                      <span>48-hour Liquidity Protection Period</span>
                     </li>
                   </ul>
                   <div className="absolute bottom-4 right-4">
@@ -277,7 +285,7 @@ export default function MemeversePage() {
                     <span className="text-red-400 font-medium">If minimum funds not reached</span>
                   </div>
                   <p className="text-sm text-zinc-300">
-                    If genesis funds are less than minTotalFunds, the project enters refund stage where investors can
+                    If genesis funds are less than minTotalFunds, the project enters refund stage where participants can
                     redeem all deposited UPT tokens.
                   </p>
                 </div>
