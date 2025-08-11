@@ -21,7 +21,7 @@ export default function MemeverseBoardPage() {
   )
 }
 
-// 内容组件 - 使用Context和URL同步
+// 内容组件 - 使用Context���URL同步
 const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
   const router = useRouter()
   const searchParams = useSearchParams()

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { X, Link2, Check, Share2 } from "lucide-react"
+import { X, Link2, Check, Share2, Gift } from "lucide-react"
 import { GradientBackgroundCard } from "@/components/ui/gradient-background-card"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { motion, AnimatePresence } from "framer-motion"
@@ -18,19 +18,19 @@ export function MemeverseSocialShare({ isOpen, onClose, project, triggerSource }
   const [copied, setCopied] = useState(false)
 
   const genesisTweets = [
-    "@OutrunBuild 🔥🔥🔥Stop scrolling and tap in—join \${symbol} Community now and lock in your early-member upside!👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney🔥🔥🔥",
-    "@OutrunBuild 💎💎💎Just joined \${symbol} Community—wanna ride with me? Tap here👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney💎💎💎",
-    "@OutrunBuild 🚀🚀🚀Turn “I wish I'd found this sooner” into “glad I got in now” → \${symbol} Community👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney🚀🚀🚀",
-    "@OutrunBuild ⏳⏳⏳Only one tweet stands between “watching” and “onboarded”—I'm inside \${symbol} Community, waiting for you👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney⏳⏳⏳",
-    "@OutrunBuild 🏆🏆🏆Don't let “next time” become “why didn't I?”—\${symbol} Community is open right now👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney🏆🏆🏆",
+    "@OutrunBuild 🔥🔥🔥Stop scrolling and tap in—join ${symbol} Community now and lock in your early-member upside!👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney🔥🔥🔥",
+    "@OutrunBuild 💎💎💎Just joined ${symbol} Community—wanna ride with me? Tap here👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney💎💎💎",
+    "@OutrunBuild 🚀🚀🚀Turn “I wish I'd found this sooner” into “glad I got in now” → ${symbol} Community👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney🚀🚀🚀",
+    "@OutrunBuild ⏳⏳⏳Only one tweet stands between “watching” and “onboarded”—I'm inside ${symbol} Community, waiting for you👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney⏳⏳⏳",
+    "@OutrunBuild 🏆🏆🏆Don't let “next time” become “why didn't I?”—${symbol} Community is open right now👇 #EarlyAdopter #Outrun #Memeverse #DAO #Memecoin #SmartMoney🏆🏆🏆",
   ]
 
   const nonGenesisTweets = [
-    "@OutrunBuild 💎💎💎From “heard about it” to “can't live without it” is one click away—\${symbol} Community👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney💎💎💎",
-    "@OutrunBuild 🔥🔥🔥\${symbol} Community is buzzing today, missing one of us won't stop the party, but having you completes it👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney🔥🔥🔥",
-    "@OutrunBuild 🪄🪄🪄Chapter one is done—grab the pen and write chapter two inside \${symbol} Community👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney🪄🪄🪄",
-    "@OutrunBuild 🍻🍻🍻Spent a week in \${symbol} Community and my contact list suddenly gained three co-founders—your turn?👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney🍻🍻🍻",
-    "@OutrunBuild 🌱🌱🌱Real growth isn't a solo mission—evolve wildly together in \${symbol} Community. Boarding gate👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney🌱🌱🌱",
+    "@OutrunBuild 💎💎💎From “heard about it” to “can't live without it” is one click away—${symbol} Community👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney💎💎💎",
+    "@OutrunBuild 🔥🔥🔥${symbol} Community is buzzing today, missing one of us won't stop the party, but having you completes it👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney🔥🔥🔥",
+    "@OutrunBuild 🪄🪄🪄Chapter one is done—grab the pen and write chapter two inside ${symbol} Community👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney🪄🪄🪄",
+    "@OutrunBuild 🍻🍻🍻Spent a week in ${symbol} Community and my contact list suddenly gained three co-founders—your turn?👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney🍻🍻🍻",
+    "@OutrunBuild 🌱🌱🌱Real growth isn't a solo mission—evolve wildly together in ${symbol} Community. Boarding gate👇 #Outrun #Memeverse #DAO #Memecoin #SmartMoney🌱🌱🌱",
   ]
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : ""
@@ -108,6 +108,7 @@ export function MemeverseSocialShare({ isOpen, onClose, project, triggerSource }
                   iconClassName="text-pink-300/80 hover:text-pink-300"
                   content="Users joining via your link and making their first transaction become your referrals. You'll earn a share of their trading fees and extra bonus points."
                 />
+                <Gift size={18} className="ml-1 text-yellow-400" />
               </div>
               <button
                 className="rounded-lg p-1 text-zinc-400 transition-all duration-300 hover:bg-white/10 hover:text-white flex items-center justify-center"

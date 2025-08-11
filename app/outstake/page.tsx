@@ -44,7 +44,8 @@ export default function OutStakePage() {
                 </h1>
 
                 <p className="text-xl md:text-2xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
-                  A yield tokenization and stablecoin module built entirely around yield-bearing assets with higher capital efficiency.
+                  A yield tokenization and stablecoin module built entirely around yield-bearing assets with higher
+                  capital efficiency.
                 </p>
               </motion.div>
 
@@ -197,6 +198,7 @@ export default function OutStakePage() {
           />
 
           <div className="max-w-5xl mx-auto">
+            {/* Step 1 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -206,52 +208,50 @@ export default function OutStakePage() {
             >
               <div className="relative bg-black/70 backdrop-blur-sm rounded-xl border border-purple-500/20 overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-600 to-pink-600"></div>
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg mr-4">
-                      1
+                <div className="flex flex-col md:flex-row min-h-[240px]">
+                  {/* Left content - takes up 2/3 on desktop */}
+                  <div className="flex-1 md:flex-[2] p-6 md:p-8">
+                    <div className="flex items-center mb-4">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg mr-4">
+                        1
+                      </div>
+                      <h3 className="text-2xl font-bold text-white inline-flex">Deposit Assets</h3>
                     </div>
-                    <h3 className="text-2xl font-bold text-white inline-flex">Deposit Assets</h3>
+
+                    <p className="text-zinc-300 mb-4">
+                      Users deposit yield-bearing tokens (like stETH, RWA) or underlying assets (like ETH) into the
+                      OutStake protocol.
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      <div className="px-3 py-1.5 bg-black/40 rounded-md border border-white/10 flex items-center">
+                        <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                        <span className="text-zinc-300">stETH</span>
+                      </div>
+                      <div className="px-3 py-1.5 bg-black/40 rounded-md border border-white/10 flex items-center">
+                        <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                        <span className="text-zinc-300">RWA</span>
+                      </div>
+                      <div className="px-3 py-1.5 bg-black/40 rounded-md border border-white/10 flex items-center">
+                        <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                        <span className="text-zinc-300">Stablecoins</span>
+                      </div>
+                    </div>
+
+                    <div className="text-sm text-zinc-400">
+                      <span className="text-purple-400">Example:</span> Deposit 10 stETH that's already earning ~3% APR
+                      on Lido
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="col-span-1 md:col-span-2">
-                      <p className="text-zinc-300 mb-4">
-                        Users deposit yield-bearing tokens (like stETH, RWA) or underlying assets (like ETH) into the
-                        OutStake protocol.
+                  {/* Right content - takes up 1/3 on desktop and is perfectly centered */}
+                  <div className="flex-1 md:flex-[1] flex items-center justify-center p-6 md:p-8">
+                    <div className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 rounded-lg border border-purple-500/20 p-4 w-full">
+                      <div className="text-sm text-purple-300 font-medium mb-2">What are yield-bearing tokens?</div>
+                      <p className="text-white text-sm">
+                        Tokens that generate yield or have potential yield. Examples include stETH(Lido), sUSDE(Ethena),
+                        Stone(StakeStone), and LP tokens.
                       </p>
-
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        <div className="px-3 py-1.5 bg-black/40 rounded-md border border-white/10 flex items-center">
-                          <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-                          <span className="text-zinc-300">stETH</span>
-                        </div>
-                        <div className="px-3 py-1.5 bg-black/40 rounded-md border border-white/10 flex items-center">
-                          <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                          <span className="text-zinc-300">RWA</span>
-                        </div>
-                        <div className="px-3 py-1.5 bg-black/40 rounded-md border border-white/10 flex items-center">
-                          <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-                          <span className="text-zinc-300">ETH</span>
-                        </div>
-                      </div>
-
-                      <div className="text-sm text-zinc-400">
-                        <span className="text-purple-400">Example:</span> Deposit 10 stETH that's already earning ~3.5%
-                        APR on Lido
-                      </div>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 rounded-lg border border-purple-500/20 h-full flex flex-col">
-                      <div className="flex-1 flex flex-col justify-center p-4">
-                        <div className="text-sm text-purple-300 font-medium mb-2 inline-block">
-                          What are yield-bearing tokens?
-                        </div>
-                        <p className="text-white text-sm">
-                          Tokens that generate yield or have potential yield. Examples include stETH(Lido),
-                          sUSDE(Ethena), Stone(StakeStone), and LP tokens.
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -276,6 +276,7 @@ export default function OutStakePage() {
               </svg>
             </div>
 
+            {/* Step 2 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -285,44 +286,43 @@ export default function OutStakePage() {
             >
               <div className="relative bg-black/70 backdrop-blur-sm rounded-xl border border-blue-500/20 overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-blue-600 to-cyan-600"></div>
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold text-lg mr-4">
-                      2
+                <div className="flex flex-col md:flex-row min-h-[280px]">
+                  {/* Left content - takes up 2/3 on desktop */}
+                  <div className="flex-1 md:flex-[2] p-6 md:p-8">
+                    <div className="flex items-center mb-4">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold text-lg mr-4">
+                        2
+                      </div>
+                      <h3 className="text-2xl font-bold text-white inline-flex">Standardize Yield (SY)</h3>
                     </div>
-                    <h3 className="text-2xl font-bold text-white inline-flex">Standardize Yield (SY)</h3>
+
+                    <p className="text-zinc-300 mb-4">
+                      The protocol wraps yield-bearing tokens into Standardized Yield (SY) tokens based on the ERC5115
+                      standard, providing a unified interface for all yield-bearing tokens. This process happens
+                      automatically behind the scenes.
+                    </p>
+
+                    <div className="bg-black/40 rounded-lg p-4 border border-white/5 mb-4">
+                      <div className="font-mono text-sm">
+                        <span className="text-zinc-300">wstETH</span>
+                        <span className="text-zinc-500 mx-2">→</span>
+                        <span className="text-cyan-400">SY-wstETH</span>
+                      </div>
+                    </div>
+
+                    <div className="text-sm text-zinc-400">
+                      <span className="text-blue-400">Example:</span> 10 wstETH is wrapped into 10 SY-wstETH
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="col-span-1 md:col-span-2">
-                      <p className="text-zinc-300 mb-4">
-                        The protocol wraps yield-bearing tokens into Standardized Yield (SY) tokens based on the ERC5115
-                        standard, providing a unified interface for all yield-bearing tokens. This process happens
-                        automatically behind the scenes.
+                  {/* Right content - takes up 1/3 on desktop and is perfectly centered */}
+                  <div className="flex-1 md:flex-[1] flex items-center justify-center p-6 md:p-8">
+                    <div className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 rounded-lg border border-blue-500/20 p-4 w-full">
+                      <div className="text-sm text-blue-300 font-medium mb-2">What is SY?</div>
+                      <p className="text-white text-sm">
+                        SY is a vault token based on the ERC5115 standard designed to encapsulate yield-bearing tokens.
+                        It provides a standardized interface for interacting with any yield-generating mechanism.
                       </p>
-
-                      <div className="bg-black/40 rounded-lg p-4 border border-white/5 mb-4">
-                        <div className="font-mono text-sm">
-                          <span className="text-zinc-300">wstETH</span>
-                          <span className="text-zinc-500 mx-2">→</span>
-                          <span className="text-cyan-400">SY-wstETH</span>
-                        </div>
-                      </div>
-
-                      <div className="text-sm text-zinc-400">
-                        <span className="text-blue-400">Example:</span> 10 wstETH is wrapped into 10 SY-wstETH
-                      </div>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 rounded-lg border border-blue-500/20 h-full flex flex-col">
-                      <div className="flex-1 flex flex-col justify-center p-4">
-                        <div className="text-sm text-blue-300 font-medium mb-2 inline-block">What is SY?</div>
-                        <p className="text-white text-sm">
-                          SY is a vault token based on the ERC5115 standard designed to encapsulate yield-bearing
-                          tokens. It provides a standardized interface for interacting with any yield-generating
-                          mechanism.
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -347,6 +347,7 @@ export default function OutStakePage() {
               </svg>
             </div>
 
+            {/* Step 3 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -356,86 +357,69 @@ export default function OutStakePage() {
             >
               <div className="relative bg-black/70 backdrop-blur-sm rounded-xl border border-pink-500/20 overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-pink-600 to-purple-600"></div>
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-lg mr-4">
-                      3
+                <div className="flex flex-col md:flex-row min-h-[280px]">
+                  {/* Left content - takes up 2/3 on desktop */}
+                  <div className="flex-1 md:flex-[2] p-6 md:p-8">
+                    <div className="flex items-center mb-4">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-lg mr-4">
+                        3
+                      </div>
+                      <h3 className="text-2xl font-bold text-white inline-flex">Stake & Lock SY Tokens</h3>
                     </div>
-                    <h3 className="text-2xl font-bold text-white inline-flex">Stake & Lock SY Tokens</h3>
+
+                    <p className="text-zinc-300 mb-4">
+                      Users stake their SY tokens and specify a lock-up period. This process mints three types of
+                      tokens, each representing different aspects of the yield-bearing token.
+                    </p>
+
+                    <div className="flex gap-3 mb-4 justify-start">
+                      <div className="bg-purple-900/30 rounded-lg p-3 border border-purple-500/20 flex-shrink-0 w-40 sm:w-48">
+                        <div className="text-center mb-1">
+                          <span className="text-purple-400 font-bold">SP</span>
+                        </div>
+                        <p className="text-xs text-zinc-400 text-center">Staking Position</p>
+                      </div>
+                      <div className="bg-pink-900/30 rounded-lg p-3 border border-pink-500/20 flex-shrink-0 w-40 sm:w-48">
+                        <div className="text-center mb-1">
+                          <span className="text-pink-400 font-bold">YT</span>
+                        </div>
+                        <p className="text-xs text-zinc-400 text-center">Yield Rate Token</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-black/40 rounded-lg p-4 border border-white/5 mb-4">
+                      <div className="font-mono text-sm">
+                        <span className="text-cyan-400">SY sUSDe</span>
+                        <span className="text-zinc-500 mx-2">→</span>
+                        <span className="text-purple-400">SP sUSDe</span>
+                        <span className="text-zinc-500 mx-1">+</span>
+                        <span className="text-pink-400">YT sUSDe</span>
+                      </div>
+                    </div>
+
+                    <div className="text-sm text-zinc-400">
+                      <span className="text-pink-400">Example:</span> 10 SY sUSDe with a 100 days lock generates
+                      12(Based on the exchange rate relative to the accounting asset) SP sUSDe, 1000 YT sUSDe
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="col-span-1 md:col-span-2">
-                      <p className="text-zinc-300 mb-4">
-                        Users stake their SY tokens and specify a lock-up period. This process mints three types of
-                        tokens, each representing different aspects of the yield-bearing token.
-                      </p>
-
-                      <div className="grid grid-cols-3 gap-3 mb-4">
-                        <div className="bg-purple-900/30 rounded-lg p-3 border border-purple-500/20">
-                          <div className="text-center mb-1">
-                            <span className="text-purple-400 font-bold">SP</span>
-                          </div>
-                          <p className="text-xs text-zinc-400 text-center">Staking Position</p>
-                        </div>
-                        <div className="bg-pink-900/30 rounded-lg p-3 border border-pink-500/20">
-                          <div className="text-center mb-1">
-                            <span className="text-pink-400 font-bold">YT</span>
-                          </div>
-                          <p className="text-xs text-zinc-400 text-center">Yield Rate Token</p>
-                        </div>
-                        <div className="bg-blue-900/30 rounded-lg p-3 border border-blue-500/20">
-                          <div className="text-center mb-1">
-                            <span className="text-blue-400 font-bold">PYT</span>
-                          </div>
-                          <p className="text-xs text-zinc-400 text-center">Points Yield Token</p>
-                        </div>
-                      </div>
-
-                      <div className="bg-black/40 rounded-lg p-4 border border-white/5 mb-4">
-                        <div className="font-mono text-sm">
-                          <span className="text-cyan-400">SY-sUSDe</span>
-                          <span className="text-zinc-500 mx-2">→</span>
-                          <span className="text-purple-400">SP-sUSDe</span>
-                          <span className="text-zinc-500 mx-1">+</span>
-                          <span className="text-pink-400">YT-sUSDe</span>
-                          <span className="text-zinc-500 mx-1">+</span>
-                          <span className="text-blue-400">PYT-sUSDe</span>
-                        </div>
-                      </div>
-
-                      <div className="text-sm text-zinc-400">
-                        <span className="text-pink-400">Example:</span> 10 SY-sUSDe with a 100 days lock generates 10
-                        SP-sUSDe, 1000 YT-sUSDe, and 10 PYT-sUSDe
-                      </div>
-                    </div>
-
-                    <div className="space-y-4 h-full flex flex-col justify-center">
+                  {/* Right content - takes up 1/3 on desktop and is perfectly centered */}
+                  <div className="flex-1 md:flex-[1] flex items-center justify-center p-6 md:p-8">
+                    <div className="space-y-4 w-full">
                       <div className="bg-gradient-to-r from-purple-900/40 to-purple-800/40 rounded-lg border border-purple-500/30 p-3">
-                        <div className="text-sm text-purple-300 font-semibold mb-1 inline-block">
-                          SP (Staking Position)
-                        </div>
+                        <div className="text-sm text-purple-300 font-semibold mb-1">SP (Staking Position)</div>
                         <p className="text-xs text-white">
                           Represents the redemption right of the principal for a locked position upon maturity. Can be
-                          split into PT.
+                          split into UPT.
                         </p>
                       </div>
 
                       <div className="bg-gradient-to-r from-pink-900/40 to-pink-800/40 rounded-lg border border-pink-500/30 p-3">
-                        <div className="text-sm text-pink-300 font-semibold mb-1 inline-block">
-                          YT (Yield Rate Token)
-                        </div>
+                        <div className="text-sm text-pink-300 font-semibold mb-1">YT (Yield Rate Token)</div>
                         <p className="text-xs text-white">
                           Represents ownership of all yield generated by the underlying assets. Has no expiration date,
                           unlike other protocols.
                         </p>
-                      </div>
-
-                      <div className="bg-gradient-to-r from-blue-900/40 to-blue-800/40 rounded-lg border border-blue-500/30 p-3">
-                        <div className="text-sm text-blue-300 font-semibold mb-1 inline-block">
-                          PYT (Points Yield Token)
-                        </div>
-                        <p className="text-xs text-white">Represents external protocol points yields (if available).</p>
                       </div>
                     </div>
                   </div>
@@ -461,6 +445,7 @@ export default function OutStakePage() {
               </svg>
             </div>
 
+            {/* Step 4 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -470,42 +455,43 @@ export default function OutStakePage() {
             >
               <div className="relative bg-black/70 backdrop-blur-sm rounded-xl border border-green-500/20 overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-green-600 to-cyan-600"></div>
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-green-600 to-cyan-600 text-white font-bold text-lg mr-4">
-                      4
+                <div className="flex flex-col md:flex-row min-h-[280px]">
+                  {/* Left content - takes up 2/3 on desktop */}
+                  <div className="flex-1 md:flex-[2] p-6 md:p-8">
+                    <div className="flex items-center mb-4 w-fit">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-green-600 to-cyan-600 text-white font-bold text-lg mr-4">
+                        4
+                      </div>
+                      <h3 className="text-2xl font-bold text-white inline-flex">
+                        Split SP into UPT and non-transferable SP
+                      </h3>
                     </div>
-                    <h3 className="text-2xl font-bold text-white inline-flex">
-                      Split SP into PT and non-transferable SP (Optional)
-                    </h3>
+
+                    <p className="text-zinc-300 mb-4">
+                      Users can split their SP tokens into UPT. This operation makes the original SP non-transferable
+                      but does not destroy it, allowing it to still be tracked.
+                    </p>
+
+                    <div className="bg-black/40 rounded-lg p-4 border border-white/5 mb-4">
+                      <div className="font-mono text-sm">
+                        <span className="text-purple-400">SP wstETH</span>
+                        <span className="text-zinc-500 mx-2">→</span>
+                        <span className="text-green-400">UETH</span>
+                        <span className="text-zinc-500 mx-1">+</span>
+                        <span className="text-cyan-400">SP wstETH(NonTransferable)</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="col-span-1 md:col-span-2">
-                      <p className="text-zinc-300 mb-4">
-                        Users can split their SP tokens into PT(UPT) according to the position's mode (which is
-                        unchangeable). This operation makes the original SP non-transferable but does not destroy it,
-                        allowing it to still be tracked.
+                  {/* Right content - takes up 1/3 on desktop and is perfectly centered */}
+                  <div className="flex-1 md:flex-[1] flex items-center justify-center p-6 md:p-8">
+                    <div className="bg-gradient-to-br from-green-900/40 to-cyan-900/40 rounded-lg border border-green-500/20 p-4 w-full">
+                      <div className="text-sm text-green-300 font-medium mb-2">What is SP?</div>
+                      <p className="text-white text-sm">
+                        SP represents the principal redemption rights for locked positions upon maturity. Holders can
+                        sell it, effectively enabling an "early redemption" operation, while buyers can obtain
+                        fixed-rate returns based on their purchase price.
                       </p>
-
-                      <div className="bg-black/40 rounded-lg p-4 border border-white/5 mb-4">
-                        <div className="font-mono text-sm">
-                          <span className="text-purple-400">SP-stETH</span>
-                          <span className="text-zinc-500 mx-2">→</span>
-                          <span className="text-green-400">PT-stETH or UETH</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-green-900/40 to-cyan-900/40 rounded-lg border border-green-500/20 h-full flex flex-col">
-                      <div className="flex-1 flex flex-col justify-center p-4">
-                        <div className="text-sm text-green-300 font-medium mb-2 inline-block">What is SP?</div>
-                        <p className="text-white text-sm">
-                          SP represents the principal redemption rights for locked positions upon maturity. Holders can
-                          sell it, effectively enabling an "early redemption" operation, while buyers can obtain
-                          fixed-rate returns based on their purchase price.
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -530,6 +516,7 @@ export default function OutStakePage() {
               </svg>
             </div>
 
+            {/* Step 5 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -539,107 +526,106 @@ export default function OutStakePage() {
             >
               <div className="relative bg-black/70 backdrop-blur-sm rounded-xl border border-purple-500/20 overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-600 to-blue-600"></div>
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-lg mr-4">
-                      5
+                <div className="flex flex-col md:flex-row min-h-[240px]">
+                  {/* Left content - takes up 2/3 on desktop */}
+                  <div className="flex-1 md:flex-[2] p-6 md:p-8 flex flex-col justify-center">
+                    <div className="flex items-center mb-4">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-lg mr-4">
+                        5
+                      </div>
+                      <h3 className="text-2xl font-bold text-white inline-flex">
+                        Higher yields and capital efficiency
+                      </h3>
                     </div>
-                    <h3 className="text-2xl font-bold text-white inline-flex">Multiple Income Streams</h3>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="col-span-1 md:col-span-2">
-                      <p className="text-zinc-300 mb-4">
-                        Users can now benefit from multiple income sources, each with different risk and return
-                        profiles.
-                      </p>
+                    <p className="text-zinc-300 mb-4">
+                      Users can now benefit from multiple income sources, each with different risk and return profiles.
+                    </p>
 
-                      <div className="space-y-3 mb-4">
-                        <div className="flex items-start">
-                          <div className="w-6 h-6 rounded-full bg-pink-600/20 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-3 w-3 text-pink-400"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          <div>
-                            <div className="text-pink-400 font-medium">Boosted Interest Rates</div>
-                            <p className="text-zinc-300 text-sm">
-                              Lock in higher interest rates with YT. YT value increases over time as yield accumulates.
-                            </p>
-                          </div>
+                    <div className="space-y-3">
+                      <div className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-pink-600/20 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3 text-pink-400"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
                         </div>
-
-                        <div className="flex items-start">
-                          <div className="w-6 h-6 rounded-full bg-green-600/20 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-3 w-3 text-green-400"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          <div>
-                            <div className="text-green-400 font-medium">Trade SP tokens</div>
-                            <p className="text-zinc-300 text-sm">
-                              Get fixed-rate returns before maturity by trading SP tokens on the market.
-                            </p>
-                          </div>
+                        <div>
+                          <div className="text-pink-400 font-medium">Boosted Interest Rates</div>
+                          <p className="text-zinc-300 text-sm">
+                            Lock in higher interest rates through YT and avoid subsequent rate fluctuations.
+                          </p>
                         </div>
+                      </div>
 
-                        <div className="flex items-start">
-                          <div className="w-6 h-6 rounded-full bg-blue-600/20 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-3 w-3 text-blue-400"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          <div>
-                            <div className="text-blue-400 font-medium">Utilize PYT tokens</div>
-                            <p className="text-zinc-300 text-sm">
-                              Benefit from external protocol points rewards through PYT tokens.
-                            </p>
-                          </div>
+                      <div className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-green-600/20 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3 text-green-400"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-green-400 font-medium">Trade SP tokens</div>
+                          <p className="text-zinc-300 text-sm">
+                            Get fixed-rate returns before maturity by trading SP tokens on the market.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start">
+                        <div className="w-6 h-6 rounded-full bg-blue-600/20 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3 text-blue-400"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-blue-400 font-medium">Leveraged staking instead of looped lending</div>
+                          <p className="text-zinc-300 text-sm">
+                            Achieve leveraged staking through UPT with no liquidation risk and 0% interest rate.
+                          </p>
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="bg-gradient-to-br from-purple-800/50 to-blue-800/50 rounded-lg border border-purple-500/30 h-full flex flex-col">
-                      <div className="flex-1 flex flex-col justify-center p-4">
-                        <div className="text-sm text-purple-200 font-semibold mb-2 inline-block">
-                          OutStake's Unique Advantage
-                        </div>
-                        <p className="text-white text-sm mb-3">
-                          Compared to other yield tokenization protocols, OutStake offers greater composability,
-                          flexibility, liquidity, and capital efficiency, enabling higher returns for users.
-                        </p>
-                        <div className="text-xs text-blue-200">
-                          UPT is not only an innovative omnichain universal principal token but also the omnichain
-                          stablecoin of the Outrun ecosystem. UPT aims to be a cornerstone of DeFi, bringing ultimate
-                          capital efficiency to the Outrun ecosystem.
-                        </div>
+                  {/* Right content - takes up 1/3 on desktop and is perfectly centered */}
+                  <div className="flex-1 md:flex-[1] flex items-center justify-center p-6 md:p-8">
+                    <div className="bg-gradient-to-br from-purple-800/50 to-blue-800/50 rounded-lg border border-purple-500/30 p-4 w-full">
+                      <div className="text-sm text-purple-200 font-semibold mb-2">OutStake's Unique Advantage</div>
+                      <p className="text-white text-sm mb-3">
+                        Compared to other yield tokenization protocols, OutStake offers greater composability,
+                        flexibility, liquidity, and capital efficiency, enabling higher returns for users.
+                      </p>
+                      <div className="text-xs text-blue-200">
+                        UPT is not only an omnichain universal principal token split from the SP token but also the
+                        omnichain stablecoin of the Outrun ecosystem. UPT aims to be a cornerstone of DeFi, bringing
+                        ultimate capital efficiency to the Outrun ecosystem.
                       </div>
                     </div>
                   </div>
@@ -651,14 +637,14 @@ export default function OutStakePage() {
           {/* Token Cards - Simplified */}
           <div className="mt-16">
             <h3 className="text-2xl font-bold text-center text-white mb-8">OutStake Token Ecosystem</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 auto-rows-fr items-stretch">
               {/* SY Card (Green) */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.0 }}
                 viewport={{ once: true }}
-                className="group"
+                className="group h-full"
               >
                 <div className="relative h-full">
                   <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-green-600/30 to-green-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
@@ -698,7 +684,7 @@ export default function OutStakePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
                 viewport={{ once: true }}
-                className="group"
+                className="group h-full"
               >
                 <div className="relative h-full">
                   <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-purple-600/30 to-purple-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
@@ -732,7 +718,7 @@ export default function OutStakePage() {
               </motion.div>
 
               {/* YT Card (Sky Blue) */}
-              <motion.div className="group">
+              <motion.div className="group h-full">
                 <div className="relative h-full">
                   <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-sky-600/30 to-sky-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
                   <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-sky-500/20 p-6 overflow-hidden group-hover:border-sky-500/40 transition duration-300">
@@ -760,90 +746,30 @@ export default function OutStakePage() {
                 </div>
               </motion.div>
 
-              {/* PT Card (Blue) */}
-              <motion.div className="group">
+              {/* UPT Card (Blue) */}
+              <motion.div className="group h-full">
                 <div className="relative h-full">
                   <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-blue-600/30 to-blue-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
                   <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-blue-500/20 p-6 overflow-hidden group-hover:border-blue-500/40 transition duration-300">
                     <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-blue-600/10"></div>
                     <div className="flex items-center mb-4">
                       <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center mr-3">
-                        <span className="text-blue-400 font-bold">PT</span>
-                      </div>
-                      <h4 className="text-xl font-bold text-white">Principal Token</h4>
-                    </div>
-                    <p className="text-zinc-300 text-sm leading-relaxed">
-                      PT is a principal token split from the SP token, a type of liquid staking token that represents
-                      the initial liquidity value of the SP token, designed to unlock the liquidity of staked assets.
-                    </p>
-                    <div className="mt-4 pt-4 border-t border-white/5">
-                      <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-2 py-1 bg-blue-900/20 rounded-md text-xs text-blue-400">No Expiration</span>
-                        <span className="px-2 py-1 bg-blue-900/20 rounded-md text-xs text-blue-400">
-                          Liquid Staking Token
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* UPT Card (Pink) */}
-              <motion.div className="group">
-                <div className="relative h-full">
-                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-pink-600/30 to-pink-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
-                  <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-pink-500/20 p-6 overflow-hidden group-hover:border-pink-500/40 transition duration-300">
-                    <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-pink-600/10"></div>
-                    <div className="flex items-center mb-4">
-                      <div className="w-10 h-10 rounded-full bg-pink-600/20 flex items-center justify-center mr-3">
-                        <span className="text-pink-400 font-bold">UPT</span>
+                        <span className="text-blue-400 font-bold">UPT</span>
                       </div>
                       <h4 className="text-xl font-bold text-white">Universal Principal Token</h4>
                     </div>
                     <p className="text-zinc-300 text-sm leading-relaxed">
-                      UPT is not only an innovative omnichain universal principal token but also the omnichain
-                      stablecoin of the Outrun ecosystem. UPT aims to be a cornerstone of DeFi, bringing ultimate
-                      capital efficiency to the Outrun ecosystem.
+                      UPT is not only an omnichain universal principal token split from the SP token but also the
+                      omnichain stablecoin of the Outrun ecosystem. UPT aims to be a cornerstone of DeFi, bringing
+                      ultimate capital efficiency to the Outrun ecosystem.
                     </p>
                     <div className="mt-4 pt-4 border-t border-white/5">
                       <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
                       <div className="flex flex-wrap gap-2">
-                        <span className="px-2 py-1 bg-pink-900/20 rounded-md text-xs text-pink-400">Omnichain</span>
-                        <span className="px-2 py-1 bg-pink-900/20 rounded-md text-xs text-pink-400">Stablecoin</span>
-                        <span className="px-2 py-1 bg-pink-900/20 rounded-md text-xs text-pink-400">
+                        <span className="px-2 py-1 bg-blue-900/20 rounded-md text-xs text-blue-400">Omnichain</span>
+                        <span className="px-2 py-1 bg-blue-900/20 rounded-md text-xs text-blue-400">Stablecoin</span>
+                        <span className="px-2 py-1 bg-blue-900/20 rounded-md text-xs text-blue-400">
                           Capital Efficient
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* PYT Card (Orange) */}
-              <motion.div className="group">
-                <div className="relative h-full">
-                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-600/30 to-orange-600/10 opacity-70 group-hover:opacity-100 blur-sm transition duration-300"></div>
-                  <div className="relative h-full bg-black/70 backdrop-blur-sm rounded-xl border border-orange-500/20 p-6 overflow-hidden group-hover:border-orange-500/40 transition duration-300">
-                    <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-orange-600/10"></div>
-                    <div className="flex items-center mb-4">
-                      <div className="w-10 h-10 rounded-full bg-orange-600/20 flex items-center justify-center mr-3">
-                        <span className="text-orange-400 font-bold">PYT</span>
-                      </div>
-                      <h4 className="text-xl font-bold text-white">Points Yield Token</h4>
-                    </div>
-                    <p className="text-zinc-300 text-sm leading-relaxed">
-                      Represents external protocol points yields, allowing users to benefit from additional rewards.
-                    </p>
-                    <div className="mt-4 pt-4 border-t border-white/5">
-                      <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Key Features</div>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-2 py-1 bg-orange-900/20 rounded-md text-xs text-orange-400">
-                          External Rewards
-                        </span>
-                        <span className="px-2 py-1 bg-orange-900/20 rounded-md text-xs text-orange-400">Tradable</span>
-                        <span className="px-2 py-1 bg-orange-900/20 rounded-md text-xs text-orange-400">
-                          Yield Accumulation
                         </span>
                       </div>
                     </div>

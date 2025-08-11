@@ -41,8 +41,7 @@ export default function MintPage() {
 
   const [marketData, setMarketData] = useState<MarketData | null>(null)
   const [isConnected, setIsConnected] = useState(false)
-  const [mintPT, setMintPT] = useState(true)
-  const [uptMode, setUptMode] = useState(true)
+  const [mintUPT, setMintUPT] = useState(true)
   const [activeTab, setActiveTab] = useState<"mint" | "yield-pool">("mint")
 
   const userBalance = 1000
@@ -73,9 +72,6 @@ export default function MintPage() {
     }
 
     setMarketData(foundMarket)
-    if (foundMarket) {
-      setUptMode(foundMarket.UPT?.isAuthorized ?? true)
-    }
   }, [syContractAddress])
 
   if (!marketData) {
@@ -204,10 +200,8 @@ export default function MintPage() {
                         userBalance={userBalance}
                         isConnected={isConnected}
                         setIsConnected={setIsConnected}
-                        uptMode={uptMode}
-                        setUptMode={setUptMode}
-                        mintPT={mintPT}
-                        setMintPT={setMintPT}
+                        mintUPT={mintUPT}
+                        setMintUPT={setMintUPT}
                       />
                     ) : (
                       <YieldPoolCard
@@ -229,7 +223,7 @@ export default function MintPage() {
                     <div className="h-[2px] bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20"></div>
                   </div>
                   {/* Right side - always shows MarketInfoCard */}
-                  <MarketInfoCard marketData={marketData} mintPT={mintPT} uptMode={uptMode} />
+                  <MarketInfoCard marketData={marketData} mintUPT={mintUPT} />
                 </div>
               </GradientBackgroundCard>
             </div>

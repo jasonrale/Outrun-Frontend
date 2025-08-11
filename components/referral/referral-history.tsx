@@ -13,16 +13,16 @@ interface ReferralHistoryProps {
 interface TradeRecord {
   id: number
   path: {
-    tokens: string[] // 代币数组，可以是2个或3个
+    tokens: string[]
   }
   commission: {
     amounts: string[]
     tokens: string[]
   }
-  network: string // 添加网络字段
+  network: string
   referredAddress: string
   timestamp: string
-  txHash?: string // 交易哈希，用于链接到区块浏览器
+  txHash?: string 
 }
 
 // Referred friend data structure

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { TokenIcon } from "@/components/ui/token-icon"
 import { formatCurrency } from "@/utils/format"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { InfoTooltip } from "@/components/ui/info-tooltip"
 
 interface StakeCardProps {
   marketData: {
@@ -16,14 +17,13 @@ interface StakeCardProps {
     syContractAddress: string
     UPT?: { isAuthorized: boolean; symbol: string; address: string }
     supportedInputTokens?: { symbol: string; address: string }[]
+    mtv?: number
   }
   userBalance: number
   isConnected: boolean
   setIsConnected: (connected: boolean) => void
-  uptMode: boolean
-  setUptMode: (mode: boolean) => void
-  mintPT: boolean
-  setMintPT: (mint: boolean) => void
+  mintUPT: boolean
+  setMintUPT: (mint: boolean) => void
 }
 
 export function StakeCard({
@@ -31,10 +31,8 @@ export function StakeCard({
   userBalance,
   isConnected,
   setIsConnected,
-  uptMode,
-  setUptMode,
-  mintPT,
-  setMintPT,
+  mintUPT,
+  setMintUPT,
 }: StakeCardProps) {
   const [activeTab, setActiveTab] = useState<"mint" | "yield-pool">("mint")
   const [inputAmount, setInputAmount] = useState("")
@@ -48,11 +46,14 @@ export function StakeCard({
     setInputAmount(userBalance.toString())
   }, [userBalance])
 
-  const handleLockPeriodChange = useCallback((value: number) => {
-    const clampedValue = Math.max(0, Math.min(365, value))
-    setLockPeriod(clampedValue)
-    setLockPeriodInput(clampedValue.toString())
-  }, [])
+  const handleLockPeriodChange = useCallback(
+    (value: number) => {
+      const clampedValue = Math.max(0, Math.min(365, value))
+      setLockPeriod(clampedValue)
+      setLockPeriodInput(clampedValue.toString())
+    },
+    [setLockPeriodInput],
+  )
 
   const handleLockPeriodInputChange = useCallback((value: string) => {
     const numValue = Number.parseInt(value)
@@ -95,6 +96,12 @@ export function StakeCard({
   const isInputValidAndPositive = useMemo(() => !isNaN(parsedInputAmount) && parsedInputAmount > 0, [parsedInputAmount])
   const hasSufficientBalance = useMemo(() => parsedInputAmount <= userBalance, [parsedInputAmount, userBalance])
 
+  const mtvTooltipContent = useMemo(() => {
+    const mtvValue = marketData.mtv || 0.95 // Default to 0.95 if not provided
+    const percentageValue = Math.round(mtvValue * 100)
+    return `MTV = ${mtvValue}, the max amount of UPT that can be minted is capped at ${percentageValue}% of the value of the yield-bearing assets you staked.`
+  }, [marketData.mtv])
+
   const { actionButtonText, actionButtonDisabled } = useMemo(() => {
     if (isConnected) {
       if (!isInputValidAndPositive) {
@@ -122,23 +129,10 @@ export function StakeCard({
       <div className="pt-2 space-y-4 relative">
         <div>
           <div className="flex items-center justify-between mb-3">
-            {marketData.UPT?.isAuthorized ? (
-              <div className="flex items-center gap-1">
-                <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
-                  UPT Mode
-                </span>
-                <button
-                  className={`w-8 h-5 rounded-md p-0.5 transition-colors duration-300 ${uptMode ? "bg-gradient-to-r from-cyan-600/70 to-purple-600/70" : "bg-white/10"}`}
-                  onClick={() => setUptMode(!uptMode)}
-                  disabled={!marketData.UPT?.isAuthorized}
-                >
-                  <div
-                    className={`w-4 h-4 rounded-md bg-white transition-transform duration-300 ${uptMode ? "translate-x-3" : "translate-x-0"} my-auto`}
-                  />
-                </button>
-              </div>
-            ) : null}
-            <div className={`flex items-center gap-2 text-sm ${marketData.UPT?.isAuthorized ? "" : "ml-auto"}`}>
+            <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
+              Stake
+            </span>
+            <div className={`flex items-center gap-2 text-sm ml-auto`}>
               <span className="text-white/60">Balance:</span>
               <span className="text-cyan-400 font-mono font-bold">{formatCurrency(userBalance)}</span>
               <Button
@@ -211,18 +205,26 @@ export function StakeCard({
 
         {/* Enhanced Output Section */}
         <div className="space-y-2 pt-8">
-          <div className="flex items-center gap-1 mb-3">
-            <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
-              Mint PT
-            </span>
-            <button
-              className={`w-8 h-5 rounded-md p-0.5 transition-colors duration-300 ${mintPT ? "bg-gradient-to-r from-cyan-600/70 to-purple-600/70" : "bg-white/10"}`}
-              onClick={() => setMintPT(!mintPT)}
-            >
-              <div
-                className={`w-4 h-4 rounded-md bg-white transition-transform duration-300 ${mintPT ? "translate-x-3" : "translate-x-0"} my-auto`}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-1">
+              <InfoTooltip
+                content={mtvTooltipContent}
+                iconClassName="text-cyan-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]"
+                iconSize={16}
+                maxWidth={237}
               />
-            </button>
+              <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
+                Mint UPT
+              </span>
+              <button
+                className={`w-8 h-5 rounded-md p-0.5 transition-colors duration-300 ${mintUPT ? "bg-gradient-to-r from-cyan-600/70 to-purple-600/70" : "bg-white/10"}`}
+                onClick={() => setMintUPT(!mintUPT)}
+              >
+                <div
+                  className={`w-4 h-4 rounded-md bg-white transition-transform duration-300 ${mintUPT ? "translate-x-3" : "translate-x-0"} my-auto`}
+                />
+              </button>
+            </div>
           </div>
 
           {/* YT Token Output */}
@@ -241,7 +243,7 @@ export function StakeCard({
                 <div className="text-lg font-mono text-white font-bold">{formatCurrency(0)}</div>
                 <div className="text-xs font-medium">
                   <span className="text-white/60">Redeemable Value: ≈ $0.00 USD</span>{" "}
-                  <span className="text-cyan-400">{uptMode ? "NonTransferable" : "Transferable"}</span>
+                  <span className="text-cyan-400">NonTransferable</span>
                 </div>
               </div>
             </div>
@@ -261,13 +263,15 @@ export function StakeCard({
               </div>
               <div className="flex-1 text-right">
                 <div className="text-lg font-mono text-white font-bold">{formatCurrency(0)}</div>
-                <div className="text-purple-400 text-xs font-medium">{mintPT ? "NonTransferable" : "Transferable"}</div>
+                <div className="text-purple-400 text-xs font-medium">
+                  {mintUPT ? "NonTransferable" : "Transferable"}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* PT Token Output (Conditional Rendering) */}
-          {mintPT && (
+          {/* UPT Token Output (Conditional Rendering) */}
+          {mintUPT && (
             <div className="relative group">
               <div className="relative flex items-center gap-3 p-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-pink-400/40 rounded-lg backdrop-blur-sm transition-all duration-300">
                 <div className="flex items-center gap-2">
@@ -275,12 +279,8 @@ export function StakeCard({
                     <TokenIcon symbol={marketData.assetName} size={24} />
                   </div>
                   <div>
-                    <div className="text-white font-bold text-sm">
-                      {uptMode ? marketData.UPT?.symbol : `PT ${marketData.assetName}`}
-                    </div>
-                    <div className="text-pink-400 text-xs font-semibold">
-                      {uptMode ? "Universal Principal Token" : "Principal Token"}
-                    </div>
+                    <div className="text-white font-bold text-sm">{marketData.UPT?.symbol}</div>
+                    <div className="text-pink-400 text-xs font-semibold">Universal Principal Token</div>
                   </div>
                 </div>
                 <div className="flex-1 text-right">

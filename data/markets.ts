@@ -33,6 +33,7 @@ export const marketsData = [
         exchangeRate: 1.136418,
         ytTotalSupply: 125395831,
         totalRedeemableValue: 219843.866016,
+        mtv: 0.95,
       },
       {
         network: "Base",
@@ -49,6 +50,7 @@ export const marketsData = [
         exchangeRate: 1.136418,
         ytTotalSupply: 525495733,
         totalRedeemableValue: 52718.979024,
+        mtv: 0.95,
       },
       {
         network: "Arbitrum",
@@ -65,6 +67,7 @@ export const marketsData = [
         exchangeRate: 1.136418,
         ytTotalSupply: 34869812,
         totalRedeemableValue: 314953.20881,
+        mtv: 0.95,
       },
     ],
   },
@@ -101,6 +104,7 @@ export const marketsData = [
         exchangeRate: 1.125219,
         ytTotalSupply: 8678392,
         totalRedeemableValue: 354.45,
+        mtv: 0.95,
       },
       {
         network: "Base",
@@ -117,6 +121,7 @@ export const marketsData = [
         exchangeRate: 1.125219,
         ytTotalSupply: 2345678,
         totalRedeemableValue: 108.268,
+        mtv: 0.95,
       },
       {
         network: "BNB Chain",
@@ -133,6 +138,7 @@ export const marketsData = [
         exchangeRate: 1.125219,
         ytTotalSupply: 5231583,
         totalRedeemableValue: 182.368,
+        mtv: 0.95,
       },
     ],
   },
@@ -169,6 +175,7 @@ export const marketsData = [
         exchangeRate: 1.080176,
         ytTotalSupply: 45678965,
         totalRedeemableValue: 15635.159369,
+        mtv: 0.95,
       },
       {
         network: "Arbitrum",
@@ -185,6 +192,7 @@ export const marketsData = [
         exchangeRate: 1.080176,
         ytTotalSupply: 83485367,
         totalRedeemableValue: 72153.419089,
+        mtv: 0.95,
       },
     ],
   },
@@ -221,6 +229,7 @@ export const marketsData = [
         exchangeRate: 1.045315,
         ytTotalSupply: 5876543,
         totalRedeemableValue: 425.924,
+        mtv: 0.95,
       },
       {
         network: "Base",
@@ -237,6 +246,7 @@ export const marketsData = [
         exchangeRate: 1.045315,
         ytTotalSupply: 3219209,
         totalRedeemableValue: 205.49,
+        mtv: 0.95,
       },
       {
         network: "Polygon",
@@ -253,6 +263,7 @@ export const marketsData = [
         exchangeRate: 1.045315,
         ytTotalSupply: 2136438,
         totalRedeemableValue: 193.824,
+        mtv: 0.95,
       },
     ],
   },
@@ -289,6 +300,7 @@ export const marketsData = [
         exchangeRate: 1.033501,
         ytTotalSupply: 5679892.5,
         totalRedeemableValue: 275.23,
+        mtv: 0.95,
       },
       {
         network: "Base",
@@ -305,6 +317,7 @@ export const marketsData = [
         exchangeRate: 1.033501,
         ytTotalSupply: 8763254.8,
         totalRedeemableValue: 559.258,
+        mtv: 0.95,
       },
     ],
   },
@@ -341,6 +354,7 @@ export const marketsData = [
         exchangeRate: 1.052134,
         ytTotalSupply: 4562379,
         totalRedeemableValue: 212.3395,
+        mtv: 0.95,
       },
       {
         network: "BNB Chain",
@@ -357,6 +371,7 @@ export const marketsData = [
         exchangeRate: 1.052134,
         ytTotalSupply: 5275654,
         totalRedeemableValue: 374.443,
+        mtv: 0.95,
       },
       {
         network: "Arbitrum",
@@ -373,6 +388,7 @@ export const marketsData = [
         exchangeRate: 1.052134,
         ytTotalSupply: 3217098,
         totalRedeemableValue: 123.843,
+        mtv: 0.95,
       },
     ],
   },
@@ -409,6 +425,7 @@ export const marketsData = [
         exchangeRate: 1.071042,
         ytTotalSupply: 2343456793,
         totalRedeemableValue: 710705.781189,
+        mtv: 0.95,
       },
       {
         network: "Polygon",
@@ -425,6 +442,7 @@ export const marketsData = [
         exchangeRate: 1.071042,
         ytTotalSupply: 1375256093,
         totalRedeemableValue: 820480.609472,
+        mtv: 0.95,
       },
     ],
   },
@@ -461,6 +479,7 @@ export const marketsData = [
         exchangeRate: 1.020113,
         ytTotalSupply: 5378253793,
         totalRedeemableValue: 1241753.093608,
+        mtv: 0.95,
       },
       {
         network: "Polygon",
@@ -477,6 +496,7 @@ export const marketsData = [
         exchangeRate: 1.020113,
         ytTotalSupply: 5198252783,
         totalRedeemableValue: 1141753.02064,
+        mtv: 0.95,
       },
       {
         network: "Arbitrum",
@@ -493,6 +513,7 @@ export const marketsData = [
         exchangeRate: 1.020113,
         ytTotalSupply: 4988153713,
         totalRedeemableValue: 841553.015098,
+        mtv: 0.95,
       },
     ],
   },
@@ -529,6 +550,7 @@ export const marketsData = [
         exchangeRate: 1.080075,
         ytTotalSupply: 4778152793,
         totalRedeemableValue: 921617.917982,
+        mtv: 0.95,
       },
       {
         network: "Base",
@@ -545,6 +567,7 @@ export const marketsData = [
         exchangeRate: 1.080075,
         ytTotalSupply: 2798158753,
         totalRedeemableValue: 484136.216302,
+        mtv: 0.95,
       },
     ],
   },

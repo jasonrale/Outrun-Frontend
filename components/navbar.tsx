@@ -55,14 +55,12 @@ const navItems: NavItem[] = [
   },
 ]
 
-// 在 import 部分之后，Navbar 组件之前添加
-// 自定义的媒体查询 hook，专门用于导航栏
 function useNavbarResponsive() {
   const [isNavMobile, setIsNavMobile] = useState(false)
 
   useEffect(() => {
     const checkWidth = () => {
-      setIsNavMobile(window.innerWidth < 930)
+      setIsNavMobile(window.innerWidth < 1050)
     }
 
     checkWidth()

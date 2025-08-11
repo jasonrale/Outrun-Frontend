@@ -157,14 +157,14 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <GradientCard
               title="Yield Tokenization"
-              description="Innovative yield tokenization mechanism, through a new staking model, minting PT/YT tokens with eternal lifecycles, unlocking higher, more flexible DeFi yields."
+              description="Innovative yield tokenization mechanism that, through a novel staking model, mints UPT / YT tokens with a perpetual lifecycle, unlocking higher capital efficiency for DeFi yields."
               gradient="from-purple-500 to-blue-600"
               delay={0.1}
             />
 
             <GradientCard
               title="Universal Principal Token"
-              description="Supported by LayerZero, UPT enables seamless cross-chain transfers, unifying the liquidity of interest-bearing tokens with the same underlying assets, amplifying network effects."
+              description="With LayerZero's support, UPT enables seamless cross-chain transfers, unifies the liquidity of yield-bearing tokens with the same underlying assets, and serves as the stablecoin for the Outrun ecosystem."
               gradient="from-blue-600 to-cyan-500"
               delay={0.2}
             />

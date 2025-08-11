@@ -16,11 +16,10 @@ interface MarketInfoCardProps {
     description?: string
     UPT?: { isAuthorized: boolean; symbol: string; address: string }
   }
-  mintPT: boolean
-  uptMode: boolean
+  mintUPT: boolean
 }
 
-export function MarketInfoCard({ marketData, mintPT, uptMode }: MarketInfoCardProps) {
+export function MarketInfoCard({ marketData, mintUPT }: MarketInfoCardProps) {
   const networkData = CHAIN_FILTERS.find((chain) => chain.name === marketData.network)
   const networkIcon = networkData?.icon || "/placeholder.svg"
 
@@ -144,23 +143,15 @@ export function MarketInfoCard({ marketData, mintPT, uptMode }: MarketInfoCardPr
                 <span className="font-semibold text-green-400">1 SY {marketData.assetName}</span> in one day.
               </div>
             </div>
-            {mintPT && (
+            {mintUPT && (
               <div className="flex items-start gap-2 p-2.5 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded-lg border border-pink-400/20">
                 <div className="w-1.5 h-1.5 bg-pink-400 rounded-full mt-1.5 flex-shrink-0"></div>
                 <div className="text-white/90 text-sm">
-                  {uptMode ? (
-                    <>
-                      <span className="font-semibold text-pink-400">1 {marketData.UPT?.symbol}</span> is a principal
-                      liquidity token split from{" "}
-                      <span className="font-semibold text-purple-400">1 SP {marketData.assetName}</span>.
-                    </>
-                  ) : (
-                    <>
-                      <span className="font-semibold text-pink-400">1 PT {marketData.assetName}</span> is a principal
-                      liquidity token split from{" "}
-                      <span className="font-semibold text-purple-400">1 SP {marketData.assetName}</span>.
-                    </>
-                  )}
+                  <>
+                    <span className="font-semibold text-pink-400">1 {marketData.UPT?.symbol}</span> is a principal
+                    liquidity token split from{" "}
+                    <span className="font-semibold text-purple-400">1 SP {marketData.assetName}</span>.
+                  </>
                 </div>
               </div>
             )}

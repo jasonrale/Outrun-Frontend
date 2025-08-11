@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { formatCurrency, formatDollarValue, formatDollarValueSixDecimals, formatMarketCap } from "@/utils/format"
-import { Flame } from "lucide-react"
+import { Flame, ChevronDown } from "lucide-react"
 import { SimpleTooltip } from "@/components/ui/universal-tooltip"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface YieldPoolCardProps {
   marketData: {
@@ -22,6 +23,7 @@ interface YieldPoolCardProps {
     ytRVGrowthRate: string
     syTokenPriceUSD: number
     protocol: { name: string; website: string }
+    supportedInputTokens?: { symbol: string; address: string }[]
   }
   userBalance: number
   isConnected: boolean
@@ -31,6 +33,9 @@ interface YieldPoolCardProps {
 export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConnected }: YieldPoolCardProps) {
   const [burnAmount, setBurnAmount] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedOutputToken, setSelectedOutputToken] = useState(
+    marketData.supportedInputTokens?.[0] || { symbol: marketData.assetName, address: "" },
+  )
 
   const ytBalance = 150.5 // This is YT quantity
 
@@ -249,34 +254,66 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
               </div>
 
               <div className="space-y-3">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs text-gray-400">Amount to Burn</label>
-                    <div className="flex items-center gap-2 text-xs text-gray-400">
-                      <span>Balance: {formatCurrency(ytBalance)}</span>
-                      <button onClick={handleMaxClick} className="text-cyan-400 hover:text-cyan-300 transition-colors">
-                        Max
-                      </button>
+                <div className="flex gap-2 items-end">
+                  {" "}
+                  {/* Added items-end to align bottoms */}
+                  <div className="relative w-2/3">
+                    <div className="flex justify-between items-center mb-2">
+                      {" "}
+                      {/* Added mb-2 for spacing */}
+                      <label className="text-xs text-gray-400 font-medium">Amount to Burn</label>
+                      <div className="flex items-center gap-2 text-xs text-gray-400 font-medium">
+                        <span>Balance: {formatCurrency(ytBalance)}</span>
+                        <button
+                          onClick={handleMaxClick}
+                          className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                        >
+                          Max
+                        </button>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="relative">
                     <Input
                       type="number"
                       placeholder="0.0"
                       value={burnAmount}
                       onChange={handleBurnAmountChange}
-                      className="bg-black/40 border-gray-600 text-white placeholder-gray-500 pr-16 h-10
+                      className="bg-black/40 border-gray-600 text-white placeholder-gray-500 pr-4 h-10
                              [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                      <div className="relative border-2 border-cyan-400 rounded-full">
-                        <TokenIcon symbol={marketData.assetName} size={20} />
-                      </div>
-                      <div className="flex flex-col items-start">
-                        <span className="text-white text-sm">YT {marketData.assetName}</span>
-                      </div>
-                    </div>
+                  </div>
+                  <div className="relative w-1/3">
+                    <label className="text-xs text-gray-400 mb-2 block text-right font-medium">Received Token</label>{" "}
+                    {/* Added mb-2 and block */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="flex items-center gap-2 cursor-pointer rounded-lg p-2 bg-black/40 border border-gray-600 hover:bg-black/50 transition-all duration-200 w-full justify-center h-10">
+                          {selectedOutputToken && (
+                            <>
+                              <TokenIcon symbol={selectedOutputToken.symbol} size={24} />
+                              <div>
+                                <span className="text-white font-bold text-sm">{selectedOutputToken.symbol}</span>
+                              </div>
+                            </>
+                          )}
+                          <ChevronDown size={14} className="text-white/60" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="min-w-[--radix-popper-anchor-width] bg-gradient-to-br from-black/80 to-purple-900/60 border border-purple-500/30 backdrop-blur-lg rounded-xl shadow-lg shadow-purple-500/20 overflow-hidden">
+                        {marketData.supportedInputTokens?.map((token) => (
+                          <DropdownMenuItem
+                            key={token.address}
+                            onClick={() => setSelectedOutputToken(token)}
+                            className="flex items-center gap-2 py-2 px-3 cursor-pointer text-white relative overflow-hidden group"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-purple-700/40 to-pink-700/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                            <div className="relative z-10 flex items-center gap-2">
+                              <TokenIcon symbol={token.symbol} size={20} />
+                              <span className="font-bold">{token.symbol}</span>
+                            </div>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
 
@@ -285,8 +322,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
                     <div className="flex justify-between text-xs">
                       <span className="text-gray-400">You will receive:</span>
                       <span className="text-green-400 font-medium">
-                        {formatCurrency(receivedSYQuantity)} {"SY "}
-                        {marketData.assetName} (~
+                        {formatCurrency(receivedSYQuantity)} {selectedOutputToken.symbol} (~
                         {formatDollarValue(receivedYieldUSD)})
                       </span>
                     </div>
