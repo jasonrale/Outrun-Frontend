@@ -17,9 +17,10 @@ interface MarketInfoCardProps {
     UPT?: { isAuthorized: boolean; symbol: string; address: string }
   }
   mintUPT: boolean
+  hideTitle?: boolean
 }
 
-export function MarketInfoCard({ marketData, mintUPT }: MarketInfoCardProps) {
+export function MarketInfoCard({ marketData, mintUPT, hideTitle = false }: MarketInfoCardProps) {
   const networkData = CHAIN_FILTERS.find((chain) => chain.name === marketData.network)
   const networkIcon = networkData?.icon || "/placeholder.svg"
 
@@ -28,11 +29,13 @@ export function MarketInfoCard({ marketData, mintUPT }: MarketInfoCardProps) {
       <div className="space-y-5">
         {/* Market Overview Section */}
         <div>
-          <div className="flex items-center justify-between border-b border-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20 pb-3 mb-4">
-            <h3 className="text-white font-bold text-lg bg-gradient-to-r from-cyan-400 to-purple-400 text-gradient-fill">
-              Market Overview
-            </h3>
-          </div>
+          {!hideTitle && (
+            <div className="flex items-center justify-between border-b border-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20 pb-3 mb-4">
+              <h3 className="text-white font-bold text-lg bg-gradient-to-r from-cyan-400 to-purple-400 text-gradient-fill">
+                Market Overview
+              </h3>
+            </div>
+          )}
 
           <div className="flex items-start gap-3 p-2 bg-gradient-to-r from-black/40 to-black/20 rounded-lg border border-white/10 mb-4">
             <div

@@ -297,7 +297,14 @@ export function StakeCard({
           <div className="space-y-4">
             <div className="py-2 px-3 bg-gradient-to-r from-black/40 to-black/20 rounded-lg border border-white/10">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-white/70 font-medium text-sm">Lock Period</span>
+                <div className="flex items-center gap-1">
+                  <span className="text-white/70 font-medium text-sm">Lock Period</span>
+                  <InfoTooltip
+                    content="If the Lock Period is 0 days, the minting quantity of UPT will not be restricted by MTV, but a 0.1% fee will be charged."
+                    iconSize={15}
+                    maxWidth={255}
+                  />
+                </div>
                 <div className="flex items-center justify-end gap-2">
                   <Input
                     type="number"

@@ -42,7 +42,8 @@ export default function MintPage() {
   const [marketData, setMarketData] = useState<MarketData | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [mintUPT, setMintUPT] = useState(true)
-  const [activeTab, setActiveTab] = useState<"mint" | "yield-pool">("mint")
+  const [activeTab, setActiveTab] = useState<"overview" | "mint" | "yield-pool">("mint")
+  const [windowWidth, setWindowWidth] = useState(0)
 
   const userBalance = 1000
 
@@ -74,6 +75,21 @@ export default function MintPage() {
     setMarketData(foundMarket)
   }, [syContractAddress])
 
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  const networkData = CHAIN_FILTERS.find((chain) => chain.name === marketData?.network)
+  const networkIcon = networkData?.icon || "/placeholder.svg"
+
+  const isOverviewTabVisible =
+    (activeTab === "mint" && windowWidth < 860) ||
+    (activeTab === "yield-pool" && windowWidth < 1024) ||
+    activeTab === "overview"
+
   if (!marketData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -84,9 +100,6 @@ export default function MintPage() {
       </div>
     )
   }
-
-  const networkData = CHAIN_FILTERS.find((chain) => chain.name === marketData.network)
-  const networkIcon = networkData?.icon || "/placeholder.svg"
 
   return (
     <div className="min-h-screen relative">
@@ -154,16 +167,28 @@ export default function MintPage() {
                   // Default to flex-col (stacked) on small screens
                   // For Mint tab: switch to flex-row at min-[860px] (860px)
                   // For Yield Pool tab: switch to flex-row at lg (1024px)
-                  className={`flex flex-col ${activeTab === "mint" ? `min-[860px]:flex-row` : "lg:flex-row"}`}
+                  // For Overview tab: always stacked since it shows MarketInfoCard content
+                  className={`flex flex-col ${activeTab === "mint" ? `min-[860px]:flex-row` : activeTab === "yield-pool" ? "lg:flex-row" : ""}`}
                 >
                   <div
-                    // This div contains StakeCard/YieldPoolCard
+                    // This div contains StakeCard/YieldPoolCard/MarketInfoCard content
                     // It should be w-full when stacked, and flex-1 when side-by-side
-                    className={`px-4 sm:px-6 py-0 lg:px-6 w-full ${activeTab === "mint" ? `min-[860px]:flex-1` : "lg:flex-1"}`}
+                    className={`px-4 sm:px-6 py-0 lg:px-6 w-full ${activeTab === "mint" ? `min-[860px]:flex-1` : activeTab === "yield-pool" ? "lg:flex-1" : ""}`}
                   >
                     {/* Enhanced Tab Header */}
                     <div className="flex items-center justify-center pt-4 pb-4 border-b border-white/10">
                       <div className="flex items-center gap-1 p-1 bg-black/40 rounded-lg border border-white/10 backdrop-blur-sm">
+                        {/* Overview tab - only visible on smaller screens */}
+                        <button
+                          onClick={() => setActiveTab("overview")}
+                          className={`px-4 py-1.5 rounded-md font-semibold transition-all duration-300 text-sm ${activeTab === "mint" ? `min-[860px]:hidden` : activeTab === "yield-pool" ? "lg:hidden" : ""} ${
+                            activeTab === "overview"
+                              ? "bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg shadow-green-500/25"
+                              : "text-white/70 hover:text-white hover:bg-gradient-to-r hover:from-green-500/20 hover:to-blue-500/20"
+                          }`}
+                        >
+                          Overview
+                        </button>
                         <button
                           onClick={() => setActiveTab("mint")}
                           className={`px-4 py-1.5 rounded-md font-semibold transition-all duration-300 text-sm ${
@@ -194,7 +219,9 @@ export default function MintPage() {
                       </Button>
                     </div>
                     {/* Content based on active tab */}
-                    {activeTab === "mint" ? (
+                    {activeTab === "overview" ? (
+                      <MarketInfoCard marketData={marketData} mintUPT={mintUPT} hideTitle={true} />
+                    ) : activeTab === "mint" ? (
                       <StakeCard
                         marketData={marketData}
                         userBalance={userBalance}
@@ -215,15 +242,15 @@ export default function MintPage() {
 
                   {/* Separator */}
                   <div
-                    className={`${activeTab === "mint" ? `hidden min-[860px]:block` : "hidden lg:block"} w-[2px] bg-gradient-to-b from-cyan-400/20 via-purple-400/20 to-pink-400/20 my-4`}
+                    className={`${activeTab === "mint" ? `hidden min-[860px]:block` : activeTab === "yield-pool" ? "hidden lg:block" : "hidden"} w-[2px] bg-gradient-to-b from-cyan-400/20 via-purple-400/20 to-pink-400/20 my-4`}
                   ></div>
                   <div
-                    className={`${activeTab === "mint" ? `min-[860px]:hidden` : "lg:hidden"} w-full px-4 mt-2 -mb-1`}
+                    className={`${activeTab === "mint" ? `min-[860px]:hidden` : activeTab === "yield-pool" ? "lg:hidden" : "hidden"} w-full px-4 mt-2 -mb-1`}
                   >
                     <div className="h-[2px] bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20"></div>
                   </div>
-                  {/* Right side - always shows MarketInfoCard */}
-                  <MarketInfoCard marketData={marketData} mintUPT={mintUPT} />
+                  {/* Right side - shows MarketInfoCard only when Overview tab is not visible */}
+                  {!isOverviewTabVisible && <MarketInfoCard marketData={marketData} mintUPT={mintUPT} />}
                 </div>
               </GradientBackgroundCard>
             </div>

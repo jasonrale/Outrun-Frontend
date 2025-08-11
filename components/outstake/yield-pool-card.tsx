@@ -108,7 +108,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
           <div className="relative group w-full sm:w-1/2">
             <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded-lg blur-sm group-hover:blur-none transition-all duration-300"></div>
             <div className="relative bg-black/40 backdrop-blur-sm border border-pink-400/20 rounded-lg p-3 hover:border-pink-400/40 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-1">
+              <div className="flex items-center gap-1 mb-1 max-sm:justify-center">
                 <span className="text-gray-400 text-sm whitespace-nowrap">Total Redeemable Value</span>
                 <InfoTooltip
                   content="The total value of yield that can be redeemed from this pool."
@@ -116,7 +116,9 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
                   maxWidth={223}
                 />
               </div>
-              <div className="text-lg font-bold text-pink-400 w-fit">{formatDollarValue(totalRedeemableValueUSD)}</div>
+              <div className="text-lg font-bold text-pink-400 w-fit max-sm:mx-auto">
+                {formatDollarValue(totalRedeemableValueUSD)}
+              </div>
             </div>
           </div>
 
@@ -124,7 +126,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
           <div className="relative group w-full sm:w-1/2">
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 rounded-lg blur-sm group-hover:blur-none transition-all duration-300"></div>
             <div className="relative bg-black/40 backdrop-blur-sm border border-purple-400/20 rounded-lg p-3 hover:border-purple-400/40 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-1">
+              <div className="flex items-center gap-1 mb-1 max-sm:justify-center">
                 <span className="text-gray-400 text-sm whitespace-nowrap">YT Redeemable Value</span>
                 <InfoTooltip
                   content={
@@ -147,7 +149,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
                   maxWidth={212}
                 />
               </div>
-              <div className="text-lg font-bold text-purple-400 w-fit">
+              <div className="text-lg font-bold text-purple-400 w-fit max-sm:mx-auto">
                 {formatDollarValueSixDecimals(YTRedeemableValueUSD)}
               </div>
             </div>
@@ -159,11 +161,11 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
           <div className="relative group w-full sm:w-[32%]">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-green-500/10 rounded-lg blur-sm group-hover:blur-none transition-all duration-300"></div>
             <div className="relative bg-black/40 backdrop-blur-sm border border-cyan-400/20 rounded-lg p-3 hover:border-cyan-400/40 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-1">
+              <div className="flex items-center gap-1 mb-1 max-sm:justify-center">
                 <span className="text-gray-400 text-sm whitespace-nowrap">YT Total Supply</span>
                 <InfoTooltip content="The total supply of YT token" iconSize={15} />
               </div>
-              <SimpleTooltip className="w-fit" content={marketData.ytTotalSupply.toString()}>
+              <SimpleTooltip className="w-fit max-sm:mx-auto" content={marketData.ytTotalSupply.toString()}>
                 <div className="text-lg font-bold text-cyan-400">{formatMarketCap(marketData.ytTotalSupply)}</div>
               </SimpleTooltip>
             </div>
@@ -172,7 +174,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
           <div className="relative group w-full sm:w-[36%]">
             <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-orange-500/10 rounded-lg blur-sm group-hover:blur-none transition-all duration-300"></div>
             <div className="relative bg-black/40 backdrop-blur-sm border border-green-400/20 rounded-lg p-3 hover:border-green-400/40 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-1">
+              <div className="flex items-center gap-1 mb-1 max-sm:justify-center">
                 <span className="text-gray-400 text-sm whitespace-nowrap">YT RV Growth Rate</span>
                 <InfoTooltip
                   content={
@@ -195,7 +197,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
                   maxWidth={252}
                 />
               </div>
-              <div className={`text-lg font-bold ${ytRVGrowthRateTextColorClass} w-fit`}>
+              <div className={`text-lg font-bold ${ytRVGrowthRateTextColorClass} w-fit max-sm:mx-auto`}>
                 {marketData.ytRVGrowthRate}
               </div>
             </div>
@@ -204,7 +206,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
           <div className="relative group w-full sm:w-[32%]">
             <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-pink-500/10 rounded-lg blur-sm group-hover:blur-none transition-all duration-300"></div>
             <div className="relative bg-black/40 backdrop-blur-sm border border-orange-400/20 rounded-lg p-3 hover:border-orange-400/40 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-1">
+              <div className="flex items-center gap-1 mb-1 max-sm:justify-center">
                 <span className="text-gray-400 text-sm whitespace-nowrap">YT Anchor Rate</span>
                 <InfoTooltip
                   content={
@@ -226,7 +228,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
                   maxWidth={221}
                 />
               </div>
-              <div className="text-lg font-bold text-orange-400 w-fit">{marketData.ytAnchorRate}</div>
+              <div className="text-lg font-bold text-orange-400 w-fit max-sm:mx-auto">{marketData.ytAnchorRate}</div>
             </div>
           </div>
         </div>
@@ -255,13 +257,11 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
 
               <div className="space-y-3">
                 <div className="flex gap-2 items-end">
-                  {" "}
                   {/* Added items-end to align bottoms */}
-                  <div className="relative w-2/3">
+                  <div className="relative w-2/3 max-[480px]:w-3/5">
                     <div className="flex justify-between items-center mb-2">
-                      {" "}
                       {/* Added mb-2 for spacing */}
-                      <label className="text-xs text-gray-400 font-medium">Amount to Burn</label>
+                      <label className="text-xs text-gray-400 font-medium">Amount</label>
                       <div className="flex items-center gap-2 text-xs text-gray-400 font-medium">
                         <span>Balance: {formatCurrency(ytBalance)}</span>
                         <button
@@ -281,7 +281,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
                              [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     />
                   </div>
-                  <div className="relative w-1/3">
+                  <div className="relative w-1/3 max-[480px]:w-2/5">
                     <label className="text-xs text-gray-400 mb-2 block text-right font-medium">Received Token</label>{" "}
                     {/* Added mb-2 and block */}
                     <DropdownMenu>
