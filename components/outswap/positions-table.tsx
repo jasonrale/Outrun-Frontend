@@ -787,7 +787,7 @@ export function PositionsTable() {
                 startPage = Math.max(1, endPage - 2)
               }
 
-              // 生成页码按钮
+              // 生���页码按钮
               for (let i = startPage; i <= endPage; i++) {
                 pages.push(
                   <button

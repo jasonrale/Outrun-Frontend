@@ -7,7 +7,7 @@ export const metadata = {
   title: "Outrun - Pioneer the Next Generation of DeFi and Web3",
   description:
     "Outrun is committed to becoming a pioneer in the next generation of DeFi and Web3 industries through innovative yield tokenization, fair launch models, and sustainable Memecoin development.",
-    generator: 'v0.dev'
+    generator: 'v0.app'
 }
 
 // Update CSP headers to ensure they don't cause issues

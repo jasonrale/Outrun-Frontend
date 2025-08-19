@@ -1,29 +1,103 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useCallback, useMemo } from "react"
 import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { TokenIcon } from "@/components/ui/token-icon"
 import { formatCurrency } from "@/utils/format"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
+import { StakingSuccessModal } from "./staking-success-modal"
 
 interface StakeCardProps {
   marketData: {
     assetName: string
     syContractAddress: string
     UPT?: { isAuthorized: boolean; symbol: string; address: string }
-    supportedInputTokens?: { symbol: string; address: string }[]
+    supportedInputTokens?: { symbol: string; address: string; exchangeRate?: number }[]
     mtv?: number
+    // Add exchange rate for the main asset
+    exchangeRate?: number
+    // Add accounting asset symbol
+    accountingAsset?: string
+    minLockupDays?: number
+    maxLockupDays?: number
   }
   userBalance: number
   isConnected: boolean
   setIsConnected: (connected: boolean) => void
   mintUPT: boolean
   setMintUPT: (mint: boolean) => void
+  wrapStake?: boolean
+  setWrapStake?: (wrapStake: boolean) => void
+}
+
+// Simple Token Selection Dropdown Component
+function TokenSelectionDropdown({
+  tokens,
+  selectedToken,
+  onSelectToken,
+}: {
+  tokens: { symbol: string; address: string; exchangeRate?: number }[]
+  selectedToken: { symbol: string; address: string; exchangeRate?: number } | null
+  onSelectToken: (token: { symbol: string; address: string; exchangeRate?: number }) => void
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const handleTokenSelect = (token: { symbol: string; address: string; exchangeRate?: number }) => {
+    onSelectToken(token)
+    setIsOpen(false)
+  }
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen)
+  }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={handleToggle}
+        className="flex items-center gap-2 cursor-pointer rounded-lg p-2 bg-black/40 border-2 border-purple-600/50 hover:bg-purple-600/20 transition-all duration-200"
+      >
+        {selectedToken && (
+          <>
+            <TokenIcon symbol={selectedToken.symbol} size={24} />
+            <div>
+              <span className="text-white font-bold text-sm">{selectedToken.symbol}</span>
+            </div>
+          </>
+        )}
+        <ChevronDown
+          size={14}
+          className={`text-white/60 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <div className="fixed inset-0 bg-transparent z-[9998]" onClick={() => setIsOpen(false)} />
+
+          {/* Dropdown Menu */}
+          <div className="absolute top-full left-0 mt-1 w-full min-w-[120px] bg-gradient-to-br from-black/95 to-purple-900/85 border border-purple-500/60 backdrop-blur-xl rounded-xl shadow-2xl shadow-purple-500/40 overflow-hidden z-[9999]">
+            {tokens.map((token, index) => (
+              <button
+                key={token.address || token.symbol}
+                onClick={() => handleTokenSelect(token)}
+                className={`w-full flex items-center gap-3 py-3 px-4 cursor-pointer text-white hover:bg-gradient-to-r hover:from-purple-700/60 hover:to-pink-700/60 transition-all duration-200 ${
+                  index === 0 ? "rounded-t-xl" : ""
+                } ${index === tokens.length - 1 ? "rounded-b-xl" : ""}`}
+              >
+                <TokenIcon symbol={token.symbol} size={20} />
+                <span className="font-bold text-sm">{token.symbol}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
 }
 
 export function StakeCard({
@@ -33,13 +107,88 @@ export function StakeCard({
   setIsConnected,
   mintUPT,
   setMintUPT,
+  wrapStake: externalWrapStake,
+  setWrapStake: setExternalWrapStake,
 }: StakeCardProps) {
-  const [activeTab, setActiveTab] = useState<"mint" | "yield-pool">("mint")
   const [inputAmount, setInputAmount] = useState("")
-  const [lockPeriod, setLockPeriod] = useState(365)
-  const [lockPeriodInput, setLockPeriodInput] = useState("365")
-  const [selectedInputToken, setSelectedInputToken] = useState<{ symbol: string; address: string } | null>(
-    marketData.supportedInputTokens?.[0] || { symbol: marketData.assetName, address: "" },
+  const [lockPeriod, setLockPeriod] = useState(marketData.maxLockupDays || 365)
+  const [lockPeriodInput, setLockPeriodInput] = useState((marketData.maxLockupDays || 365).toString())
+  const [localWrapStake, setLocalWrapStake] = useState(false)
+  const wrapStake = externalWrapStake !== undefined ? externalWrapStake : localWrapStake
+  const setWrapStake = setExternalWrapStake || setLocalWrapStake
+  const [isApproving, setIsApproving] = useState(false)
+  const [isConnecting, setIsConnecting] = useState(false)
+  const [isApproved, setIsApproved] = useState(false)
+  const [isStaking, setIsStaking] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [stakingResult, setStakingResult] = useState<{
+    stakedAmount: string
+    stakedToken: string
+    receivedTokens: Array<{ amount: string; symbol: string; type: string }>
+  } | null>(null)
+
+  // Initialize selected token with the first supported token or default to asset name
+  const [selectedInputToken, setSelectedInputToken] = useState<{
+    symbol: string
+    address: string
+    exchangeRate?: number
+  }>(() => {
+    if (marketData.supportedInputTokens && marketData.supportedInputTokens.length > 0) {
+      return marketData.supportedInputTokens[0]
+    }
+    return {
+      symbol: marketData.assetName,
+      address: "",
+      exchangeRate: marketData.exchangeRate || 1,
+    }
+  })
+
+  // Get available tokens for selection
+  const availableTokens = useMemo(() => {
+    if (marketData.supportedInputTokens && marketData.supportedInputTokens.length > 0) {
+      return marketData.supportedInputTokens
+    }
+    return [
+      {
+        symbol: marketData.assetName,
+        address: "",
+        exchangeRate: marketData.exchangeRate || 1,
+      },
+    ]
+  }, [marketData.supportedInputTokens, marketData.assetName, marketData.exchangeRate])
+
+  // Function to determine if a token is an accounting asset (base asset)
+  const isAccountingAsset = useCallback(
+    (tokenSymbol: string) => {
+      // Common accounting assets that should use 1:1 exchange rate
+      const accountingAssets = ["ETH", "USDe", "USDC", "USDT", "DAI"]
+      return accountingAssets.includes(tokenSymbol) || tokenSymbol === marketData.accountingAsset
+    },
+    [marketData.accountingAsset],
+  )
+
+  // Get exchange rate for selected token
+  const getExchangeRate = useCallback(
+    (token: { symbol: string; exchangeRate?: number }) => {
+      // If it's an accounting asset, use 1:1 rate
+      if (isAccountingAsset(token.symbol)) {
+        return 1
+      }
+
+      // Use token-specific exchange rate if available
+      if (token.exchangeRate) {
+        return token.exchangeRate
+      }
+
+      // Use market default exchange rate
+      if (marketData.exchangeRate) {
+        return marketData.exchangeRate
+      }
+
+      // Fallback to 1:1 if no exchange rate is defined
+      return 1
+    },
+    [isAccountingAsset, marketData.exchangeRate],
   )
 
   const handleMaxClick = useCallback(() => {
@@ -48,34 +197,40 @@ export function StakeCard({
 
   const handleLockPeriodChange = useCallback(
     (value: number) => {
-      const clampedValue = Math.max(0, Math.min(365, value))
+      const clampedValue = Math.max(marketData.minLockupDays || 1, Math.min(marketData.maxLockupDays || 365, value))
       setLockPeriod(clampedValue)
       setLockPeriodInput(clampedValue.toString())
     },
-    [setLockPeriodInput],
+    [setLockPeriodInput, marketData.minLockupDays, marketData.maxLockupDays],
   )
 
-  const handleLockPeriodInputChange = useCallback((value: string) => {
-    const numValue = Number.parseInt(value)
-    if (!isNaN(numValue)) {
-      const clampedValue = Math.max(0, Math.min(365, numValue))
-      setLockPeriodInput(clampedValue.toString())
-      setLockPeriod(clampedValue)
-    } else {
-      setLockPeriodInput(value)
-    }
-  }, [])
+  const handleLockPeriodInputChange = useCallback(
+    (value: string) => {
+      const numValue = Number.parseInt(value)
+      if (!isNaN(numValue)) {
+        const clampedValue = Math.max(
+          marketData.minLockupDays || 1,
+          Math.min(marketData.maxLockupDays || 365, numValue),
+        )
+        setLockPeriodInput(clampedValue.toString())
+        setLockPeriod(clampedValue)
+      } else {
+        setLockPeriodInput(value)
+      }
+    },
+    [marketData.minLockupDays, marketData.maxLockupDays],
+  )
 
   const handleLockPeriodInputBlur = useCallback(() => {
     const numValue = Number.parseInt(lockPeriodInput)
     if (isNaN(numValue)) {
       setLockPeriodInput(lockPeriod.toString())
     } else {
-      const clampedValue = Math.max(0, Math.min(365, numValue))
+      const clampedValue = Math.max(marketData.minLockupDays || 1, Math.min(marketData.maxLockupDays || 365, numValue))
       setLockPeriod(clampedValue)
       setLockPeriodInput(clampedValue.toString())
     }
-  }, [lockPeriodInput, lockPeriod])
+  }, [lockPeriodInput, lockPeriod, marketData.minLockupDays, marketData.maxLockupDays])
 
   const handleInputAmountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -84,11 +239,62 @@ export function StakeCard({
     }
   }, [])
 
-  const handleConnectWallet = useCallback(() => {
+  const handleConnectWallet = useCallback(async () => {
+    setIsConnecting(true)
+    await new Promise((resolve) => setTimeout(resolve, 2000))
     setIsConnected(true)
+    setIsConnecting(false)
   }, [setIsConnected])
 
-  const handleTokenSelection = useCallback((token: { symbol: string; address: string }) => {
+  const handleApprove = useCallback(async () => {
+    setIsApproving(true)
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    setIsApproving(false)
+    setIsApproved(true)
+  }, [])
+
+  const handleStake = useCallback(async () => {
+    setIsStaking(true)
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    setIsStaking(false)
+    setIsApproved(false)
+
+    const stakedAmount = inputAmount
+    const exchangeRate = getExchangeRate(selectedInputToken)
+    const mtvValue = marketData.mtv || 0.95
+
+    // SP amount = staked amount * exchange rate
+    const spAmount = Number.parseFloat(stakedAmount) * exchangeRate
+    const ytAmount = wrapStake ? 0 : spAmount * lockPeriod
+
+    const receivedTokens = []
+
+    if (!wrapStake) {
+      receivedTokens.push(
+        { amount: ytAmount.toFixed(2), symbol: `YT ${marketData.assetName}`, type: "Yield Token" },
+        { amount: spAmount.toFixed(2), symbol: `SP ${marketData.assetName}`, type: "Staking Position" },
+      )
+    }
+
+    if (mintUPT || wrapStake) {
+      const uethAmount = wrapStake ? spAmount * 0.999 : spAmount * mtvValue
+      receivedTokens.push({
+        amount: uethAmount.toFixed(2),
+        symbol: marketData.UPT?.symbol || "UETH",
+        type: "Universal Principal Token",
+      })
+    }
+
+    setStakingResult({
+      stakedAmount,
+      stakedToken: selectedInputToken.symbol,
+      receivedTokens,
+    })
+    setShowSuccessModal(true)
+    setInputAmount("")
+  }, [inputAmount, mintUPT, marketData, selectedInputToken, lockPeriod, getExchangeRate, wrapStake])
+
+  const handleTokenSelection = useCallback((token: { symbol: string; address: string; exchangeRate?: number }) => {
     setSelectedInputToken(token)
   }, [])
 
@@ -102,9 +308,50 @@ export function StakeCard({
     return `MTV = ${mtvValue}, the max amount of UPT that can be minted is capped at ${percentageValue}% of the value of the yield-bearing assets you staked.`
   }, [marketData.mtv])
 
+  const calculatedOutputs = useMemo(() => {
+    if (!isInputValidAndPositive) {
+      return {
+        spAmount: 0,
+        ytAmount: 0,
+        uethAmount: 0,
+        mintFee: 0, // Added mint fee calculation
+      }
+    }
+
+    const exchangeRate = getExchangeRate(selectedInputToken)
+    const mtvValue = marketData.mtv || 0.95
+
+    // SP amount = staked amount * exchange rate
+    const spAmount = parsedInputAmount * exchangeRate
+    const ytAmount = wrapStake ? 0 : spAmount * lockPeriod
+    const uethAmount = wrapStake ? spAmount * 0.999 : spAmount * mtvValue
+    const mintFee = wrapStake ? spAmount * 0.001 : 0 // Calculate 0.1% mint fee for wrap stake
+
+    return {
+      spAmount,
+      ytAmount,
+      uethAmount,
+      mintFee, // Include mint fee in return object
+    }
+  }, [
+    parsedInputAmount,
+    isInputValidAndPositive,
+    lockPeriod,
+    marketData.mtv,
+    selectedInputToken,
+    getExchangeRate,
+    wrapStake,
+  ])
+
   const { actionButtonText, actionButtonDisabled } = useMemo(() => {
     if (isConnected) {
-      if (!isInputValidAndPositive) {
+      if (isStaking) {
+        return { actionButtonText: "Staking...", actionButtonDisabled: true }
+      } else if (isApproving) {
+        return { actionButtonText: "Approving...", actionButtonDisabled: true }
+      } else if (isApproved) {
+        return { actionButtonText: "Stake", actionButtonDisabled: false }
+      } else if (!isInputValidAndPositive) {
         return { actionButtonText: "Enter Amount", actionButtonDisabled: true }
       } else if (!hasSufficientBalance) {
         return { actionButtonText: "Insufficient Balance", actionButtonDisabled: true }
@@ -112,26 +359,47 @@ export function StakeCard({
         return { actionButtonText: "Approve", actionButtonDisabled: false }
       }
     } else {
-      return { actionButtonText: "Connect Wallet", actionButtonDisabled: false }
+      if (isConnecting) {
+        return { actionButtonText: "Connecting...", actionButtonDisabled: true }
+      } else {
+        return { actionButtonText: "Connect Wallet", actionButtonDisabled: false }
+      }
     }
-  }, [isConnected, isInputValidAndPositive, hasSufficientBalance])
+  }, [isConnected, isConnecting, isApproving, isApproved, isStaking, isInputValidAndPositive, hasSufficientBalance])
 
   const sliderStyle = useMemo(
     () => ({
-      background: `linear-gradient(to right, #06b6d4 0%, #a855f7 ${(lockPeriod / 365) * 50}%, #ec4899 ${(lockPeriod / 365) * 100}%, rgba(255,255,255,0.1) ${(lockPeriod / 365) * 100}%, rgba(255,255,255,0.1) 100%)`,
+      background: `linear-gradient(to right, #06b6d4 0%, #a855f7 ${(lockPeriod / (marketData.maxLockupDays || 365)) * 50}%, #ec4899 ${(lockPeriod / (marketData.maxLockupDays || 365)) * 100}%, rgba(255,255,255,0.1) ${(lockPeriod / (marketData.maxLockupDays || 365)) * 100}%, rgba(255,255,255,0.1) 100%)`,
     }),
-    [lockPeriod],
+    [lockPeriod, marketData.maxLockupDays],
   )
 
   return (
     <div className="p-4 lg:max-w-none">
-      {/* Enhanced Input Section */}
+      {/* 重新调整HTML结构 - 先渲染所有其他内容 */}
       <div className="pt-2 space-y-4 relative">
+        {/* Stake 标题和余额显示 */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
-              Stake
-            </span>
+            <div className="flex items-center gap-1">
+              <InfoTooltip
+                content="Wrap Stake is a method to directly mint UPT at a 1:1 ratio based on the value of the underlying accounting asset, with a 0.1% fee, and does not mint SP and YT."
+                iconClassName="text-cyan-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]"
+                iconSize={16}
+                maxWidth={256}
+              />
+              <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
+                Wrap Stake
+              </span>
+              <button
+                className={`w-8 h-5 rounded-md p-0.5 transition-colors duration-300 ${wrapStake ? "bg-gradient-to-r from-cyan-600/70 to-purple-600/70" : "bg-white/10"}`}
+                onClick={() => setWrapStake(!wrapStake)}
+              >
+                <div
+                  className={`w-4 h-4 rounded-md bg-white transition-transform duration-300 ${wrapStake ? "translate-x-3" : "translate-x-0"} my-auto`}
+                />
+              </button>
+            </div>
             <div className={`flex items-center gap-2 text-sm ml-auto`}>
               <span className="text-white/60">Balance:</span>
               <span className="text-cyan-400 font-mono font-bold">{formatCurrency(userBalance)}</span>
@@ -143,38 +411,10 @@ export function StakeCard({
               </Button>
             </div>
           </div>
+
+          {/* 输入框容器 - 但是不包含代币选择下拉框 */}
           <div className="relative">
             <div className="relative flex items-center gap-3 p-2.5 bg-gradient-to-r from-black/60 to-black/40 border-2 border-green-400/50 rounded-lg backdrop-blur-sm">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2 cursor-pointer rounded-lg p-2 bg-black/40 border-2 border-purple-600/50 hover:bg-purple-600/20 transition-all duration-200">
-                    {selectedInputToken && (
-                      <>
-                        <TokenIcon symbol={selectedInputToken.symbol} size={24} />
-                        <div>
-                          <span className="text-white font-bold text-sm">{selectedInputToken.symbol}</span>
-                        </div>
-                      </>
-                    )}
-                    <ChevronDown size={14} className="text-white/60" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="min-w-[--radix-popper-anchor-width] bg-gradient-to-br from-black/80 to-purple-900/60 border border-purple-500/30 backdrop-blur-lg rounded-xl shadow-lg shadow-purple-500/20 overflow-hidden">
-                  {marketData.supportedInputTokens?.map((token) => (
-                    <DropdownMenuItem
-                      key={token.address}
-                      onClick={() => handleTokenSelection(token)}
-                      className="flex items-center gap-2 py-2 px-3 cursor-pointer text-white relative overflow-hidden group"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-700/40 to-pink-700/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                      <div className="relative z-10 flex items-center gap-2">
-                        <TokenIcon symbol={token.symbol} size={20} />
-                        <span className="font-bold">{token.symbol}</span>
-                      </div>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
               <div className="flex-1 text-right">
                 <Input
                   type="number"
@@ -205,73 +445,87 @@ export function StakeCard({
 
         {/* Enhanced Output Section */}
         <div className="space-y-2 pt-8">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-1">
-              <InfoTooltip
-                content={mtvTooltipContent}
-                iconClassName="text-cyan-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]"
-                iconSize={16}
-                maxWidth={237}
-              />
-              <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
-                Mint UPT
-              </span>
-              <button
-                className={`w-8 h-5 rounded-md p-0.5 transition-colors duration-300 ${mintUPT ? "bg-gradient-to-r from-cyan-600/70 to-purple-600/70" : "bg-white/10"}`}
-                onClick={() => setMintUPT(!mintUPT)}
-              >
-                <div
-                  className={`w-4 h-4 rounded-md bg-white transition-transform duration-300 ${mintUPT ? "translate-x-3" : "translate-x-0"} my-auto`}
-                />
-              </button>
+          {wrapStake ? (
+            <div className="flex items-center justify-between mb-3">
+              <div className="h-5"></div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-1">
+                <InfoTooltip
+                  content={mtvTooltipContent}
+                  iconClassName="text-cyan-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]"
+                  iconSize={16}
+                  maxWidth={237}
+                />
+                <span className="text-sm font-medium text-gradient-fill bg-gradient-to-r from-cyan-300 to-purple-300 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">
+                  Mint UPT
+                </span>
+                <button
+                  className={`w-8 h-5 rounded-md p-0.5 transition-colors duration-300 ${mintUPT ? "bg-gradient-to-r from-cyan-600/70 to-purple-600/70" : "bg-white/10"}`}
+                  onClick={() => setMintUPT(!mintUPT)}
+                >
+                  <div
+                    className={`w-4 h-4 rounded-md bg-white transition-transform duration-300 ${mintUPT ? "translate-x-3" : "translate-x-0"} my-auto`}
+                  />
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* YT Token Output */}
-          <div className="relative group">
-            <div className="relative flex items-center gap-3 p-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-cyan-400/35 rounded-lg backdrop-blur-sm transition-all duration-300">
-              <div className="flex items-center gap-2">
-                <div className="relative border-2 border-cyan-400 rounded-full">
-                  <TokenIcon symbol={marketData.assetName} size={24} />
+          {!wrapStake && (
+            <div className="relative group">
+              <div className="relative flex items-center gap-3 p-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-cyan-400/35 rounded-lg backdrop-blur-sm transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <div className="relative border-2 border-cyan-400 rounded-full">
+                    <TokenIcon symbol={marketData.assetName} size={24} />
+                  </div>
+                  <div>
+                    <div className="text-white font-bold text-sm">YT {marketData.assetName}</div>
+                    <div className="text-cyan-400 text-xs font-semibold">Yield Token</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-white font-bold text-sm">YT {marketData.assetName}</div>
-                  <div className="text-cyan-400 text-xs font-semibold">Yield Token</div>
-                </div>
-              </div>
-              <div className="flex-1 text-right">
-                <div className="text-lg font-mono text-white font-bold">{formatCurrency(0)}</div>
-                <div className="text-xs font-medium">
-                  <span className="text-white/60">Redeemable Value: ≈ $0.00 USD</span>{" "}
-                  <span className="text-cyan-400">NonTransferable</span>
+                <div className="flex-1 text-right">
+                  <div className="text-lg font-mono text-white font-bold">
+                    {formatCurrency(calculatedOutputs.ytAmount)}
+                  </div>
+                  <div className="text-xs font-medium">
+                    <span className="text-white/60">Redeemable Value: ≈ $0.00 USD</span>{" "}
+                    <span className="text-cyan-400">NonTransferable</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* SP Token Output */}
-          <div className="relative group">
-            <div className="relative flex items-center gap-3 p-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-purple-400/40 rounded-lg backdrop-blur-sm transition-all duration-300">
-              <div className="flex items-center gap-2">
-                <div className="relative border-2 border-purple-400 rounded-full">
-                  <TokenIcon symbol={marketData.assetName} size={24} />
+          {!wrapStake && (
+            <div className="relative group">
+              <div className="relative flex items-center gap-3 p-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-purple-400/40 rounded-lg backdrop-blur-sm transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <div className="relative border-2 border-purple-400 rounded-full">
+                    <TokenIcon symbol={marketData.assetName} size={24} />
+                  </div>
+                  <div>
+                    <div className="text-white font-bold text-sm">SP {marketData.assetName}</div>
+                    <div className="text-purple-400 text-xs font-semibold">Staking Position</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-white font-bold text-sm">SP {marketData.assetName}</div>
-                  <div className="text-purple-400 text-xs font-semibold">Staking Position</div>
-                </div>
-              </div>
-              <div className="flex-1 text-right">
-                <div className="text-lg font-mono text-white font-bold">{formatCurrency(0)}</div>
-                <div className="text-purple-400 text-xs font-medium">
-                  {mintUPT ? "NonTransferable" : "Transferable"}
+                <div className="flex-1 text-right">
+                  <div className="text-lg font-mono text-white font-bold">
+                    {formatCurrency(calculatedOutputs.spAmount)}
+                  </div>
+                  <div className="text-purple-400 text-xs font-medium">
+                    {mintUPT ? "NonTransferable" : "Transferable"}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* UPT Token Output (Conditional Rendering) */}
-          {mintUPT && (
+          {(mintUPT || wrapStake) && (
             <div className="relative group">
               <div className="relative flex items-center gap-3 p-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-pink-400/40 rounded-lg backdrop-blur-sm transition-all duration-300">
                 <div className="flex items-center gap-2">
@@ -279,13 +533,31 @@ export function StakeCard({
                     <TokenIcon symbol={marketData.assetName} size={24} />
                   </div>
                   <div>
-                    <div className="text-white font-bold text-sm">{marketData.UPT?.symbol}</div>
+                    <div className="text-white font-bold text-sm">{marketData.UPT?.symbol || "UETH"}</div>
                     <div className="text-pink-400 text-xs font-semibold">Universal Principal Token</div>
                   </div>
                 </div>
                 <div className="flex-1 text-right">
-                  <div className="text-lg font-mono text-white font-bold">{formatCurrency(0)}</div>
+                  <div className="text-lg font-mono text-white font-bold">
+                    {formatCurrency(calculatedOutputs.uethAmount)}
+                  </div>
                   <div className="text-white/60 text-xs font-medium">≈ $0.00 USD</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Mint Fee Display - matches UPT output styling */}
+          {wrapStake && (
+            <div className="relative group">
+              <div className="relative flex items-center gap-3 py-1.5 px-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-orange-400/40 rounded-lg backdrop-blur-sm transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <div className="text-orange-400 font-normal text-sm">Mint Fee (0.1%)</div>
+                </div>
+                <div className="flex-1 text-right">
+                  <div className="text-sm font-mono text-orange-400 font-normal">
+                    {formatCurrency(calculatedOutputs.mintFee)} {selectedInputToken.symbol}
+                  </div>
                 </div>
               </div>
             </div>
@@ -293,113 +565,105 @@ export function StakeCard({
         </div>
 
         {/* Enhanced Lock Period Section */}
-        <div className="pt-4 border-t border-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20">
-          <div className="space-y-4">
-            <div className="py-2 px-3 bg-gradient-to-r from-black/40 to-black/20 rounded-lg border border-white/10">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-1">
-                  <span className="text-white/70 font-medium text-sm">Lock Period</span>
-                  <InfoTooltip
-                    content="If the Lock Period is 0 days, the minting quantity of UPT will not be restricted by MTV, but a 0.1% fee will be charged."
-                    iconSize={15}
-                    maxWidth={255}
-                  />
+        {!wrapStake && (
+          <div className="pt-4 border-t border-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20">
+            <div className="space-y-4">
+              <div className="py-2 px-3 bg-gradient-to-r from-black/40 to-black/20 rounded-lg border border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1">
+                    <span className="text-white/70 font-medium text-sm">Lock Period</span>
+                  </div>
+                  <div className="flex items-center justify-end gap-2">
+                    <Input
+                      type="number"
+                      min={(marketData.minLockupDays || 1).toString()}
+                      max={(marketData.maxLockupDays || 365).toString()}
+                      value={lockPeriodInput}
+                      onChange={(e) => handleLockPeriodInputChange(e.target.value)}
+                      onBlur={handleLockPeriodInputBlur}
+                      className="w-14 h-7 text-center text-xl font-bold font-mono text-white border border-white/20 rounded-md bg-black/20 focus:border-cyan-400/50 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none px-0.5"
+                    />
+                    <span className="text-white/60 font-medium text-sm">Days</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-end gap-2">
-                  <Input
-                    type="number"
-                    min="0"
-                    max="365"
-                    value={lockPeriodInput}
-                    onChange={(e) => handleLockPeriodInputChange(e.target.value)}
-                    onBlur={handleLockPeriodInputBlur}
-                    className="w-14 h-7 text-center text-xl font-bold font-mono text-white border border-white/20 rounded-md bg-black/20 focus:border-cyan-400/50 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none px-0.5"
-                  />
-                  <span className="text-white/60 font-medium text-sm">Days</span>
-                </div>
-              </div>
 
-              {/* Slider */}
-              <div className="relative mt-2">
-                <input
-                  type="range"
-                  min="0"
-                  max="365"
-                  value={lockPeriod}
-                  onChange={(e) => handleLockPeriodChange(Number.parseInt(e.target.value))}
-                  className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer custom-slider"
-                  style={sliderStyle}
-                />
+                {/* Slider */}
+                <div className="relative mt-2">
+                  <input
+                    type="range"
+                    min={(marketData.minLockupDays || 1).toString()}
+                    max={(marketData.maxLockupDays || 365).toString()}
+                    value={lockPeriod}
+                    onChange={(e) => handleLockPeriodChange(Number.parseInt(e.target.value))}
+                    className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer custom-slider"
+                    style={sliderStyle}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Enhanced Action Button */}
         <div className="pt-1">
           {!isConnected ? (
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-lg blur-lg opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
               <Button
                 onClick={handleConnectWallet}
                 className="relative w-full h-12 text-lg font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white border-0 rounded-lg shadow-2xl transition-all duration-300"
+                disabled={isConnecting}
               >
-                Connect Wallet
+                <div className="flex items-center justify-center gap-2">
+                  {isConnecting && (
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  )}
+                  {actionButtonText}
+                </div>
               </Button>
             </div>
           ) : (
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-lg blur-lg opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
               <Button
+                onClick={
+                  actionButtonText === "Approve"
+                    ? handleApprove
+                    : actionButtonText === "Stake"
+                      ? handleStake
+                      : undefined
+                }
                 className="relative w-full h-12 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 text-white border-0 rounded-lg shadow-2xl transition-all duration-300"
                 disabled={actionButtonDisabled}
               >
-                {actionButtonText}
+                <div className="flex items-center justify-center gap-2">
+                  {(isApproving || isStaking) && (
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  )}
+                  {actionButtonText}
+                </div>
               </Button>
             </div>
           )}
         </div>
+
+        {/* 关键：代币选择下拉框放在HTML结构的最后，这样它会自然地覆盖前面的所有元素 */}
+        <div className="absolute top-[36px] left-[12px]">
+          <TokenSelectionDropdown
+            tokens={availableTokens}
+            selectedToken={selectedInputToken}
+            onSelectToken={handleTokenSelection}
+          />
+        </div>
       </div>
 
-      <style jsx>{`
-        .custom-slider::-webkit-slider-thumb {
-          appearance: none;
-          width: 16px;
-          height: 16px;
-          background: linear-gradient(135deg, #06b6d4, #a855f7);
-          border-radius: 50%;
-          cursor: pointer;
-          box-shadow: 0 2px 8px rgba(6, 182, 212, 0.4);
-          border: 2px solid white;
-          position: relative;
-          z-index: 10;
-        }
-
-        .custom-slider::-moz-range-thumb {
-          width: 16px;
-          height: 16px;
-          background: linear-gradient(135deg, #06b6d4, #a855f7);
-          border-radius: 50%;
-          cursor: pointer;
-          border: 2px solid white;
-          box-shadow: 0 2px 8px rgba(6, 182, 212, 0.4);
-          position: relative;
-          z-index: 10;
-        }
-
-        .custom-slider::-webkit-slider-track {
-          height: 8px;
-          border-radius: 4px;
-          background: transparent;
-        }
-
-        .custom-slider::-moz-range-track {
-          height: 8px;
-          border-radius: 4px;
-          background: transparent;
-          border: none;
-        }
-      `}</style>
+      {/* Staking Success Modal */}
+      <StakingSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        stakingResult={stakingResult}
+        marketData={marketData}
+      />
     </div>
   )
 }

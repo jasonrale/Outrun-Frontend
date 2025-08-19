@@ -2,8 +2,6 @@
 import { useState, useEffect, useMemo } from "react"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { AssetDetailModal } from "./asset-detail-modal"
-// MemeverseSocialShare is now rendered by the parent component (VerseDetailContent)
-// import { MemeverseSocialShare } from "./memeverse-social-share"
 
 interface DAOTabProps {
   project: any
@@ -19,15 +17,6 @@ export function DAOTab({ project, onOpenShareModal }: DAOTabProps) {
     isOpen: false,
     type: null,
   })
-
-  // Removed socialShareState as it's now managed by the parent
-  // const [socialShareState, setSocialShareState] = useState<{
-  //   isOpen: boolean
-  //   triggerSource: "genesis" | "swap" | "general" | "claimPol" | "stake" | "claimDAORewards" | null
-  // }>({
-  //   isOpen: false,
-  //   triggerSource: null,
-  // })
 
   const daoData = project.daoData
 
@@ -148,11 +137,6 @@ export function DAOTab({ project, onOpenShareModal }: DAOTabProps) {
     onOpenShareModal("claimDAORewards")
   }
 
-  // Removed closeSocialShare as it's now managed by the parent
-  // const closeSocialShare = () => {
-  //   setSocialShareState({ isOpen: false, triggerSource: null })
-  // }
-
   const currentModalData = modalState.type ? assetData[modalState.type] : null
 
   return (
@@ -187,8 +171,6 @@ export function DAOTab({ project, onOpenShareModal }: DAOTabProps) {
             <div className="flex items-center justify-center gap-1 flex-shrink-0">
               <span className="text-pink-300">Governor:</span>
               <span className="font-mono text-white/90 text-base">
-                {" "}
-                {/* Changed text-sm to text-base */}
                 {daoData.governorAddress.substring(0, 10)}...
                 {daoData.governorAddress.substring(daoData.governorAddress.length - 8)}
               </span>
@@ -306,7 +288,7 @@ export function DAOTab({ project, onOpenShareModal }: DAOTabProps) {
                     content="End the current cycle and start the next cycle."
                     position="top"
                     iconSize={14}
-                    width={170}
+                    width={162}
                     iconClassName="text-white/80 hover:text-white ml-1"
                   />
                 </div>
@@ -323,8 +305,6 @@ export function DAOTab({ project, onOpenShareModal }: DAOTabProps) {
             <div className="flex items-center justify-center gap-1 flex-shrink-0">
               <span className="text-pink-300">Incentivizer:</span>
               <span className="font-mono text-white/90 text-base">
-                {" "}
-                {/* Changed text-sm to text-base */}
                 {daoData.cycleIncentivizerAddress.substring(0, 10)}...
                 {daoData.cycleIncentivizerAddress.substring(daoData.cycleIncentivizerAddress.length - 8)}
               </span>
@@ -382,7 +362,7 @@ export function DAOTab({ project, onOpenShareModal }: DAOTabProps) {
                     content="End the current cycle and start the next cycle."
                     position="top"
                     iconSize={14}
-                    width={170}
+                    width={162}
                     iconClassName="text-white/80 hover:text-white ml-1"
                   />
                 </div>
@@ -635,16 +615,6 @@ export function DAOTab({ project, onOpenShareModal }: DAOTabProps) {
           onClaim={handleClaim}
         />
       )}
-
-      {/* Removed social share modal rendering from here, now handled by parent */}
-      {/* {socialShareState.isOpen && socialShareState.triggerSource && (
-      <MemeverseSocialShare
-        isOpen={socialShareState.isOpen}
-        onClose={closeSocialShare}
-        project={project}
-        triggerSource={socialShareState.triggerSource}
-      />
-    )} */}
 
       <style jsx global>{`
       @keyframes arrow-pulse-1 {

@@ -34,10 +34,11 @@ export function ReferralLink({ code, link }: ReferralLinkProps) {
           Your Referral Link
         </h2>
         <InfoTooltip
-          content="Share this link with friends. When they trade on Outrun, you'll earn a percentage of their trading fees."
+          iconClassName="text-purple-400 hover:text-purple-400 transition-colors"
+          content="Share this link with your friends, and you'll earn commissions and points when they complete transactions in Outrun ecosystem."
           position="top"
           className="ml-2"
-          iconClassName="text-purple-400 hover:text-purple-400 transition-colors"
+          width={236}
         />
       </div>
 

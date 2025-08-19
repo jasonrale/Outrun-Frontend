@@ -331,7 +331,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
           </Button>
         </div>
 
-        {/* 搜索和过滤器 */}
+        {/* 搜索和过滤�� */}
         <div className="mb-8">
           {/* 移动端布局 - 在小于1120px的屏幕上显示 */}
           <div className="flex flex-col gap-6 max-[1120px]:flex min-[1120px]:hidden">

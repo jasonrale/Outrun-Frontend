@@ -63,7 +63,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       case "Unlocked":
         return "from-cyan-400/80 via-blue-500/80 to-indigo-400/80" // 增强亮度和对比度
       case "Refund":
-        return "from-red-400/80 via-orange-500/80 to-yellow-500/80" // 增强亮度和对比度
+        return "from-red-400/80 via-orange-500/80 to-yellow-500/80" // 增强亮度和对比���
       default:
         return "from-white/10 to-white/5"
     }

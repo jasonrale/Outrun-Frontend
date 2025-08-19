@@ -21,7 +21,7 @@ export function WalletButton({ isMobile = false }: WalletButtonProps) {
   const isHovering = isHoveringState
   const setIsHovering = setIsHoveringState
 
-  const isNavMobile = useMediaQuery("(max-width: 780px)") // 与导航栏的断点保持一致
+  const isNavMobile = useMediaQuery("(max-width: 780px)") // ��导航栏的断点保持一致
   const effectiveIsMobile = isMobile || isNavMobile // 使用组合条件
 
   const handleClick = async () => {

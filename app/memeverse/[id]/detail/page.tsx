@@ -86,7 +86,7 @@ const DEFAULT_SOCIAL_LINKS = {
 }
 
 const SHARE_TOOLTIP_MESSAGES = [
-  { message: "Your share fuels your community’s rise—unleash exponential growth!", width: 225 },
+  { message: "Your share fuels your community's rise—unleash exponential growth!", width: 225 },
   { message: "One share can spark 10x community power—start now!", width: 236 },
   { message: "More shares, stronger community, bigger rewards for all!", width: 223 },
   { message: "Sharing builds value—grow your community, own its future!", width: 212 },
@@ -150,7 +150,7 @@ function VerseDetailContent() {
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareModalTriggerSource, setShareModalTriggerSource] = useState<
     "genesis" | "swap" | "general" | "claimPol" | "stake" | "claimDAORewards"
-  >("general") // Added claimDAORewards type
+  >("general")
 
   const userRefundAmount = 2.5
 
@@ -258,6 +258,11 @@ function VerseDetailContent() {
     setShareModalTriggerSource(source)
     setShowShareModal(true)
   }
+
+  // 修复关闭动画的关键：使用 useCallback 防止不必要的重新渲染
+  const handleCloseShareModal = useCallback(() => {
+    setShowShareModal(false)
+  }, [])
 
   if (loading) {
     return (
@@ -391,7 +396,7 @@ function VerseDetailContent() {
                     iconClassName="text-pink-300/80 hover:text-pink-300 animate-shake"
                   />
                   <Button
-                    onClick={handleOpenShareModal} // Use the new handler
+                    onClick={() => handleOpenShareModal("general")}
                     variant="ghost"
                     className="flex items-center text-pink-300 hover:text-pink-100 p-2.5 rounded-full transition-colors duration-300 hover:bg-transparent px-[5px] py-[5px] animate-shake"
                   >
@@ -503,7 +508,7 @@ function VerseDetailContent() {
                         iconClassName="text-pink-300/80 hover:text-pink-300 animate-shake"
                       />
                       <Button
-                        onClick={handleOpenShareModal} // Use the new handler
+                        onClick={() => handleOpenShareModal("general")}
                         variant="ghost"
                         className="flex items-center text-pink-300 hover:text-pink-100 p-2.5 rounded-full transition-colors duration-300 hover:bg-transparent px-[5px] py-[5px] animate-shake"
                       >
@@ -555,14 +560,13 @@ function VerseDetailContent() {
           </div>
         </div>
 
-        {showShareModal && (
-          <MemeverseSocialShare
-            isOpen={showShareModal}
-            onClose={() => setShowShareModal(false)}
-            project={verse}
-            triggerSource={shareModalTriggerSource}
-          />
-        )}
+        {/* 修复：将模态框移到组件外层，避免重新渲染影响动画 */}
+        <MemeverseSocialShare
+          isOpen={showShareModal}
+          onClose={handleCloseShareModal}
+          project={verse}
+          triggerSource={shareModalTriggerSource}
+        />
 
         <style jsx global>{`
     .desktop-back-button {
@@ -937,7 +941,7 @@ function VerseDetailContent() {
                   iconClassName="text-pink-300/80 hover:text-pink-300 animate-shake"
                 />
                 <Button
-                  onClick={() => handleOpenShareModal("general")} // Explicitly set triggerSource here
+                  onClick={() => handleOpenShareModal("general")}
                   variant="ghost"
                   className="flex items-center text-pink-300 hover:text-pink-100 p-2.5 rounded-full transition-colors duration-300 hover:bg-transparent px-[5px] py-[5px] animate-shake"
                 >
@@ -969,14 +973,13 @@ function VerseDetailContent() {
         </GradientBackgroundCard>
       </div>
 
-      {showShareModal && (
-        <MemeverseSocialShare
-          isOpen={showShareModal}
-          onClose={() => setShowShareModal(false)}
-          project={verse}
-          triggerSource={shareModalTriggerSource}
-        />
-      )}
+      {/* 修复：将模态框移到组件外层，避免重新渲染影响动画 */}
+      <MemeverseSocialShare
+        isOpen={showShareModal}
+        onClose={handleCloseShareModal}
+        project={verse}
+        triggerSource={shareModalTriggerSource}
+      />
 
       <style jsx global>{`
   .desktop-back-button {

@@ -10,6 +10,7 @@ import { TokenIcon } from "@/components/ui/token-icon"
 import { SettingsPanel } from "@/components/ui/settings-panel"
 import { USER_BALANCES } from "@/data/memeverse-projects"
 import { MemeverseSocialShare } from "@/components/memeverse/detail/memeverse-social-share"
+import { motion, AnimatePresence } from "framer-motion"
 
 // Add this function after the imports and before the component
 const formatNumberWithSubscriptZeros = (num: number): string => {
@@ -93,6 +94,8 @@ export function POLTab({ project }: POLTabProps) {
   const [isMintModalOpen, setIsMintModalOpen] = useState(false)
   const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false)
   const [isClaiming, setIsClaiming] = useState(false) // New state for claiming animation
+  const [isClaimModalClosing, setIsClaimModalClosing] = useState(false) // New state for closing animation
+  const [isMintModalClosing, setIsMintModalClosing] = useState(false) // New state for closing animation
   const [countdown, setCountdown] = useState("")
   const [showDetails, setShowDetails] = useState(false)
   const [isRateReversed, setIsRateReversed] = useState(false)
@@ -210,6 +213,30 @@ export function POLTab({ project }: POLTabProps) {
       uethAmount: uethOutput.toFixed(6),
     }
   }, [redeemPolAmount])
+
+  // Handle social share modal close with proper callback
+  const handleSocialShareClose = useCallback(() => {
+    setShowSocialShareModal(false)
+  }, [])
+
+  const handleClaimModalClose = () => {
+    if (isClaiming) return // Prevent closing during claiming
+
+    setIsClaimModalClosing(true)
+    // Delay actual close to allow animation to complete
+    setTimeout(() => {
+      setIsClaimModalClosing(false)
+      setIsClaimModalOpen(false)
+    }, 300) // Match animation duration
+  }
+
+  const handleMintModalClose = () => {
+    setIsMintModalClosing(true)
+    setTimeout(() => {
+      setIsMintModalClosing(false)
+      setIsMintModalOpen(false)
+    }, 300)
+  }
 
   const hasInputAmounts = pfrogAmount || uethAmount
   const hasPolAmount = polAmount
@@ -394,251 +421,310 @@ export function POLTab({ project }: POLTabProps) {
       </div>
 
       {/* Claim POL Modal */}
-      {isClaimModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsClaimModalOpen(false)} />
-          <GradientBackgroundCard className="relative z-10 max-w-md w-full" border shadow>
-            <div className="p-6 space-y-6">
-              <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400 text-center">
-                Claim POL Tokens
-              </h2>
-              <p className="text-white/90 text-center leading-relaxed">
-                Because you participated in the Genesis, you can claim{" "}
-                <span className="font-bold text-pink-300">{polData.claimablePOL.toLocaleString()} </span>
-                <span className="font-bold text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
-                  POL {project.symbol}
-                </span>
-              </p>
-              <div className="flex justify-center">
-                <Button
-                  className="h-8 text-base bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 px-6"
-                  onClick={() => {
-                    setIsClaiming(true)
-                    // Simulate an asynchronous claim operation
-                    setTimeout(() => {
-                      // Handle actual claim logic here
-                      setIsClaiming(false)
-                      setIsClaimModalOpen(false)
-                      setShowSocialShareModal(true)
-                      setSocialShareTriggerSource("claimPol")
-                    }, 2000) // Simulate 2-second claiming process
-                  }}
-                  disabled={isClaiming} // Disable button during claiming
-                >
-                  {isClaiming ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Claiming...
-                    </>
-                  ) : (
-                    "Claim"
-                  )}
-                </Button>
-              </div>
-            </div>
-          </GradientBackgroundCard>
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {isClaimModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={handleClaimModalClose}
+            />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{
+                scale: isClaimModalClosing ? 0.95 : 1,
+                opacity: isClaimModalClosing ? 0 : 1,
+              }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10"
+            >
+              <GradientBackgroundCard className="max-w-md w-full" border shadow>
+                <div className="p-6 space-y-6">
+                  <div className="flex justify-center">
+                    <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400 inline-block">
+                      Claim POL Tokens
+                    </h2>
+                  </div>
+                  <p className="text-white/90 text-center leading-relaxed">
+                    Because you participated in the Genesis, you can claim{" "}
+                    <span className="font-bold text-pink-300">{polData.claimablePOL.toLocaleString()} </span>
+                    <span className="font-bold text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
+                      POL {project.symbol}
+                    </span>
+                  </p>
+                  <div className="flex justify-center">
+                    <Button
+                      className="h-8 text-base bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 px-6"
+                      onClick={() => {
+                        setIsClaiming(true)
+                        // Simulate an asynchronous claim operation
+                        setTimeout(() => {
+                          // Handle actual claim logic here
+                          setIsClaiming(false)
+                          handleClaimModalClose()
+
+                          // Add a small delay before opening the social share modal to ensure proper state transition
+                          setTimeout(() => {
+                            setSocialShareTriggerSource("claimPol")
+                            setShowSocialShareModal(true)
+                          }, 400) // Increased delay to account for close animation
+                        }, 2000) // Simulate 2-second claiming process
+                      }}
+                      disabled={isClaiming || isClaimModalClosing} // Disable during claiming or closing
+                    >
+                      {isClaiming ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Claiming...
+                        </>
+                      ) : (
+                        "Claim"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </GradientBackgroundCard>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Mint POL Modal */}
-      {isMintModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ margin: 0, height: "100vh" }}>
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMintModalOpen(false)} />
-          <GradientBackgroundCard className="relative z-10 max-w-md w-full my-0" shadow border contentClassName="p-6">
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
-                  MINT POL
-                </h2>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="p-2 text-purple-400 hover:text-purple-300 relative"
-                    onClick={() => setShowSettings(!showSettings)}
-                  >
-                    <Settings size={18} />
-                  </button>
-                  {/* Close button - only visible on mobile */}
-                  <button
-                    className="md:hidden p-2 text-purple-400 hover:text-purple-300 relative"
-                    onClick={() => setIsMintModalOpen(false)}
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Settings Panel */}
-              <SettingsPanel
-                isOpen={showSettings}
-                onClose={() => setShowSettings(false)}
-                slippage={slippage}
-                onSlippageChange={setSlippage}
-                transactionDeadline={transactionDeadline}
-                onTransactionDeadlineChange={setTransactionDeadline}
-              />
-
-              {/* Supply Amount Section */}
-              <div className="mb-4">
-                <label className="block text-white/70 text-sm mb-2">Supply Amount</label>
-
-                {/* Project Token Input */}
-                <div
-                  className="mb-3 p-3 rounded-lg bg-black/40 border border-pink-500/20"
-                  style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <input
-                      type="text"
-                      placeholder="0.00"
-                      value={pfrogAmount}
-                      onChange={(e) => setPfrogAmount(e.target.value)}
-                      className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
-                      aria-label={`${project.symbol} amount`}
-                    />
-                    <div className="flex items-center">
-                      <TokenIcon symbol={project.symbol} size={20} className="mr-2" />
-                      <span className="text-white font-medium">{project.symbol}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="text-white/60">~$--</div>
-                    <div className="flex items-center text-white/60">
-                      <span>Balance: {USER_BALANCES.memecoin[project.symbol]?.toLocaleString() || "0"}</span>
-                      <button className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80">
-                        Max
+      <AnimatePresence mode="wait">
+        {isMintModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ margin: 0, height: "100vh" }}>
+            <motion.div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={handleMintModalClose}
+            />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{
+                scale: isMintModalClosing ? 0.95 : 1,
+                opacity: isMintModalClosing ? 0 : 1,
+              }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10"
+            >
+              <GradientBackgroundCard className="max-w-md w-full my-0" shadow border contentClassName="p-6">
+                <div className="space-y-6">
+                  {/* Header */}
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
+                      Mint POL
+                    </h2>
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="p-2 text-purple-400 hover:text-purple-300 relative"
+                        onClick={() => setShowSettings(!showSettings)}
+                        disabled={isMintModalClosing}
+                      >
+                        <Settings size={18} />
+                      </button>
+                      <button
+                        className="md:hidden p-2 text-purple-400 hover:text-purple-300 relative"
+                        onClick={handleMintModalClose}
+                        disabled={isMintModalClosing}
+                      >
+                        <X size={20} />
                       </button>
                     </div>
                   </div>
-                </div>
 
-                {/* UETH Token Input */}
-                <div
-                  className="p-3 rounded-lg bg-black/40 border border-pink-500/20"
-                  style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <input
-                      type="text"
-                      placeholder="0.00"
-                      value={uethAmount}
-                      onChange={(e) => setUethAmount(e.target.value)}
-                      className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
-                      aria-label="UETH amount"
-                    />
-                    <div className="flex items-center">
-                      <TokenIcon symbol="UETH" size={20} className="mr-2" />
-                      <span className="text-white font-medium">UETH</span>
+                  {/* Settings Panel */}
+                  <SettingsPanel
+                    isOpen={showSettings}
+                    onClose={() => setShowSettings(false)}
+                    slippage={slippage}
+                    onSlippageChange={setSlippage}
+                    transactionDeadline={transactionDeadline}
+                    onTransactionDeadlineChange={setTransactionDeadline}
+                  />
+
+                  {/* Supply Amount Section */}
+                  <div className="mb-4">
+                    <label className="block text-white/70 text-sm mb-2">Supply Amount</label>
+
+                    {/* Project Token Input */}
+                    <div
+                      className="mb-3 p-3 rounded-lg bg-black/40 border border-pink-500/20"
+                      style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <input
+                          type="text"
+                          placeholder="0.00"
+                          value={pfrogAmount}
+                          onChange={(e) => setPfrogAmount(e.target.value)}
+                          className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
+                          aria-label={`${project.symbol} amount`}
+                          disabled={isMintModalClosing}
+                        />
+                        <div className="flex items-center">
+                          <TokenIcon symbol={project.symbol} size={20} className="mr-2" />
+                          <span className="text-white font-medium">{project.symbol}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="text-white/60">~$--</div>
+                        <div className="flex items-center text-white/60">
+                          <span>Balance: {USER_BALANCES.memecoin[project.symbol]?.toLocaleString() || "0"}</span>
+                          <button
+                            className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
+                            disabled={isMintModalClosing}
+                          >
+                            Max
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* UETH Token Input */}
+                    <div
+                      className="p-3 rounded-lg bg-black/40 border border-pink-500/20"
+                      style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <input
+                          type="text"
+                          placeholder="0.00"
+                          value={uethAmount}
+                          onChange={(e) => setUethAmount(e.target.value)}
+                          className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
+                          aria-label="UETH amount"
+                          disabled={isMintModalClosing}
+                        />
+                        <div className="flex items-center">
+                          <TokenIcon symbol="UETH" size={20} className="mr-2" />
+                          <span className="text-white font-medium">UETH</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="text-white/60">~$--</div>
+                        <div className="flex items-center text-white/60">
+                          <span>Balance: 1,250.00</span>
+                          <button
+                            className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
+                            disabled={isMintModalClosing}
+                          >
+                            Max
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Arrow between UETH and POL-Symbol */}
+                    <div className="flex justify-center py-3">
+                      <svg
+                        width="16"
+                        height="18"
+                        viewBox="0 0 24 28"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="text-pink-400"
+                      >
+                        <path d="M12 2v20M19 15l-7 7-7-7" />
+                      </svg>
+                    </div>
+
+                    {/* POL-Symbol Output */}
+                    <div
+                      className="p-3 rounded-lg bg-black/40 border border-pink-500/20"
+                      style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <input
+                          type="text"
+                          placeholder="0.00"
+                          value={polAmount}
+                          onChange={(e) => setPolAmount(e.target.value)}
+                          className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
+                          aria-label={`POL-${project.symbol} amount`}
+                          disabled={isMintModalClosing}
+                        />
+                        <div className="flex items-center">
+                          <TokenIcon symbol={`POL-${project.symbol}`} size={20} className="mr-2" />
+                          <span className="text-white font-medium">POL-{project.symbol}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="text-white/60">~$--</div>
+                        <div className="flex items-center text-white/60">
+                          <span>Balance: {userPolBalance.toLocaleString()}</span>
+                          <button
+                            className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
+                            disabled={isMintModalClosing}
+                          >
+                            Max
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="text-white/60">~$--</div>
-                    <div className="flex items-center text-white/60">
-                      <span>Balance: 1,250.00</span>
-                      <button className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80">
-                        Max
-                      </button>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Arrow between UETH and POL-Symbol */}
-                <div className="flex justify-center py-3">
-                  <svg
-                    width="16"
-                    height="18"
-                    viewBox="0 0 24 28"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="text-pink-400"
-                  >
-                    <path d="M12 2v20M19 15l-7 7-7-7" />
-                  </svg>
-                </div>
+                  {/* Price Info */}
+                  {(hasInputAmounts || hasPolAmount) && (
+                    <div
+                      className="mb-3 p-2 rounded-lg bg-black/40 border border-pink-500/20"
+                      style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
+                    >
+                      {getExchangeRateDisplay()}
 
-                {/* POL-Symbol Output */}
-                <div
-                  className="p-3 rounded-lg bg-black/40 border border-pink-500/20"
-                  style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <input
-                      type="text"
-                      placeholder="0.00"
-                      value={polAmount}
-                      onChange={(e) => setPolAmount(e.target.value)}
-                      className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
-                      aria-label={`POL-${project.symbol} amount`}
-                    />
-                    <div className="flex items-center">
-                      <TokenIcon symbol={`POL-${project.symbol}`} size={20} className="mr-2" />
-                      <span className="text-white font-medium">POL-{project.symbol}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="text-white/60">~$--</div>
-                    <div className="flex items-center text-white/60">
-                      <span>Balance: {userPolBalance.toLocaleString()}</span>
-                      <button className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80">
-                        Max
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Price Info */}
-              {(hasInputAmounts || hasPolAmount) && (
-                <div
-                  className="mb-3 p-2 rounded-lg bg-black/40 border border-pink-500/20"
-                  style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
-                >
-                  {getExchangeRateDisplay()}
-
-                  {showDetails && (
-                    <>
-                      {/* Divider line */}
-                      <div className="w-full h-px bg-zinc-700/50 my-2"></div>
-
-                      {hasInputAmounts && (
+                      {showDetails && (
                         <>
-                          <div className="flex justify-between items-center py-0.5">
-                            <span className="text-xs text-zinc-400">Min. Receive:</span>
-                            <span className="text-xs text-white">
-                              {getMinReceived(slippage)} POL-{project.symbol}
-                            </span>
-                          </div>
+                          {/* Divider line */}
+                          <div className="w-full h-px bg-zinc-700/50 my-2"></div>
 
-                          <div className="flex justify-between items-center py-0.5">
-                            <span className="text-xs text-zinc-400">Max. Slippage:</span>
-                            <span className="text-xs text-white">{slippage}%</span>
-                          </div>
+                          {hasInputAmounts && (
+                            <>
+                              <div className="flex justify-between items-center py-0.5">
+                                <span className="text-xs text-zinc-400">Min. Receive:</span>
+                                <span className="text-xs text-white">
+                                  {getMinReceived(slippage)} POL-{project.symbol}
+                                </span>
+                              </div>
+
+                              <div className="flex justify-between items-center py-0.5">
+                                <span className="text-xs text-zinc-400">Max. Slippage:</span>
+                                <span className="text-xs text-white">{slippage}%</span>
+                              </div>
+                            </>
+                          )}
+
+                          {hasPolAmount && !hasInputAmounts && (
+                            <div className="flex justify-between items-center py-0.5">
+                              <span className="text-xs text-zinc-400">Max. Slippage:</span>
+                              <span className="text-xs text-white">{slippage}%</span>
+                            </div>
+                          )}
                         </>
                       )}
-
-                      {hasPolAmount && !hasInputAmounts && (
-                        <div className="flex justify-between items-center py-0.5">
-                          <span className="text-xs text-zinc-400">Max. Slippage:</span>
-                          <span className="text-xs text-white">{slippage}%</span>
-                        </div>
-                      )}
-                    </>
+                    </div>
                   )}
-                </div>
-              )}
 
-              {/* Mint Button */}
-              <Button
-                className="w-full h-12 text-base bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!hasInputAmounts && !hasPolAmount}
-              >
-                {!hasInputAmounts && !hasPolAmount ? "Please Input" : "Mint"}
-              </Button>
-            </div>
-          </GradientBackgroundCard>
-        </div>
-      )}
+                  {/* Mint Button */}
+                  <Button
+                    className="w-full h-12 text-base bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={(!hasInputAmounts && !hasPolAmount) || isMintModalClosing}
+                  >
+                    {!hasInputAmounts && !hasPolAmount ? "Please Input" : "Mint"}
+                  </Button>
+                </div>
+              </GradientBackgroundCard>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Redeem POL Modal */}
       {isRedeemModalOpen && (
@@ -685,9 +771,9 @@ export function POLTab({ project }: POLTabProps) {
                 {/* POL Token Input */}
                 <div
                   className="p-3 rounded-lg bg-black/40 border border-red-500/20"
-                  style={{ boxShadow: "0 0 10px rgba(239,68,68,0.1) inset" }}
+                  style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
                 >
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between">
                     <input
                       type="text"
                       placeholder="0.00"
@@ -781,14 +867,14 @@ export function POLTab({ project }: POLTabProps) {
           </GradientBackgroundCard>
         </div>
       )}
-      {showSocialShareModal && (
-        <MemeverseSocialShare
-          isOpen={showSocialShareModal}
-          onClose={() => setShowSocialShareModal(false)}
-          project={project}
-          triggerSource={socialShareTriggerSource}
-        />
-      )}
+
+      {/* Social Share Modal - Render outside of other modals to prevent conflicts */}
+      <MemeverseSocialShare
+        isOpen={showSocialShareModal}
+        onClose={handleSocialShareClose}
+        project={project}
+        triggerSource={socialShareTriggerSource}
+      />
     </div>
   )
 }

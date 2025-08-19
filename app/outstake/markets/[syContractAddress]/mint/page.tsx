@@ -44,6 +44,7 @@ export default function MintPage() {
   const [mintUPT, setMintUPT] = useState(true)
   const [activeTab, setActiveTab] = useState<"overview" | "mint" | "yield-pool">("mint")
   const [windowWidth, setWindowWidth] = useState(0)
+  const [wrapStake, setWrapStake] = useState(false)
 
   const userBalance = 1000
 
@@ -220,7 +221,12 @@ export default function MintPage() {
                     </div>
                     {/* Content based on active tab */}
                     {activeTab === "overview" ? (
-                      <MarketInfoCard marketData={marketData} mintUPT={mintUPT} hideTitle={true} />
+                      <MarketInfoCard
+                        marketData={marketData}
+                        mintUPT={mintUPT}
+                        hideTitle={true}
+                        wrapStake={wrapStake}
+                      />
                     ) : activeTab === "mint" ? (
                       <StakeCard
                         marketData={marketData}
@@ -229,6 +235,8 @@ export default function MintPage() {
                         setIsConnected={setIsConnected}
                         mintUPT={mintUPT}
                         setMintUPT={setMintUPT}
+                        wrapStake={wrapStake}
+                        setWrapStake={setWrapStake}
                       />
                     ) : (
                       <YieldPoolCard
@@ -250,7 +258,9 @@ export default function MintPage() {
                     <div className="h-[2px] bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20"></div>
                   </div>
                   {/* Right side - shows MarketInfoCard only when Overview tab is not visible */}
-                  {!isOverviewTabVisible && <MarketInfoCard marketData={marketData} mintUPT={mintUPT} />}
+                  {!isOverviewTabVisible && (
+                    <MarketInfoCard marketData={marketData} mintUPT={mintUPT} wrapStake={wrapStake} />
+                  )}
                 </div>
               </GradientBackgroundCard>
             </div>

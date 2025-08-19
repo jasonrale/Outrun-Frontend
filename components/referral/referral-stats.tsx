@@ -34,16 +34,18 @@ export function ReferralStats({ data }: ReferralStatsProps) {
           <StatCard
             title="Total Earned"
             value={`$${data.totalEarned}`}
-            tooltip="Total amount earned from referrals"
+            tooltip="Total earned from referrals."
             gradient="from-purple-500 to-pink-500"
             delay={0.1}
+            tooltipWidth={178}
           />
           <StatCard
             title="Total Referrals"
             value={data.referralsCount.toString()}
-            tooltip="Number of users who signed up with your code"
+            tooltip="Number of users who signed up with your code."
             gradient="from-pink-500 to-purple-500"
             delay={0.2}
+            tooltipWidth={193}
           />
         </div>
       </GradientBackgroundCard>
@@ -57,9 +59,10 @@ interface StatCardProps {
   tooltip: string
   gradient: string
   delay: number
+  tooltipWidth?: number
 }
 
-function StatCard({ title, value, tooltip, gradient, delay }: StatCardProps) {
+function StatCard({ title, value, tooltip, gradient, delay, tooltipWidth }: StatCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -74,11 +77,10 @@ function StatCard({ title, value, tooltip, gradient, delay }: StatCardProps) {
           position="top"
           className="ml-1"
           iconClassName="text-purple-400 hover:text-purple-400 transition-colors"
+          width={tooltipWidth}
         />
       </div>
-      <p className={`text-xl md:text-2xl font-bold text-gradient-fill bg-gradient-to-r ${gradient}`}>
-        {value}
-      </p>
+      <p className={`text-xl md:text-2xl font-bold text-gradient-fill bg-gradient-to-r ${gradient}`}>{value}</p>
     </motion.div>
   )
 }
