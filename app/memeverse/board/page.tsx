@@ -21,7 +21,7 @@ export default function MemeverseBoardPage() {
   )
 }
 
-// 内容组件 - 使用Context���URL同步
+// 内容组件 - 使用Context同步URL
 const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -212,7 +212,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
     [handlePageChange, updateURL],
   )
 
-  // ���用useMemo优化分页计算
+  // 使用useMemo优化分页计算
   const paginationData = useMemo(() => {
     if (totalPages <= 1) return { showPagination: false }
 
@@ -331,7 +331,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
           </Button>
         </div>
 
-        {/* 搜索和过滤�� */}
+        {/* 搜索和过滤器 */}
         <div className="mb-8">
           {/* 移动端布局 - 在小于1120px的屏幕上显示 */}
           <div className="flex flex-col gap-6 max-[1120px]:flex min-[1120px]:hidden">
@@ -372,7 +372,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 rounded-full transition-all duration-300 px-4"
+                  className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                   onClick={toggleChainDropdown}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -418,7 +418,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 rounded-full transition-all duration-300 px-4"
+                  className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                   onClick={toggleStageDropdown}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -450,7 +450,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 rounded-full transition-all duration-300 px-4"
+                  className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                   onClick={toggleSortDropdown}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -536,7 +536,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 rounded-full transition-all duration-300 px-4"
+                    className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                     onClick={toggleChainDropdown}
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -582,7 +582,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 rounded-full transition-all duration-300 px-4"
+                    className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                     onClick={toggleStageDropdown}
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -614,7 +614,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 rounded-full transition-all duration-300 px-4"
+                    className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                     onClick={toggleSortDropdown}
                   >
                     <div className="flex items-center justify-center gap-1">

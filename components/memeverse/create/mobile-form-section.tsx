@@ -219,7 +219,7 @@ export const MobileFormSection = React.memo(
           <Button
             type="button"
             variant="outline"
-            className="w-full h-[38px] bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 justify-between"
+            className="w-full h-[38px] bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white justify-between"
             onClick={() => openModal("fundType")}
           >
             <span>{formData.genesieFundType}</span>
@@ -242,7 +242,7 @@ export const MobileFormSection = React.memo(
           <Button
             type="button"
             variant="outline"
-            className="w-full h-[38px] bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 justify-between"
+            className="w-full h-[38px] bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white justify-between"
             onClick={() => openModal("network")}
           >
             <div className="flex items-center">
@@ -277,7 +277,7 @@ export const MobileFormSection = React.memo(
           <Button
             type="button"
             variant="outline"
-            className="w-full h-[38px] bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 justify-between"
+            className="w-full h-[38px] bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white justify-between"
             onClick={() => openModal("omniChains")}
           >
             <span>
