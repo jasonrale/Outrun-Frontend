@@ -11,6 +11,7 @@ import { formatCurrency, formatDollarValue, formatDollarValueSixDecimals, format
 import { Flame, ChevronDown } from "lucide-react"
 import { SimpleTooltip } from "@/components/ui/universal-tooltip"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useWallet } from "@/contexts/wallet-context"
 
 interface YieldPoolCardProps {
   marketData: {
@@ -26,13 +27,14 @@ interface YieldPoolCardProps {
     supportedInputTokens?: { symbol: string; address: string }[]
   }
   userBalance: number
-  isConnected: boolean
-  setIsConnected: (connected: boolean) => void
 }
 
-export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConnected }: YieldPoolCardProps) {
+export function YieldPoolCard({ marketData, userBalance }: YieldPoolCardProps) {
+  const { isConnected, connectWallet } = useWallet()
+
   const [burnAmount, setBurnAmount] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const [selectedOutputToken, setSelectedOutputToken] = useState(
     marketData.supportedInputTokens?.[0] || { symbol: marketData.assetName, address: "" },
   )
@@ -41,7 +43,12 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
 
   const handleBurnYT = useCallback(async () => {
     if (!isConnected) {
-      setIsConnected(true)
+      setIsConnectingWallet(true)
+      try {
+        await connectWallet()
+      } finally {
+        setIsConnectingWallet(false)
+      }
       return
     }
 
@@ -51,7 +58,7 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
       setIsLoading(false)
       setBurnAmount("")
     }, 2000)
-  }, [isConnected, setIsConnected])
+  }, [isConnected, connectWallet])
 
   const handleMaxClick = useCallback(() => {
     setBurnAmount(ytBalance.toString())
@@ -80,13 +87,11 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
     [marketData.totalRedeemableValue, marketData.syTokenPriceUSD, marketData.ytTotalSupply],
   )
 
-  // Received Yield USD = burnAmount (YT quantity) * YT Redeemable Value (USD per YT)
   const receivedYieldUSD = useMemo(
     () => (burnAmount ? Number.parseFloat(burnAmount) * YTRedeemableValueUSD : 0),
     [burnAmount, YTRedeemableValueUSD],
   )
 
-  // Calculate received SY quantity
   const receivedSYQuantity = useMemo(
     () =>
       marketData.ytTotalSupply > 0 ? (burnAmount * marketData.totalRedeemableValue) / marketData.ytTotalSupply : 0,
@@ -332,14 +337,21 @@ export function YieldPoolCard({ marketData, userBalance, isConnected, setIsConne
                 <Button
                   onClick={handleBurnYT}
                   disabled={
-                    !burnAmount ||
-                    Number.parseFloat(burnAmount) <= 0 ||
-                    Number.parseFloat(burnAmount) > ytBalance ||
-                    isLoading
+                    (isConnected &&
+                      (!burnAmount ||
+                        Number.parseFloat(burnAmount) <= 0 ||
+                        Number.parseFloat(burnAmount) > ytBalance)) ||
+                    isLoading ||
+                    isConnectingWallet
                   }
                   className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium py-2 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 >
-                  {isLoading ? (
+                  {isConnectingWallet ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Connecting Wallet...
+                    </div>
+                  ) : isLoading ? (
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                       Burning YT...

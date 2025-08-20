@@ -131,8 +131,8 @@ export function AssetDetailModal({
             className="relative max-w-sm w-full mx-4"
             ref={modalRef}
           >
-            <GradientBackgroundCard className="relative z-10 w-full my-0" shadow border contentClassName="p-4">
-              <div className="space-y-4">
+            <GradientBackgroundCard className="relative z-10 w-full my-0" shadow border contentClassName="p-6">
+              <div className="space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                   <div>
@@ -141,7 +141,7 @@ export function AssetDetailModal({
                     </h2>
                   </div>
                   <button
-                    className="rounded-lg p-1 text-zinc-400 transition-all duration-300 hover:bg-white/10 hover:text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-lg p-1 text-purple-400 transition-all duration-300 hover:bg-white/10 hover:text-pink-400 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleClose}
                     disabled={isClaiming || isClosing}
                   >

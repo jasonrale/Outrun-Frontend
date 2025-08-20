@@ -9,6 +9,7 @@ import { TokenIcon } from "@/components/ui/token-icon"
 import { formatCurrency } from "@/utils/format"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { StakingSuccessModal } from "./staking-success-modal"
+import { useWallet } from "@/contexts/wallet-context"
 
 interface StakeCardProps {
   marketData: {
@@ -17,23 +18,18 @@ interface StakeCardProps {
     UPT?: { isAuthorized: boolean; symbol: string; address: string }
     supportedInputTokens?: { symbol: string; address: string; exchangeRate?: number }[]
     mtv?: number
-    // Add exchange rate for the main asset
     exchangeRate?: number
-    // Add accounting asset symbol
     accountingAsset?: string
     minLockupDays?: number
     maxLockupDays?: number
   }
   userBalance: number
-  isConnected: boolean
-  setIsConnected: (connected: boolean) => void
   mintUPT: boolean
   setMintUPT: (mint: boolean) => void
   wrapStake?: boolean
   setWrapStake?: (wrapStake: boolean) => void
 }
 
-// Simple Token Selection Dropdown Component
 function TokenSelectionDropdown({
   tokens,
   selectedToken,
@@ -103,13 +99,13 @@ function TokenSelectionDropdown({
 export function StakeCard({
   marketData,
   userBalance,
-  isConnected,
-  setIsConnected,
   mintUPT,
   setMintUPT,
   wrapStake: externalWrapStake,
   setWrapStake: setExternalWrapStake,
 }: StakeCardProps) {
+  const { isConnected, isConnecting, connectWallet } = useWallet()
+
   const [inputAmount, setInputAmount] = useState("")
   const [lockPeriod, setLockPeriod] = useState(marketData.maxLockupDays || 365)
   const [lockPeriodInput, setLockPeriodInput] = useState((marketData.maxLockupDays || 365).toString())
@@ -117,7 +113,6 @@ export function StakeCard({
   const wrapStake = externalWrapStake !== undefined ? externalWrapStake : localWrapStake
   const setWrapStake = setExternalWrapStake || setLocalWrapStake
   const [isApproving, setIsApproving] = useState(false)
-  const [isConnecting, setIsConnecting] = useState(false)
   const [isApproved, setIsApproved] = useState(false)
   const [isStaking, setIsStaking] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
@@ -127,7 +122,6 @@ export function StakeCard({
     receivedTokens: Array<{ amount: string; symbol: string; type: string }>
   } | null>(null)
 
-  // Initialize selected token with the first supported token or default to asset name
   const [selectedInputToken, setSelectedInputToken] = useState<{
     symbol: string
     address: string
@@ -143,7 +137,6 @@ export function StakeCard({
     }
   })
 
-  // Get available tokens for selection
   const availableTokens = useMemo(() => {
     if (marketData.supportedInputTokens && marketData.supportedInputTokens.length > 0) {
       return marketData.supportedInputTokens
@@ -157,35 +150,28 @@ export function StakeCard({
     ]
   }, [marketData.supportedInputTokens, marketData.assetName, marketData.exchangeRate])
 
-  // Function to determine if a token is an accounting asset (base asset)
   const isAccountingAsset = useCallback(
     (tokenSymbol: string) => {
-      // Common accounting assets that should use 1:1 exchange rate
       const accountingAssets = ["ETH", "USDe", "USDC", "USDT", "DAI"]
       return accountingAssets.includes(tokenSymbol) || tokenSymbol === marketData.accountingAsset
     },
     [marketData.accountingAsset],
   )
 
-  // Get exchange rate for selected token
   const getExchangeRate = useCallback(
     (token: { symbol: string; exchangeRate?: number }) => {
-      // If it's an accounting asset, use 1:1 rate
       if (isAccountingAsset(token.symbol)) {
         return 1
       }
 
-      // Use token-specific exchange rate if available
       if (token.exchangeRate) {
         return token.exchangeRate
       }
 
-      // Use market default exchange rate
       if (marketData.exchangeRate) {
         return marketData.exchangeRate
       }
 
-      // Fallback to 1:1 if no exchange rate is defined
       return 1
     },
     [isAccountingAsset, marketData.exchangeRate],
@@ -240,11 +226,12 @@ export function StakeCard({
   }, [])
 
   const handleConnectWallet = useCallback(async () => {
-    setIsConnecting(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsConnected(true)
-    setIsConnecting(false)
-  }, [setIsConnected])
+    try {
+      await connectWallet()
+    } catch (error) {
+      console.error("Failed to connect wallet:", error)
+    }
+  }, [connectWallet])
 
   const handleApprove = useCallback(async () => {
     setIsApproving(true)
@@ -263,7 +250,6 @@ export function StakeCard({
     const exchangeRate = getExchangeRate(selectedInputToken)
     const mtvValue = marketData.mtv || 0.95
 
-    // SP amount = staked amount * exchange rate
     const spAmount = Number.parseFloat(stakedAmount) * exchangeRate
     const ytAmount = wrapStake ? 0 : spAmount * lockPeriod
 
@@ -303,7 +289,7 @@ export function StakeCard({
   const hasSufficientBalance = useMemo(() => parsedInputAmount <= userBalance, [parsedInputAmount, userBalance])
 
   const mtvTooltipContent = useMemo(() => {
-    const mtvValue = marketData.mtv || 0.95 // Default to 0.95 if not provided
+    const mtvValue = marketData.mtv || 0.95
     const percentageValue = Math.round(mtvValue * 100)
     return `MTV = ${mtvValue}, the max amount of UPT that can be minted is capped at ${percentageValue}% of the value of the yield-bearing assets you staked.`
   }, [marketData.mtv])
@@ -314,24 +300,23 @@ export function StakeCard({
         spAmount: 0,
         ytAmount: 0,
         uethAmount: 0,
-        mintFee: 0, // Added mint fee calculation
+        mintFee: 0,
       }
     }
 
     const exchangeRate = getExchangeRate(selectedInputToken)
     const mtvValue = marketData.mtv || 0.95
 
-    // SP amount = staked amount * exchange rate
     const spAmount = parsedInputAmount * exchangeRate
     const ytAmount = wrapStake ? 0 : spAmount * lockPeriod
     const uethAmount = wrapStake ? spAmount * 0.999 : spAmount * mtvValue
-    const mintFee = wrapStake ? spAmount * 0.001 : 0 // Calculate 0.1% mint fee for wrap stake
+    const mintFee = wrapStake ? spAmount * 0.001 : 0
 
     return {
       spAmount,
       ytAmount,
       uethAmount,
-      mintFee, // Include mint fee in return object
+      mintFee,
     }
   }, [
     parsedInputAmount,
@@ -376,9 +361,7 @@ export function StakeCard({
 
   return (
     <div className="p-4 lg:max-w-none">
-      {/* 重新调整HTML结构 - 先渲染所有其他内容 */}
       <div className="pt-2 space-y-4 relative">
-        {/* Stake 标题和余额显示 */}
         <div>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-1">
@@ -412,7 +395,6 @@ export function StakeCard({
             </div>
           </div>
 
-          {/* 输入框容器 - 但是不包含代币选择下拉框 */}
           <div className="relative">
             <div className="relative flex items-center gap-3 p-2.5 bg-gradient-to-r from-black/60 to-black/40 border-2 border-green-400/50 rounded-lg backdrop-blur-sm">
               <div className="flex-1 text-right">
@@ -430,7 +412,6 @@ export function StakeCard({
           </div>
         </div>
 
-        {/* Arrow positioned absolutely to be independent */}
         <div className="absolute left-1/2 top-[120px] -translate-x-1/2 z-10">
           <svg width="24" height="28" viewBox="0 0 24 28" fill="none" className="text-white/70">
             <path
@@ -443,7 +424,6 @@ export function StakeCard({
           </svg>
         </div>
 
-        {/* Enhanced Output Section */}
         <div className="space-y-2 pt-8">
           {wrapStake ? (
             <div className="flex items-center justify-between mb-3">
@@ -473,7 +453,6 @@ export function StakeCard({
             </div>
           )}
 
-          {/* YT Token Output */}
           {!wrapStake && (
             <div className="relative group">
               <div className="relative flex items-center gap-3 p-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-cyan-400/35 rounded-lg backdrop-blur-sm transition-all duration-300">
@@ -499,7 +478,6 @@ export function StakeCard({
             </div>
           )}
 
-          {/* SP Token Output */}
           {!wrapStake && (
             <div className="relative group">
               <div className="relative flex items-center gap-3 p-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-purple-400/40 rounded-lg backdrop-blur-sm transition-all duration-300">
@@ -524,7 +502,6 @@ export function StakeCard({
             </div>
           )}
 
-          {/* UPT Token Output (Conditional Rendering) */}
           {(mintUPT || wrapStake) && (
             <div className="relative group">
               <div className="relative flex items-center gap-3 p-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-pink-400/40 rounded-lg backdrop-blur-sm transition-all duration-300">
@@ -547,7 +524,6 @@ export function StakeCard({
             </div>
           )}
 
-          {/* Mint Fee Display - matches UPT output styling */}
           {wrapStake && (
             <div className="relative group">
               <div className="relative flex items-center gap-3 py-1.5 px-2 bg-gradient-to-r from-black/60 to-black/40 border-2 border-orange-400/40 rounded-lg backdrop-blur-sm transition-all duration-300">
@@ -564,7 +540,6 @@ export function StakeCard({
           )}
         </div>
 
-        {/* Enhanced Lock Period Section */}
         {!wrapStake && (
           <div className="pt-4 border-t border-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20">
             <div className="space-y-4">
@@ -587,7 +562,6 @@ export function StakeCard({
                   </div>
                 </div>
 
-                {/* Slider */}
                 <div className="relative mt-2">
                   <input
                     type="range"
@@ -604,7 +578,6 @@ export function StakeCard({
           </div>
         )}
 
-        {/* Enhanced Action Button */}
         <div className="pt-1">
           {!isConnected ? (
             <div className="relative group">
@@ -647,7 +620,6 @@ export function StakeCard({
           )}
         </div>
 
-        {/* 关键：代币选择下拉框放在HTML结构的最后，这样它会自然地覆盖前面的所有元素 */}
         <div className="absolute top-[36px] left-[12px]">
           <TokenSelectionDropdown
             tokens={availableTokens}
@@ -657,7 +629,6 @@ export function StakeCard({
         </div>
       </div>
 
-      {/* Staking Success Modal */}
       <StakingSuccessModal
         isOpen={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}

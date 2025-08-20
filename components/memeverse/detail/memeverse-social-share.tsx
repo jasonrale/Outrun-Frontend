@@ -134,7 +134,7 @@ export function MemeverseSocialShare({ isOpen, onClose, project, triggerSource }
                   <Gift size={18} className="ml-1 text-yellow-400" />
                 </div>
                 <button
-                  className="rounded-lg p-1 text-zinc-400 transition-all duration-300 hover:bg-white/10 hover:text-white flex items-center justify-center"
+                  className="rounded-lg p-1 text-purple-500 transition-all duration-300 hover:bg-white/10 hover:text-pink-400 flex items-center justify-center"
                   onClick={onClose}
                 >
                   <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110" />

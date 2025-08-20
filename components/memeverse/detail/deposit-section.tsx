@@ -5,6 +5,7 @@ import React from "react"
 import { useState, useEffect, useRef } from "react"
 import { ChevronDown } from "lucide-react"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
+import { useWallet } from "@/contexts/wallet-context"
 
 interface Token {
   symbol: string
@@ -26,15 +27,12 @@ interface DepositSectionProps {
 }
 
 export function DepositSection({ availableTokens, providers, myGenesisFunds, onDeposit }: DepositSectionProps) {
-  // Define the tokens we want to show
   const requiredTokens = ["ETH", "weETH", "stETH", "UETH"]
 
-  // Ensure we have all required tokens, create placeholders if missing
   const filteredTokens = requiredTokens.map((symbol) => {
     const found = availableTokens.find((t) => t.symbol === symbol)
     if (found) return found
 
-    // Create placeholder if token not found
     return {
       symbol,
       name: symbol,
@@ -43,23 +41,19 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
     }
   })
 
-  // Filter providers to only show weETH and stETH
   const filteredProviders = ["weETH (Etherfi)", "stETH (Lido)"].map((name) => {
     const found = providers.find((p) => p.name === name)
     if (found) return found
 
-    // Create placeholder if provider not found
     return {
       id: name.toLowerCase().replace(/[^a-z0-9]/g, ""),
       name,
     }
   })
 
-  // Find providers for specific tokens
   const weETHProvider = filteredProviders.find((p) => p.name === "weETH (Etherfi)") || filteredProviders[0]
   const stETHProvider = filteredProviders.find((p) => p.name === "stETH (Lido)") || filteredProviders[0]
 
-  // Find default provider for selection
   const defaultProvider = stETHProvider
 
   const [selectedToken, setSelectedToken] = useState(filteredTokens[0])
@@ -73,18 +67,19 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
   const providerButtonRef = useRef<HTMLButtonElement>(null)
   const providerDropdownRef = useRef<HTMLDivElement>(null)
 
+  const { isConnected, connectWallet } = useWallet()
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false)
+
   useEffect(() => {
     setIsMounted(true)
     return () => setIsMounted(false)
   }, [])
 
-  // Check if provider selection should be enabled
   const isUETH = selectedToken.symbol === "UETH"
   const isWeETH = selectedToken.symbol === "weETH"
   const isStETH = selectedToken.symbol === "stETH"
   const isProviderSelectionDisabled = isUETH || isWeETH || isStETH
 
-  // Update provider when token changes
   useEffect(() => {
     if (isWeETH) {
       setSelectedProvider(weETHProvider)
@@ -93,40 +88,49 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
     }
   }, [selectedToken, isWeETH, isStETH, weETHProvider, stETHProvider])
 
-  // Handle amount change
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Only allow numbers and decimal point
     const value = e.target.value.replace(/[^0-9.]/g, "")
     setTokenAmount(value)
   }
 
-  // Handle token selection
   const handleTokenSelect = (token: Token) => {
     setSelectedToken(token)
     setShowTokenList(false)
-    setShowProviderList(false) // Ensure Provider dropdown is closed
+    setShowProviderList(false)
   }
 
-  // Handle provider selection
   const handleProviderSelect = (provider: Provider) => {
     setSelectedProvider(provider)
     setShowProviderList(false)
-    setShowTokenList(false) // Ensure token dropdown is closed
+    setShowTokenList(false)
   }
 
-  // Handle max button click
   const handleMaxClick = () => {
     setTokenAmount(selectedToken.balance.toString())
   }
 
-  // Handle deposit button click
-  function handleDeposit() {
+  const handleWalletConnect = async () => {
+    setIsConnectingWallet(true)
+    try {
+      await connectWallet()
+    } catch (error) {
+      console.error("Failed to connect wallet:", error)
+    } finally {
+      setIsConnectingWallet(false)
+    }
+  }
+
+  const handleDeposit = () => {
+    if (!isConnected) {
+      handleWalletConnect()
+      return
+    }
+
     if (!tokenAmount || isNaN(Number.parseFloat(tokenAmount)) || Number.parseFloat(tokenAmount) <= 0) {
       alert("Please enter a valid amount")
       return
     }
 
-    // If it's a special token, use the corresponding provider
     let providerToUse = selectedProvider
     if (isUETH) {
       providerToUse = defaultProvider
@@ -137,18 +141,9 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
     }
 
     onDeposit(tokenAmount, selectedToken, providerToUse)
-    setTokenAmount("") // Clear input
+    setTokenAmount("")
   }
 
-  // Handle Provider selection box click
-  const handleProviderClick = () => {
-    if (!isProviderSelectionDisabled) {
-      setShowProviderList(!showProviderList)
-      if (!showProviderList) setShowTokenList(false) // If opening Provider list, ensure token list is closed
-    }
-  }
-
-  // Get Provider display content
   const getProviderContent = () => {
     if (isUETH) {
       return (
@@ -189,7 +184,20 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
     }
   }
 
-  // Close dropdowns when clicking outside
+  const getButtonText = () => {
+    if (!isConnected) {
+      return isConnectingWallet ? "Connecting Wallet..." : "Connect Wallet"
+    }
+    return Number.parseFloat(tokenAmount) > 0 ? "Genesis" : "Please Input"
+  }
+
+  const getButtonDisabled = () => {
+    if (!isConnected) {
+      return isConnectingWallet
+    }
+    return !tokenAmount || isNaN(Number.parseFloat(tokenAmount)) || Number.parseFloat(tokenAmount) <= 0
+  }
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
@@ -224,7 +232,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
 
   useEffect(() => {
     if (showProviderList) {
-      // Ensure all parent containers don't restrict dropdown display
       const parentElements = []
       let parent = providerButtonRef.current?.parentElement
       while (parent && parent !== document.body) {
@@ -232,7 +239,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
         parent = parent.parentElement
       }
 
-      // Save original styles
       const originalStyles = parentElements.map((el) => ({
         element: el,
         overflow: el.style.overflow,
@@ -240,7 +246,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
         position: el.style.position,
       }))
 
-      // Apply new styles
       parentElements.forEach((el) => {
         el.style.overflow = "visible"
         if (!el.style.position || el.style.position === "static") {
@@ -251,7 +256,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
         }
       })
 
-      // Cleanup function
       return () => {
         originalStyles.forEach((item) => {
           item.element.style.overflow = item.overflow
@@ -288,26 +292,29 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
   const isTablet = deviceType === "tablet"
   const isDesktop = deviceType === "desktop"
 
+  const handleProviderClick = () => {
+    setShowProviderList(!showProviderList)
+    if (!showProviderList) setShowTokenList(false)
+  }
+
   return (
     <div className="w-full lg:w-1/4 flex-shrink-0 deposit-section-container" style={{ overflow: "visible" }}>
-      {/* Main container - create a new stacking context */}
       <div
         className="bg-[#0f0326]/90 rounded-lg border border-purple-500/40 flex flex-col shadow-[0_4px_20px_-4px_rgba(168,85,247,0.25)]"
         style={{
           aspectRatio: !isDesktop ? "auto" : "1/1",
           height: "auto",
-          position: "relative", // Create new stacking context
-          overflow: "visible", // Ensure overflow content is visible
+          position: "relative",
+          overflow: "visible",
         }}
       >
-        {/* Content container */}
-        <div className={`p-3 flex flex-col h-full ${isDesktop ? "justify-between" : ""}`}>
-          {/* All content areas, including buttons */}
+        <div
+          className={`p-3 flex flex-col h-full ${isDesktop ? "justify-between" : ""}`}
+          style={{ overflow: "visible" }}
+        >
           <div className="flex flex-col space-y-3">
-            {/* Token selection and amount input */}
             <div className="w-full bg-[#1a0f3d]/90 rounded-lg border border-purple-500/40 px-2 py-1.5">
               <div className="flex justify-between mb-1">
-                {/* Token selection container - set higher z-index */}
                 <div className="relative" style={{ zIndex: 6 }}>
                   <button
                     ref={tokenButtonRef}
@@ -329,7 +336,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
                     <ChevronDown className="w-4.5 h-4.5 text-pink-400" />
                   </button>
 
-                  {/* Token dropdown menu */}
                   {showTokenList && (
                     <div
                       ref={tokenDropdownRef}
@@ -356,7 +362,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
                               </div>
                               <span className="text-gray-400 text-xs">{token.balance.toFixed(2)}</span>
                             </button>
-                            {/* Add divider except after the last item */}
                             {index < filteredTokens.length - 1 && (
                               <div className="border-t border-purple-500/20 mx-2"></div>
                             )}
@@ -367,7 +372,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
                   )}
                 </div>
 
-                {/* Amount input */}
                 <div className="w-full max-w-[120px]">
                   <input
                     type="text"
@@ -382,7 +386,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
                 </div>
               </div>
 
-              {/* Balance row inside the input container */}
               <div className="flex items-center justify-between text-[11px]">
                 <div className="text-gray-400">Balance: {selectedToken.balance.toFixed(2)}</div>
                 <button onClick={handleMaxClick} className="text-pink-400 hover:text-pink-300 transition-colors">
@@ -391,7 +394,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
               </div>
             </div>
 
-            {/* Genesis Fund display box */}
             <div className="w-full bg-[#1a0f3d]/90 rounded-lg border border-purple-500/40 py-1.5 px-2 flex justify-between items-center">
               <div className="text-xs text-gray-400">My Genesis Fund:</div>
               <div className="text-xs text-pink-300 font-medium overflow-hidden text-ellipsis whitespace-nowrap max-w-[120px]">
@@ -399,7 +401,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
               </div>
             </div>
 
-            {/* Outstake Provider selection */}
             <div style={{ position: "relative", zIndex: 5, overflow: "visible" }}>
               <div className="text-xs text-gray-400 mb-1">Outstake Provider:</div>
               <div className="relative provider-dropdown-container" style={{ overflow: "visible" }}>
@@ -414,7 +415,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
                   {getProviderContent()}
                 </button>
 
-                {/* Provider list dropdown */}
                 {!isProviderSelectionDisabled && showProviderList && (
                   <div
                     ref={providerDropdownRef}
@@ -422,7 +422,7 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
                     style={{
                       maxHeight: "144px",
                       overflowY: "auto",
-                      zIndex: 50, // Increase z-index to ensure display above other elements
+                      zIndex: 50,
                       overflow: "visible",
                       boxShadow:
                         "0 8px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(168, 85, 247, 0.2), 0 0 20px rgba(236, 72, 153, 0.1)",
@@ -439,7 +439,6 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
                               {provider.name}
                             </span>
                           </button>
-                          {/* Add divider except after the last item */}
                           {index < filteredProviders.length - 1 && (
                             <div className="border-t border-purple-500/20 mx-2"></div>
                           )}
@@ -451,33 +450,35 @@ export function DepositSection({ availableTokens, providers, myGenesisFunds, onD
               </div>
             </div>
 
-            {/* Mobile and tablet Deposit button */}
             {(isMobile || isTablet) && (
               <div className="mt-3">
                 <button
                   onClick={handleDeposit}
-                  disabled={
-                    !tokenAmount || isNaN(Number.parseFloat(tokenAmount)) || Number.parseFloat(tokenAmount) <= 0
-                  }
+                  disabled={getButtonDisabled()}
                   className="w-full h-10 rounded-lg bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-700 hover:via-pink-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_-2px_rgba(168,85,247,0.4)]"
                   style={{ position: "relative", zIndex: 3 }}
                 >
-                  {Number.parseFloat(tokenAmount) > 0 ? "Genesis" : "Please Input"}
+                  {isConnectingWallet && (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  )}
+                  {getButtonText()}
                 </button>
               </div>
             )}
           </div>
 
-          {/* Desktop-only Deposit button */}
           {isDesktop && (
             <div className="mt-3 mb-3">
               <button
                 onClick={handleDeposit}
-                disabled={!tokenAmount || isNaN(Number.parseFloat(tokenAmount)) || Number.parseFloat(tokenAmount) <= 0}
+                disabled={getButtonDisabled()}
                 className="w-full h-8 rounded-lg bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-700 hover:via-pink-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_-2px_rgba(168,85,247,0.4)]"
                 style={{ position: "relative", zIndex: 3 }}
               >
-                {Number.parseFloat(tokenAmount) > 0 ? "Genesis" : "Please Input"}
+                {isConnectingWallet && (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                )}
+                {getButtonText()}
               </button>
             </div>
           )}

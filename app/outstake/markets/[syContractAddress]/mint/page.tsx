@@ -40,7 +40,6 @@ export default function MintPage() {
   const isMobile = useMobile()
 
   const [marketData, setMarketData] = useState<MarketData | null>(null)
-  const [isConnected, setIsConnected] = useState(false)
   const [mintUPT, setMintUPT] = useState(true)
   const [activeTab, setActiveTab] = useState<"overview" | "mint" | "yield-pool">("mint")
   const [windowWidth, setWindowWidth] = useState(0)
@@ -145,8 +144,6 @@ export default function MintPage() {
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4">
-            {" "}
-            {/* Increased gap for better spacing */}
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-xl blur-lg"></div>
               <GradientBackgroundCard
@@ -165,21 +162,13 @@ export default function MintPage() {
                 bottomGlowColor="from-purple-600/10"
               >
                 <div
-                  // Default to flex-col (stacked) on small screens
-                  // For Mint tab: switch to flex-row at min-[860px] (860px)
-                  // For Yield Pool tab: switch to flex-row at lg (1024px)
-                  // For Overview tab: always stacked since it shows MarketInfoCard content
                   className={`flex flex-col ${activeTab === "mint" ? `min-[860px]:flex-row` : activeTab === "yield-pool" ? "lg:flex-row" : ""}`}
                 >
                   <div
-                    // This div contains StakeCard/YieldPoolCard/MarketInfoCard content
-                    // It should be w-full when stacked, and flex-1 when side-by-side
                     className={`px-4 sm:px-6 py-0 lg:px-6 w-full ${activeTab === "mint" ? `min-[860px]:flex-1` : activeTab === "yield-pool" ? "lg:flex-1" : ""}`}
                   >
-                    {/* Enhanced Tab Header */}
                     <div className="flex items-center justify-center pt-4 pb-4 border-b border-white/10">
                       <div className="flex items-center gap-1 p-1 bg-black/40 rounded-lg border border-white/10 backdrop-blur-sm">
-                        {/* Overview tab - only visible on smaller screens */}
                         <button
                           onClick={() => setActiveTab("overview")}
                           className={`px-4 py-1.5 rounded-md font-semibold transition-all duration-300 text-sm ${activeTab === "mint" ? `min-[860px]:hidden` : activeTab === "yield-pool" ? "lg:hidden" : ""} ${
@@ -219,36 +208,28 @@ export default function MintPage() {
                         <Settings size={16} />
                       </Button>
                     </div>
-                    {/* Content based on active tab */}
                     {activeTab === "overview" ? (
                       <MarketInfoCard
                         marketData={marketData}
                         mintUPT={mintUPT}
                         hideTitle={true}
                         wrapStake={wrapStake}
+                        isYieldPoolActive={false}
                       />
                     ) : activeTab === "mint" ? (
                       <StakeCard
                         marketData={marketData}
                         userBalance={userBalance}
-                        isConnected={isConnected}
-                        setIsConnected={setIsConnected}
                         mintUPT={mintUPT}
                         setMintUPT={setMintUPT}
                         wrapStake={wrapStake}
                         setWrapStake={setWrapStake}
                       />
                     ) : (
-                      <YieldPoolCard
-                        marketData={marketData}
-                        userBalance={userBalance}
-                        isConnected={isConnected}
-                        setIsConnected={setIsConnected}
-                      />
+                      <YieldPoolCard marketData={marketData} userBalance={userBalance} />
                     )}
                   </div>
 
-                  {/* Separator */}
                   <div
                     className={`${activeTab === "mint" ? `hidden min-[860px]:block` : activeTab === "yield-pool" ? "hidden lg:block" : "hidden"} w-[2px] bg-gradient-to-b from-cyan-400/20 via-purple-400/20 to-pink-400/20 my-4`}
                   ></div>
@@ -257,9 +238,13 @@ export default function MintPage() {
                   >
                     <div className="h-[2px] bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20"></div>
                   </div>
-                  {/* Right side - shows MarketInfoCard only when Overview tab is not visible */}
                   {!isOverviewTabVisible && (
-                    <MarketInfoCard marketData={marketData} mintUPT={mintUPT} wrapStake={wrapStake} />
+                    <MarketInfoCard
+                      marketData={marketData}
+                      mintUPT={mintUPT}
+                      wrapStake={wrapStake}
+                      isYieldPoolActive={activeTab === "yield-pool"}
+                    />
                   )}
                 </div>
               </GradientBackgroundCard>

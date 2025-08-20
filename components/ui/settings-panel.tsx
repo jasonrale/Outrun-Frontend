@@ -75,7 +75,7 @@ export function SettingsPanel({
                     content="Your transaction will revert if the price changes more than the slippage percentage."
                     position="top"
                     className="ml-1"
-                    width={195}
+                    width={193}
                     iconClassName="text-purple-400 hover:text-purple-300 transition-colors scale-90"
                   />
                 </div>
@@ -134,7 +134,7 @@ export function SettingsPanel({
                     content="Your transaction will revert if it is pending for more than this period of time."
                     position="top"
                     className="ml-1"
-                    width={192}
+                    width={190}
                     iconClassName="text-purple-400 hover:text-purple-300 transition-colors scale-90"
                   />
                 </div>

@@ -11,6 +11,9 @@ import { SettingsPanel } from "@/components/ui/settings-panel"
 import { USER_BALANCES } from "@/data/memeverse-projects"
 import { MemeverseSocialShare } from "@/components/memeverse/detail/memeverse-social-share"
 import { motion, AnimatePresence } from "framer-motion"
+import { useWallet } from "@/contexts/wallet-context"
+import { PolMintSuccessModal } from "@/components/memeverse/detail/pol-mint-success-modal"
+import { PolRedeemSuccessModal } from "@/components/memeverse/detail/pol-redeem-success-modal"
 
 // Add this function after the imports and before the component
 const formatNumberWithSubscriptZeros = (num: number): string => {
@@ -79,6 +82,9 @@ interface POLTabProps {
 }
 
 export function POLTab({ project }: POLTabProps) {
+  const { isConnected, connectWallet } = useWallet()
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false)
+
   // 直接使用项目中的polData
   const polData = project.polData
 
@@ -94,8 +100,13 @@ export function POLTab({ project }: POLTabProps) {
   const [isMintModalOpen, setIsMintModalOpen] = useState(false)
   const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false)
   const [isClaiming, setIsClaiming] = useState(false) // New state for claiming animation
+  const [isMinting, setIsMinting] = useState(false) // New state for minting animation
   const [isClaimModalClosing, setIsClaimModalClosing] = useState(false) // New state for closing animation
   const [isMintModalClosing, setIsMintModalClosing] = useState(false) // New state for closing animation
+  const [isRedeemModalClosing, setIsRedeemModalClosing] = useState(false) // New state for closing animation
+  const [isRedeeming, setIsRedeeming] = useState(false) // New state for redeeming animation
+  const [showRedeemSuccessModal, setShowRedeemSuccessModal] = useState(false)
+  const [redeemResult, setRedeemResult] = useState<any>(null)
   const [countdown, setCountdown] = useState("")
   const [showDetails, setShowDetails] = useState(false)
   const [isRateReversed, setIsRateReversed] = useState(false)
@@ -104,11 +115,19 @@ export function POLTab({ project }: POLTabProps) {
   const [polAmount, setPolAmount] = useState("")
   const [redeemPolAmount, setRedeemPolAmount] = useState("")
   const [slippage, setSlippage] = useState("0.5")
-  const [showSettings, setShowSettings] = useState(false)
   const [transactionDeadline, setTransactionDeadline] = useState("10")
+  const [showMintSuccessModal, setShowMintSuccessModal] = useState(false)
+  const [mintResult, setMintResult] = useState<{
+    suppliedTokens: Array<{ amount: string; symbol: string; type: string }>
+    receivedTokens: Array<{ amount: string; symbol: string; type: string }>
+  } | null>(null)
+  const [showSettings, setShowSettings] = useState(false) // Declare showSettings variable
 
-  // 判断是否为Unlock阶段
-  const isUnlocked = project.stage === "Unlocked"
+  // 判断是否为Unlock阶段或当前时间已超过解锁时间
+  const now = new Date().getTime()
+  const unlockTime = new Date(project.unlockTime).getTime()
+  const isTimeUnlocked = now >= unlockTime
+  const isUnlocked = project.stage === "Unlocked" || isTimeUnlocked
 
   useEffect(() => {
     const updateCountdown = () => {
@@ -197,22 +216,16 @@ export function POLTab({ project }: POLTabProps) {
     [polAmount],
   )
 
-  // 计算Redeem输出金额
-  const getRedeemOutputs = useCallback(() => {
-    if (!redeemPolAmount || Number.parseFloat(redeemPolAmount) === 0) {
-      return { memecoinAmount: "0.00", uethAmount: "0.00" }
-    }
-
-    const polInput = Number.parseFloat(redeemPolAmount)
-    // 假设的兑换比例，实际应该从合约或API获取
-    const memecoinOutput = polInput * 500000 // 1 POL = 500000 MEMECOIN
-    const uethOutput = polInput * 0.0005 // 1 POL = 0.0005 UETH
+  const getRedeemOutputs = () => {
+    const polAmount = Number.parseFloat(redeemPolAmount) || 0
 
     return {
-      memecoinAmount: memecoinOutput.toLocaleString(),
-      uethAmount: uethOutput.toFixed(6),
+      // NSHIB/UETH LP数量 = POL代币输入数量
+      lpAmount: polAmount,
+      // POL NSHIB/UETH LP数量 = POL代币输入数量的1/5
+      polLpAmount: polAmount / 5,
     }
-  }, [redeemPolAmount])
+  }
 
   // Handle social share modal close with proper callback
   const handleSocialShareClose = useCallback(() => {
@@ -231,6 +244,8 @@ export function POLTab({ project }: POLTabProps) {
   }
 
   const handleMintModalClose = () => {
+    if (isMinting) return // Prevent closing during minting
+
     setIsMintModalClosing(true)
     setTimeout(() => {
       setIsMintModalClosing(false)
@@ -238,9 +253,119 @@ export function POLTab({ project }: POLTabProps) {
     }, 300)
   }
 
+  const handleRedeemModalClose = () => {
+    setIsRedeemModalClosing(true)
+    setTimeout(() => {
+      setIsRedeemModalClosing(false)
+      setIsRedeemModalOpen(false)
+    }, 300)
+  }
+
+  const handleRedeem = () => {
+    setIsRedeeming(true)
+    // Simulate an asynchronous redeem operation
+    setTimeout(() => {
+      const outputs = getRedeemOutputs()
+
+      // Set redeem result data
+      setRedeemResult({
+        redeemedTokens: [{ amount: redeemPolAmount, symbol: `POL-${project.symbol}`, type: "pol" }],
+        receivedTokens: [
+          { amount: outputs.lpAmount.toString(), symbol: `${project.symbol}/UETH LP`, type: "lp" },
+          { amount: outputs.polLpAmount.toString(), symbol: `POL ${project.symbol}/UETH LP`, type: "pol-lp" },
+        ],
+      })
+
+      setIsRedeeming(false)
+      handleRedeemModalClose()
+      setShowRedeemSuccessModal(true)
+    }, 2000) // Simulate 2-second redeeming process
+  }
+
   const hasInputAmounts = pfrogAmount || uethAmount
   const hasPolAmount = polAmount
   const hasRedeemAmount = redeemPolAmount
+
+  const handleConnectWallet = async () => {
+    setIsConnectingWallet(true)
+    try {
+      await connectWallet()
+    } catch (error) {
+      console.error("Failed to connect wallet:", error)
+    } finally {
+      setIsConnectingWallet(false)
+    }
+  }
+
+  const handleMint = () => {
+    setIsMinting(true)
+    // Simulate wallet call and minting process
+    setTimeout(() => {
+      // Handle actual mint logic here
+      setIsMinting(false)
+      handleMintModalClose()
+
+      // Add a small delay before opening the social share modal to ensure proper state transition
+      setTimeout(() => {
+        setMintResult({
+          suppliedTokens: [
+            {
+              amount: pfrogAmount || "0",
+              symbol: project.symbol,
+              type: "Project Token",
+            },
+            {
+              amount: uethAmount || "0",
+              symbol: "UETH",
+              type: "Base Token",
+            },
+          ],
+          receivedTokens: [
+            {
+              amount: polAmount || "0",
+              symbol: `POL-${project.symbol}`,
+              type: "POL Token",
+            },
+          ],
+        })
+
+        setShowMintSuccessModal(true)
+      }, 400) // Increased delay to account for close animation
+    }, 3000) // Simulate 3-second minting process
+  }
+
+  const syncSupplyAmounts = (projectTokenValue: string, uethValue: string) => {
+    // 计算POL代币数量：sqrt(项目代币数量 × UETH数量)
+    const projectNum = Number.parseFloat(projectTokenValue) || 0
+    const uethNum = Number.parseFloat(uethValue) || 0
+    const polValue = Math.sqrt(projectNum * uethNum)
+
+    setPolAmount(polValue > 0 ? polValue.toFixed(6) : "")
+  }
+
+  const handleProjectTokenChange = (value: string) => {
+    setPfrogAmount(value)
+    // 1:1同步到UETH输入框
+    setUethAmount(value)
+    // 计算POL代币数量
+    syncSupplyAmounts(value, value)
+  }
+
+  const handleUethChange = (value: string) => {
+    setUethAmount(value)
+    // 1:1同步到项目代币输入框
+    setPfrogAmount(value)
+    // 计算POL代币数量
+    syncSupplyAmounts(value, value)
+  }
+
+  const handlePolChange = (value: string) => {
+    setPolAmount(value)
+    // 当POL输入框改变时，两个Supply Amount输入框都设置为POL值的平方根
+    const sqrtValue = value ? Math.sqrt(Number.parseFloat(value) || 0).toFixed(6) : ""
+    setPfrogAmount(sqrtValue)
+    setUethAmount(sqrtValue)
+  }
 
   return (
     <div className="space-y-6">
@@ -522,20 +647,21 @@ export function POLTab({ project }: POLTabProps) {
                     <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
                       Mint POL
                     </h2>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                       <button
-                        className="p-2 text-purple-400 hover:text-purple-300 relative"
+                        className="p-2 text-purple-400 hover:text-purple-300 relative ml-1"
                         onClick={() => setShowSettings(!showSettings)}
                         disabled={isMintModalClosing}
                       >
                         <Settings size={18} />
                       </button>
+                      {/* Close button - visible on both desktop and mobile */}
                       <button
-                        className="md:hidden p-2 text-purple-400 hover:text-purple-300 relative"
+                        className="p-2 text-purple-400 hover:text-pink-400 relative"
                         onClick={handleMintModalClose}
                         disabled={isMintModalClosing}
                       >
-                        <X size={20} />
+                        <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110" />
                       </button>
                     </div>
                   </div>
@@ -564,7 +690,10 @@ export function POLTab({ project }: POLTabProps) {
                           type="text"
                           placeholder="0.00"
                           value={pfrogAmount}
-                          onChange={(e) => setPfrogAmount(e.target.value)}
+                          onChange={(e) => {
+                            const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
+                            handleProjectTokenChange(cleanValue)
+                          }}
                           className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
                           aria-label={`${project.symbol} amount`}
                           disabled={isMintModalClosing}
@@ -581,6 +710,10 @@ export function POLTab({ project }: POLTabProps) {
                           <button
                             className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
                             disabled={isMintModalClosing}
+                            onClick={() => {
+                              const maxBalance = USER_BALANCES.memecoin[project.symbol] || 0
+                              handleProjectTokenChange(maxBalance.toString())
+                            }}
                           >
                             Max
                           </button>
@@ -598,7 +731,10 @@ export function POLTab({ project }: POLTabProps) {
                           type="text"
                           placeholder="0.00"
                           value={uethAmount}
-                          onChange={(e) => setUethAmount(e.target.value)}
+                          onChange={(e) => {
+                            const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
+                            handleUethChange(cleanValue)
+                          }}
                           className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
                           aria-label="UETH amount"
                           disabled={isMintModalClosing}
@@ -615,6 +751,9 @@ export function POLTab({ project }: POLTabProps) {
                           <button
                             className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
                             disabled={isMintModalClosing}
+                            onClick={() => {
+                              handleUethChange("1250.00")
+                            }}
                           >
                             Max
                           </button>
@@ -647,7 +786,10 @@ export function POLTab({ project }: POLTabProps) {
                           type="text"
                           placeholder="0.00"
                           value={polAmount}
-                          onChange={(e) => setPolAmount(e.target.value)}
+                          onChange={(e) => {
+                            const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
+                            handlePolChange(cleanValue)
+                          }}
                           className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
                           aria-label={`POL-${project.symbol} amount`}
                           disabled={isMintModalClosing}
@@ -664,6 +806,9 @@ export function POLTab({ project }: POLTabProps) {
                           <button
                             className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
                             disabled={isMintModalClosing}
+                            onClick={() => {
+                              handlePolChange(userPolBalance.toString())
+                            }}
                           >
                             Max
                           </button>
@@ -715,9 +860,32 @@ export function POLTab({ project }: POLTabProps) {
                   {/* Mint Button */}
                   <Button
                     className="w-full h-12 text-base bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={(!hasInputAmounts && !hasPolAmount) || isMintModalClosing}
+                    disabled={
+                      isConnected
+                        ? (!hasInputAmounts && !hasPolAmount) || isMintModalClosing || isMinting
+                        : isConnectingWallet || isMintModalClosing
+                    }
+                    onClick={isConnected ? handleMint : handleConnectWallet}
                   >
-                    {!hasInputAmounts && !hasPolAmount ? "Please Input" : "Mint"}
+                    {!isConnected ? (
+                      isConnectingWallet ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Connecting Wallet...
+                        </>
+                      ) : (
+                        "Connect Wallet"
+                      )
+                    ) : isMinting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Minting...
+                      </>
+                    ) : !hasInputAmounts && !hasPolAmount ? (
+                      "Please Input"
+                    ) : (
+                      "Mint"
+                    )}
                   </Button>
                 </div>
               </GradientBackgroundCard>
@@ -727,146 +895,181 @@ export function POLTab({ project }: POLTabProps) {
       </AnimatePresence>
 
       {/* Redeem POL Modal */}
-      {isRedeemModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ margin: 0, height: "100vh" }}>
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsRedeemModalOpen(false)} />
-          <GradientBackgroundCard className="relative z-10 max-w-md w-full my-0" shadow border contentClassName="p-6">
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-red-400 via-pink-500 to-orange-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
-                  REDEEM POL
-                </h2>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="p-2 text-red-400 hover:text-red-300 relative"
-                    onClick={() => setShowSettings(!showSettings)}
-                  >
-                    <Settings size={18} />
-                  </button>
-                  {/* Close button - only visible on mobile */}
-                  <button
-                    className="md:hidden p-2 text-red-400 hover:text-red-300 relative"
-                    onClick={() => setIsRedeemModalOpen(false)}
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Settings Panel */}
-              <SettingsPanel
-                isOpen={showSettings}
-                onClose={() => setShowSettings(false)}
-                slippage={slippage}
-                onSlippageChange={setSlippage}
-                transactionDeadline={transactionDeadline}
-                onTransactionDeadlineChange={setTransactionDeadline}
-              />
-
-              {/* Redeem Amount Section */}
-              <div className="mb-4">
-                <label className="block text-white/70 text-sm mb-2">Redeem Amount</label>
-
-                {/* POL Token Input */}
-                <div
-                  className="p-3 rounded-lg bg-black/40 border border-red-500/20"
-                  style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
-                >
+      <AnimatePresence mode="wait">
+        {isRedeemModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ margin: 0, height: "100vh" }}>
+            <motion.div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={handleRedeemModalClose}
+            />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{
+                scale: isRedeemModalClosing ? 0.95 : 1,
+                opacity: isRedeemModalClosing ? 0 : 1,
+              }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10"
+            >
+              <GradientBackgroundCard className="max-w-md w-full my-0" shadow border contentClassName="p-6">
+                <div className="space-y-6">
+                  {/* Header */}
                   <div className="flex items-center justify-between">
-                    <input
-                      type="text"
-                      placeholder="0.00"
-                      value={redeemPolAmount}
-                      onChange={(e) => setRedeemPolAmount(e.target.value)}
-                      className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
-                      aria-label={`POL-${project.symbol} amount`}
-                    />
-                    <div className="flex items-center">
-                      <TokenIcon symbol={`POL-${project.symbol}`} size={20} className="mr-2" />
-                      <span className="text-white font-medium">POL-{project.symbol}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="text-white/60">~$--</div>
-                    <div className="flex items-center text-white/60">
-                      <span>Balance: {userPolBalance.toLocaleString()}</span>
-                      <button className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80">
-                        Max
+                    <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-red-400 via-pink-500 to-orange-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+                      Redeem POL
+                    </h2>
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="rounded-lg p-1 text-red-400 transition-all duration-300 hover:bg-white/10 hover:text-pink-400 flex items-center justify-center"
+                        onClick={handleRedeemModalClose}
+                        disabled={isRedeemModalClosing}
+                      >
+                        <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110" />
                       </button>
                     </div>
                   </div>
-                </div>
 
-                {/* Arrow between POL and outputs */}
-                <div className="flex justify-center py-3">
-                  <svg
-                    width="16"
-                    height="18"
-                    viewBox="0 0 24 28"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="text-red-400"
+                  {/* Redeem Amount Section */}
+                  <div className="mb-4">
+                    <label className="block text-white/70 text-sm mb-2">Redeem Amount</label>
+
+                    {/* POL Token Input */}
+                    <div
+                      className="p-3 rounded-lg bg-black/40 border border-red-500/20"
+                      style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <input
+                          type="text"
+                          placeholder="0.00"
+                          value={redeemPolAmount}
+                          onChange={(e) => {
+                            const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
+                            setRedeemPolAmount(cleanValue)
+                          }}
+                          className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
+                          aria-label={`POL-${project.symbol} amount`}
+                          disabled={isRedeemModalClosing}
+                        />
+                        <div className="flex items-center">
+                          <TokenIcon symbol={`POL-${project.symbol}`} size={20} className="mr-2" />
+                          <span className="text-white font-medium">POL-{project.symbol}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="text-white/60">~$--</div>
+                        <div className="flex items-center text-white/60">
+                          <span>Balance: {userPolBalance.toLocaleString()}</span>
+                          <button
+                            className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
+                            disabled={isRedeemModalClosing}
+                            onClick={() => setRedeemPolAmount(userPolBalance.toString())}
+                          >
+                            Max
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Arrow between POL and outputs */}
+                    <div className="flex justify-center py-3">
+                      <svg
+                        width="16"
+                        height="18"
+                        viewBox="0 0 24 28"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="text-red-400"
+                      >
+                        <path d="M12 2v20M19 15l-7 7-7-7" />
+                      </svg>
+                    </div>
+
+                    {/* NSHIB/UETH LP Token Output (Immediate) */}
+                    <div
+                      className="mb-3 p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
+                      style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
+                    >
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex items-center justify-start">
+                          <div className="text-left text-green-300 text-lg font-medium">
+                            {formatLargeNumber(getRedeemOutputs().lpAmount)}
+                          </div>
+                          <div className="text-green-400/60 text-xs ml-2">~$--</div>
+                        </div>
+                        <div className="flex items-center justify-end">
+                          <TokenIcon symbol={project.symbol} size={20} className="mr-2" />
+                          <span className="text-green-300 font-medium">
+                            {project.symbol}/UETH <span className="text-orange-400">LP</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* POL NSHIB/UETH LP Token Output (Delayed) */}
+                    <div
+                      className="p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
+                      style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
+                    >
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex items-center justify-start">
+                          <div className="text-left text-green-300 text-lg font-medium">
+                            {formatLargeNumber(getRedeemOutputs().polLpAmount)}
+                          </div>
+                          <div className="text-green-400/60 text-xs ml-2">~$--</div>
+                        </div>
+                        <div className="flex items-center justify-end">
+                          <TokenIcon symbol={`POL ${project.symbol}`} size={20} className="mr-2" />
+                          <span className="text-green-300 font-medium">
+                            POL {project.symbol}/UETH <span className="text-orange-400">LP</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Redeem Button */}
+                  <Button
+                    className="w-full h-12 text-base bg-gradient-to-r from-red-600 via-pink-600 to-orange-600 hover:from-red-500 hover:via-pink-500 hover:to-orange-500 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={
+                      isConnected
+                        ? !hasRedeemAmount || isRedeemModalClosing || isRedeeming
+                        : isConnectingWallet || isRedeemModalClosing
+                    }
+                    onClick={isConnected ? handleRedeem : handleConnectWallet}
                   >
-                    <path d="M12 2v20M19 15l-7 7-7-7" />
-                  </svg>
+                    {!isConnected ? (
+                      isConnectingWallet ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Connecting Wallet...
+                        </>
+                      ) : (
+                        "Connect Wallet"
+                      )
+                    ) : isRedeeming ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Redeeming...
+                      </>
+                    ) : !hasRedeemAmount ? (
+                      "Please Input"
+                    ) : (
+                      "Redeem"
+                    )}
+                  </Button>
                 </div>
-
-                {/* UETH Token Output (Immediate) */}
-                <div
-                  className="mb-3 p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
-                  style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 flex-1 min-w-0 max-w-[60%]">
-                      <div className="text-left text-green-300 text-lg font-medium">
-                        {formatLargeNumber(getRedeemOutputs().uethAmount)}
-                      </div>
-                      <div className="text-green-400/60 text-xs whitespace-nowrap">~$--</div>
-                    </div>
-                    <div className="flex items-center flex-shrink-0">
-                      <TokenIcon symbol="UETH" size={20} className="mr-2" />
-                      <span className="text-green-300 font-medium">UETH</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Project Token Output (Delayed) */}
-                <div
-                  className="p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
-                  style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 flex-1 min-w-0 max-w-[60%]">
-                      <div className="text-left text-green-300 text-lg font-medium">
-                        {formatLargeNumber(getRedeemOutputs().memecoinAmount)}
-                      </div>
-                      <div className="text-green-400/60 text-xs whitespace-nowrap">~$--</div>
-                    </div>
-                    <div className="flex items-center flex-shrink-0">
-                      <TokenIcon symbol={project.symbol} size={20} className="mr-2" />
-                      <span className="text-green-300 font-medium">{project.symbol}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Redeem Button */}
-              <Button
-                className="w-full h-12 text-base bg-gradient-to-r from-red-600 via-pink-600 to-orange-600 hover:from-red-500 hover:via-pink-500 hover:to-orange-500 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!hasRedeemAmount}
-                onClick={() => {
-                  // Handle redeem logic here
-                  setIsRedeemModalOpen(false)
-                }}
-              >
-                {!hasRedeemAmount ? "Please Input" : "Redeem"}
-              </Button>
-            </div>
-          </GradientBackgroundCard>
-        </div>
-      )}
+              </GradientBackgroundCard>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Social Share Modal - Render outside of other modals to prevent conflicts */}
       <MemeverseSocialShare
@@ -874,6 +1077,28 @@ export function POLTab({ project }: POLTabProps) {
         onClose={handleSocialShareClose}
         project={project}
         triggerSource={socialShareTriggerSource}
+      />
+
+      {/* POL Mint Success Modal */}
+      <PolMintSuccessModal
+        isOpen={showMintSuccessModal}
+        onClose={() => setShowMintSuccessModal(false)}
+        memecoinAmount={Number.parseFloat(mintResult?.suppliedTokens?.[0]?.amount || "0")}
+        uethAmount={Number.parseFloat(mintResult?.suppliedTokens?.[1]?.amount || "0")}
+        polAmount={Number.parseFloat(mintResult?.receivedTokens?.[0]?.amount || "0")}
+        projectData={{
+          name: project.name,
+          symbol: project.symbol,
+        }}
+      />
+      <PolRedeemSuccessModal
+        isOpen={showRedeemSuccessModal}
+        onClose={() => setShowRedeemSuccessModal(false)}
+        polAmount={Number.parseFloat(redeemResult?.redeemedTokens?.[0]?.amount || "0")}
+        projectData={{
+          name: project.name,
+          symbol: project.symbol,
+        }}
       />
     </div>
   )

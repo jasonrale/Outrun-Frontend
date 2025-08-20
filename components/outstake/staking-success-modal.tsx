@@ -36,13 +36,13 @@ export function StakingSuccessModal({ isOpen, onClose, stakingResult, marketData
             <div className="flex flex-col space-y-6">
               <div className="relative flex justify-center items-center">
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center">
+                  <div className="w-7 h-7 bg-pink-500 rounded-full flex items-center justify-center">
                     <Check className="w-3.5 h-3.5 text-white" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Staking Successful</h2>
                 </div>
                 <button
-                  className="absolute right-0 rounded-lg p-1 text-zinc-400 transition-all duration-300 hover:bg-white/10 hover:text-white flex items-center justify-center"
+                  className="absolute right-0 rounded-lg p-1 text-pink-400 transition-all duration-300 hover:bg-white/10 hover:text-purple-400 flex items-center justify-center"
                   onClick={onClose}
                 >
                   <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110" />
