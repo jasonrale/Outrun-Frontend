@@ -1,14 +1,17 @@
 "use client"
 
-import { useRef } from "react"
+import type React from "react"
+
+import { useRef, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { ArrowRight, Stars, Coins, Gavel, Rocket, Shield, Unlock } from "lucide-react"
+import { Stars, Coins, Gavel, Rocket, Shield, Unlock, Mail } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { SectionHeading } from "@/components/ui/section-heading"
 import { FeatureCard } from "@/components/ui/feature-card"
 import { UseCaseCard } from "@/components/ui/use-case-card"
 import { useRouter } from "next/navigation"
+import { Waitlist } from "@/components/waitlist"
 
 export default function MemeversePage() {
   const { scrollYProgress } = useScroll()
@@ -17,6 +20,55 @@ export default function MemeversePage() {
 
   const titleOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0.8])
   const titleY = useTransform(scrollYProgress, [0, 0.1], [0, -20])
+
+  const [email, setEmail] = useState("")
+  const [isValidEmail, setIsValidEmail] = useState(true)
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setEmail(value)
+    setIsValidEmail(value === "" || validateEmail(value))
+
+    // Clear custom validation message
+    e.target.setCustomValidity("")
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!email) {
+      const emailInput = e.currentTarget.querySelector('input[type="email"]') as HTMLInputElement
+      emailInput.setCustomValidity("Please enter your email address")
+      emailInput.reportValidity()
+      return
+    }
+
+    if (!validateEmail(email)) {
+      const emailInput = e.currentTarget.querySelector('input[type="email"]') as HTMLInputElement
+      emailInput.setCustomValidity("Please enter a valid email address")
+      emailInput.reportValidity()
+      return
+    }
+
+    // Handle successful submission
+    setEmail("")
+    setIsValidEmail(true)
+  }
+
+  const handleInvalid = (e: React.InvalidEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    const input = e.target
+    if (input.validity.valueMissing) {
+      input.setCustomValidity("Please enter your email address")
+    } else if (input.validity.typeMismatch) {
+      input.setCustomValidity("Please enter a valid email address")
+    }
+  }
 
   return (
     <div ref={containerRef} className="relative flex flex-col min-h-screen">
@@ -55,16 +107,9 @@ export default function MemeversePage() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex flex-col sm:flex-row gap-4"
+                className="w-full max-w-2xl"
               >
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-full px-8 h-12 text-base shadow-[0_0_15px_rgba(168,85,247,0.5)]"
-                  onClick={() => router.push("/memeverse/board")}
-                >
-                  Explore Memeverse
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Waitlist />
               </motion.div>
 
               <motion.div

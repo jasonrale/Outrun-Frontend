@@ -155,10 +155,53 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Adding neon glow animations for Early Access text and Join Waitlist button */
+/* Neon glow animation for Early Access text */
+@keyframes neonGlow {
+  0% {
+    text-shadow: 0 0 3px rgba(168, 85, 247, 0.4), 0 0 6px rgba(168, 85, 247, 0.2), 0 0 9px rgba(168, 85, 247, 0.1);
+  }
+  50% {
+    text-shadow: 0 0 5px rgba(168, 85, 247, 0.6), 0 0 12px rgba(168, 85, 247, 0.4), 0 0 18px rgba(168, 85, 247, 0.2), 0
+      0 24px rgba(236, 72, 153, 0.2);
+  }
+  100% {
+    text-shadow: 0 0 3px rgba(168, 85, 247, 0.4), 0 0 6px rgba(168, 85, 247, 0.2), 0 0 9px rgba(168, 85, 247, 0.1);
+  }
+}
+
+/* Neon glow animation for ETH text in Ethereum blue */
+@keyframes neonEthGlow {
+  0% {
+    text-shadow: 0 0 4px rgba(98, 126, 234, 0.4), 0 0 8px rgba(98, 126, 234, 0.2), 0 0 12px rgba(98, 126, 234, 0.1);
+  }
+  50% {
+    text-shadow: 0 0 6px rgba(98, 126, 234, 0.6), 0 0 12px rgba(98, 126, 234, 0.4), 0 0 18px rgba(98, 126, 234, 0.2), 0
+      0 24px rgba(98, 126, 234, 0.15);
+  }
+  100% {
+    text-shadow: 0 0 4px rgba(98, 126, 234, 0.4), 0 0 8px rgba(98, 126, 234, 0.2), 0 0 12px rgba(98, 126, 234, 0.1);
+  }
+}
+
+/* Neon button glow animation for Join Waitlist button */
+@keyframes neonButtonGlow {
+  0% {
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.4), 0 0 18px rgba(168, 85, 247, 0.2), 0 0 24px rgba(168, 85, 247, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 0 26px rgba(168, 85, 247, 0.4), 0 0 37px rgba(168, 85, 247, 0.2), 0
+      0 48px rgba(236, 72, 153, 0.15);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.4), 0 0 18px rgba(168, 85, 247, 0.2), 0 0 24px rgba(168, 85, 247, 0.1);
+  }
+}
+
 /* 霓虹文字效果 */
 .neon-text {
-  text-shadow: 0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.3), 0 0 15px rgba(236, 72, 153, 0.3), 0 0
-    20px rgba(59, 130, 246, 0.3);
+  text-shadow: 0 0 5px rgba(168, 85, 247, 0.5), 0 0 12px rgba(168, 85, 247, 0.3), 0 0 18px rgba(236, 72, 153, 0.3), 0 0
+    24px rgba(59, 130, 246, 0.3);
 }
 
 /* 导航项悬停效果 */

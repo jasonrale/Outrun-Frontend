@@ -131,7 +131,7 @@ export function MemeverseSocialShare({ isOpen, onClose, project, triggerSource }
                     iconClassName="text-pink-300/80 hover:text-pink-300"
                     content="Users joining via your link and making their first transaction become your referrals. You'll earn a share of their trading fees and extra bonus points."
                   />
-                  <Gift size={18} className="ml-1 text-yellow-400" />
+                  <Gift size={18} className="ml-1 text-orange-500" />
                 </div>
                 <button
                   className="rounded-lg p-1 text-purple-500 transition-all duration-300 hover:bg-white/10 hover:text-pink-400 flex items-center justify-center"

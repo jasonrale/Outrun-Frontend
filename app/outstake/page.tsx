@@ -2,12 +2,12 @@
 
 import { useRef } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { ArrowRight, Coins, TrendingUp, Layers, Clock, Globe, Lock } from "lucide-react"
-import Link from "next/link"
+import { Coins, TrendingUp, Layers, Clock, Globe, Lock } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { FeatureCard } from "@/components/ui/feature-card"
 import { SectionHeading } from "@/components/ui/section-heading"
+import { Waitlist } from "@/components/waitlist"
 
 export default function OutStakePage() {
   const { scrollYProgress } = useScroll()
@@ -53,18 +53,9 @@ export default function OutStakePage() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex flex-col sm:flex-row gap-4"
+                className="w-full max-w-2xl"
               >
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-full px-8 h-12 text-base shadow-[0_0_15px_rgba(168,85,247,0.5)]"
-                  asChild
-                >
-                  <Link href="/outstake/markets">
-                    Start Staking
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+                <Waitlist />
               </motion.div>
 
               <motion.div

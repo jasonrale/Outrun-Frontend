@@ -1,8 +1,9 @@
 /* Hero Section Scaling Styles */
 .hero-section {
-  height: 100vh;
-  min-height: 600px;
-  max-height: 1080px;
+  /* Changed from fixed height to min-height for better flexibility */
+  min-height: 100vh;
+  min-height: 650px; /* Increased from 600px to accommodate all content */
+  max-height: none; /* Removed max-height constraint to prevent cut-off */
   position: relative;
   display: flex;
   align-items: center;
@@ -26,7 +27,9 @@
   z-index: 1;
   transform: scale(1);
   transform-origin: center center;
-  padding-top: 36px; /* ���加顶部内边距，使内容向下移动 */
+  /* Reduced padding-top from 36px to 20px to give more space for bottom content */
+  padding-top: 20px;
+  padding-bottom: 20px; /* Added bottom padding to ensure scroll component has space */
 }
 
 /* 确保内容不会溢出 */
@@ -38,13 +41,26 @@
 /* 移动设备特殊处理 */
 @media (max-width: 768px) {
   .hero-section {
-    min-height: 500px;
+    /* Increased min-height for mobile to accommodate all content */
+    min-height: 550px;
+  }
+
+  .hero-content-wrapper {
+    /* Reduced padding on mobile for better space utilization */
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
 }
 
 @media (max-width: 480px) {
   .hero-section {
-    min-height: 450px;
+    /* Increased min-height for small mobile to prevent cut-off */
+    min-height: 500px;
+  }
+
+  .hero-content-wrapper {
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 }
 
