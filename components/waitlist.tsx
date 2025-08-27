@@ -40,7 +40,7 @@ export function Waitlist({ className = "" }: WaitlistProps) {
         <h3 className="text-2xl md:text-3xl font-bold text-center whitespace-nowrap">
           Join{" "}
           <span
-            className="text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
+            className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
             style={{ animation: "neonGlow 3s ease-in-out infinite alternate" }}
           >
             Early Access
