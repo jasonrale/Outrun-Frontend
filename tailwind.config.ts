@@ -91,10 +91,14 @@ const config = {
     ({ addUtilities }) => {
       const newUtilities = {
         ".text-gradient-fill": {
+          color: "rgb(255, 255, 255)",
           "background-clip": "text",
           "-webkit-background-clip": "text",
-          color: "transparent",
           "-webkit-text-fill-color": "transparent",
+          // Fallback for browsers that don't support background-clip: text
+          "@supports not (background-clip: text)": {
+            color: "rgb(255, 255, 255)",
+          },
         },
       }
       addUtilities(newUtilities, ["responsive", "hover"])

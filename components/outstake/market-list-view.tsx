@@ -16,7 +16,7 @@ interface MarketListViewProps {
   favoritedMarkets: string[]
   handleFavoriteToggle: (marketId: string, e: React.MouseEvent) => void
   handleMarketClick: (market: any) => void
-  filteredMarketsData: any[] // Used to find syTokenPriceUSD for YT Redeemable Value calc
+  filteredMarketsData: any[]
 }
 
 export function MarketListView({
@@ -47,41 +47,41 @@ export function MarketListView({
     >
       {/* Table Headers */}
       <div className="flex gap-4 py-3 px-6 border-b border-white/10 bg-white/5">
-        <div className={`w-[14%] text-[13px] font-medium text-white/70 flex items-center`}>Market</div>
+        <div className={`w-[17%] text-[13px] font-medium text-white/70 flex items-center`}>Market</div>
         <div
-          className={`w-[14%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[16%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("totalValueLocked")}
         >
           Total Value Locked
           <span className="ml-1 flex flex-col">
             <ChevronUp
-              size={9}
+              size={10}
               className={sortColumn === "totalValueLocked" && sortDirection === "asc" ? "text-white" : "text-white/40"}
             />
             <ChevronDown
-              size={9}
+              size={10}
               className={sortColumn === "totalValueLocked" && sortDirection === "desc" ? "text-white" : "text-white/40"}
             />
           </span>
         </div>
         <div
-          className={`w-[13%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[15%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("underlyingAPY")}
         >
           Underlying APY
           <span className="ml-1 flex flex-col">
             <ChevronUp
-              size={9}
+              size={10}
               className={sortColumn === "underlyingAPY" && sortDirection === "asc" ? "text-white" : "text-white/40"}
             />
             <ChevronDown
-              size={9}
+              size={10}
               className={sortColumn === "underlyingAPY" && sortDirection === "desc" ? "text-white" : "text-white/40"}
             />
           </span>
         </div>
         <div
-          className={`w-[14%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[16%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("impliedRealAPY")}
         >
           <span>Implied Real APY</span>
@@ -108,17 +108,17 @@ export function MarketListView({
           />
           <span className="ml-1 flex flex-col">
             <ChevronUp
-              size={9}
+              size={10}
               className={sortColumn === "impliedRealAPY" && sortDirection === "asc" ? "text-white" : "text-white/40"}
             />
             <ChevronDown
-              size={9}
+              size={10}
               className={sortColumn === "impliedRealAPY" && sortDirection === "desc" ? "text-white" : "text-white/40"}
             />
           </span>
         </div>
         <div
-          className={`w-[13%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[16%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("ytAnchorRate")}
         >
           <span>YT Anchor Rate</span>
@@ -144,17 +144,17 @@ export function MarketListView({
           />
           <span className="ml-1 flex flex-col">
             <ChevronUp
-              size={9}
+              size={10}
               className={sortColumn === "ytAnchorRate" && sortDirection === "asc" ? "text-white" : "text-white/40"}
             />
             <ChevronDown
-              size={9}
+              size={10}
               className={sortColumn === "ytAnchorRate" && sortDirection === "desc" ? "text-white" : "text-white/40"}
             />
           </span>
         </div>
         <div
-          className={`w-[17%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
+          className={`w-[20%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
           onClick={() => handleSort("ytRedeemableValue")}
         >
           <span>YT Redeemable Value</span>
@@ -181,50 +181,14 @@ export function MarketListView({
           />
           <span className="ml-1 flex flex-col">
             <ChevronUp
-              size={9}
+              size={10}
               className={sortColumn === "ytRedeemableValue" && sortDirection === "asc" ? "text-white" : "text-white/40"}
             />
             <ChevronDown
-              size={9}
+              size={10}
               className={
                 sortColumn === "ytRedeemableValue" && sortDirection === "desc" ? "text-white" : "text-white/40"
               }
-            />
-          </span>
-        </div>
-        <div
-          className={`w-[15%] text-[13px] font-medium text-white/70 text-center flex items-center justify-center cursor-pointer`}
-          onClick={() => handleSort("ytRVGrowthRate")}
-        >
-          <span>YT RV Growth Rate</span>
-          <InfoTooltip
-            content={
-              <div>
-                YT Redeemable Value Growth Rate measures the daily percentage change in the redeemable value of YT.
-                <br />
-                <a
-                  href="https://outrun.gitbook.io/doc/outstake/glossary/yt-rv-growth-rate"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-pink-400 hover:text-pink-300"
-                >
-                  Learn more
-                </a>
-              </div>
-            }
-            position="top"
-            className="ml-1"
-            iconSize={14}
-            maxWidth={252}
-          />
-          <span className="ml-1 flex flex-col">
-            <ChevronUp
-              size={9}
-              className={sortColumn === "ytRVGrowthRate" && sortDirection === "asc" ? "text-white" : "text-white/40"}
-            />
-            <ChevronDown
-              size={9}
-              className={sortColumn === "ytRVGrowthRate" && sortDirection === "desc" ? "text-white" : "text-white/40"}
             />
           </span>
         </div>
@@ -244,13 +208,29 @@ export function MarketListView({
               onClick={() => handleMarketClick(market)}
             >
               {/* Market Column */}
-              <div className={`w-[14%] flex items-center`}>
-                <img
-                  src={networkIconSrc || "/placeholder.svg"}
-                  alt={market.network || "Network"}
-                  className="w-5 h-5 rounded-full mr-2 flex-shrink-0"
-                />
-                <TokenIcon symbol={market.assetName} size={20} className="border border-black flex-shrink-0" />
+              <div className={`w-[17%] flex items-center`}>
+                <div
+                  className={`w-6 h-6 rounded-full flex items-center justify-center border mr-2 flex-shrink-0 ${
+                    market.network === "Ethereum"
+                      ? "bg-white/10 border-white/50"
+                      : market.network === "Arbitrum"
+                        ? "bg-sky-500/20 border-sky-400"
+                        : market.network === "BNB Chain"
+                          ? "bg-yellow-500/20 border-yellow-400"
+                          : market.network === "Base"
+                            ? "bg-blue-600/30 border-blue-600"
+                            : market.network === "Sonic"
+                              ? "bg-white/10 border-white/50"
+                              : "bg-white/10 border-white/50"
+                  }`}
+                >
+                  <img
+                    src={networkIconSrc || "/placeholder.svg"}
+                    alt={market.network || "Network"}
+                    className="w-4 h-4 object-contain"
+                  />
+                </div>
+                <TokenIcon symbol={market.assetName} size={24} className="border border-black flex-shrink-0" />
                 <div className="ml-2 flex items-center gap-1 min-w-0">
                   <span className="text-white font-semibold text-sm truncate">
                     {market.assetName}
@@ -267,47 +247,43 @@ export function MarketListView({
               </div>
 
               {/* Total Value Locked Column */}
-              <div className={`w-[14%] text-center`}>
+              <div className={`w-[16%] text-center`}>
                 <div className="text-white font-semibold font-mono text-sm">{market.totalValueLocked}</div>
               </div>
 
               {/* Underlying APY Column */}
-              <div className={`w-[13%] text-center`}>
+              <div className={`w-[15%] text-center`}>
                 <div className="flex items-center justify-center gap-1">
                   <span className="text-purple-300 font-semibold font-mono text-sm">{market.underlyingAPY}</span>
                 </div>
               </div>
 
               {/* Implied Real APY Column */}
-              <div className={`w-[14%] text-center`}>
+              <div className={`w-[16%] text-center`}>
                 <div className="text-cyan-400 font-semibold font-mono text-sm">{market.impliedRealAPY}</div>
               </div>
 
               {/* YT Anchor Rate Column */}
-              <div className={`w-[13%] text-center`}>
+              <div className={`w-[16%] text-center`}>
                 <div className="text-pink-400 font-semibold font-mono text-sm ">{market.ytAnchorRate}</div>
               </div>
 
               {/* YT Redeemable Value Column */}
-              <div className={`w-[17%] text-center`}>
-                <div className="text-white font-semibold font-mono text-sm">{market.ytRedeemableValueFormatted}</div>
-              </div>
-
-              {/* YT RV Growth Rate Column */}
-              <div className={`w-[15%] text-center`}>
-                <div
-                  className={`font-semibold font-mono text-sm flex items-center justify-center gap-1 ${isNegativeRVGrowth ? "text-red-400" : "text-green-400"}`}
-                >
-                  {market.ytRVGrowthRate}
-                  {isNegativeRVGrowth ? (
-                    <svg width="10" height="10" viewBox="0 0 12 12" className="text-red-400">
-                      <path d="M6 10L2 4H10L6 10Z" fill="currentColor" />
-                    </svg>
-                  ) : (
-                    <svg width="10" height="10" viewBox="0 0 12 12" className="text-green-400">
-                      <path d="M6 2L10 8H2L6 2Z" fill="currentColor" />
-                    </svg>
-                  )}
+              <div className={`w-[20%] text-center`}>
+                <div className="text-white font-semibold font-mono text-sm flex items-center justify-center gap-2">
+                  <span>{market.ytRedeemableValueFormatted}</span>
+                  <span className={`flex items-center gap-1 ${isNegativeRVGrowth ? "text-red-400" : "text-green-400"}`}>
+                    {market.ytRVGrowthRate}
+                    {isNegativeRVGrowth ? (
+                      <svg width="10" height="10" viewBox="0 0 12 12" className="text-red-400">
+                        <path d="M6 10L2 4H10L6 10Z" fill="currentColor" />
+                      </svg>
+                    ) : (
+                      <svg width="10" height="10" viewBox="0 0 12 12" className="text-green-400">
+                        <path d="M6 2L10 8H2L6 2Z" fill="currentColor" />
+                      </svg>
+                    )}
+                  </span>
                 </div>
               </div>
             </div>

@@ -24,7 +24,7 @@ export function TokenIcon({ symbol, size = 24, className = "" }: TokenIconProps)
     setImageError(false)
   }, [symbol])
 
-  // 如果没有图标 URL 或加载出错，显示备用图标
+  // 如果���有图标 URL 或加载出错，显示备用图标
   if (!iconUrl || imageError) {
     return (
       <div

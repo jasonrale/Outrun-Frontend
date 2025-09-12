@@ -74,7 +74,7 @@
   pointer-events: auto;
 }
 
-/* 确保在所有缩放级别下文本都清晰可读 */
+/* 确保在所有缩放级别下文本都清晰���读 */
 .hero-content-wrapper h1,
 .hero-content-wrapper p,
 .hero-content-wrapper button {

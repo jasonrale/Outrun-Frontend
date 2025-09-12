@@ -115,7 +115,7 @@ export function MarketFilters({
           <img
             src={chain.icon || "/placeholder.svg"}
             alt={chain.name}
-            className={`w-5 h-5 transition-all duration-300 ${
+            className={`w-6 h-6 transition-all duration-300 ${
               isSelected ? "drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" : ""
             }`}
           />

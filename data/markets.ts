@@ -211,7 +211,7 @@ export const marketsData = [
         maxLockupDays: 365,
       },
       {
-        network: "Polygon",
+        network: "Sonic",
         totalValueLocked: "$34.89M",
         underlyingAPY: "3.38%",
         impliedRealAPY: "5.73%",
@@ -404,7 +404,7 @@ export const marketsData = [
         maxLockupDays: 365,
       },
       {
-        network: "Polygon",
+        network: "Sonic",
         totalValueLocked: "$15.38M",
         underlyingAPY: "4.875%",
         impliedRealAPY: "8.67%",
@@ -462,7 +462,7 @@ export const marketsData = [
         maxLockupDays: 365,
       },
       {
-        network: "Polygon",
+        network: "Sonic",
         totalValueLocked: "$67.45M",
         underlyingAPY: "3.72%",
         impliedRealAPY: "7.12%",

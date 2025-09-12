@@ -18,10 +18,10 @@ export const FEATURED_MARKETS = {
 }
 
 export const CHAIN_FILTERS = [
-  { name: "Ethereum", icon: "/networks/ethereum.svg", color: "hover:bg-blue-500/20" },
+  { name: "Ethereum", icon: "/networks/ethereum.svg", color: "hover:bg-white-500/20" },
   { name: "Base", icon: "/networks/base.svg", color: "hover:bg-blue-600/20" },
   { name: "BNB Chain", icon: "/networks/bnb.svg", color: "hover:bg-yellow-500/20" },
-  { name: "Polygon", icon: "/networks/polygon.svg", color: "hover:bg-purple-500/20" },
+  { name: "Sonic", icon: "/networks/sonic.svg", color: "hover:bg-white-500/20" },
   { name: "Arbitrum", icon: "/networks/arbitrum.svg", color: "hover:bg-blue-400/20" },
 ]
 

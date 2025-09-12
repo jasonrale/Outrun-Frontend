@@ -143,7 +143,7 @@ export const MOCK_PROJECTS = [
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
       { name: "Base", chainid: 8453, icon: "/networks/base.svg" },
-      { name: "Polygon", chainid: 137, icon: "/networks/polygon.svg" },
+      { name: "Sonic", chainid: 146, icon: "/networks/sonic.svg" },
     ],
   },
   {
@@ -204,7 +204,7 @@ export const MOCK_PROJECTS = [
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
       { name: "Base", chainid: 8453, icon: "/networks/base.svg" },
-      { name: "Polygon", chainid: 137, icon: "/networks/polygon.svg" },
+      { name: "Sonic", chainid: 146, icon: "/networks/sonic.svg" },
     ],
   },
   {
@@ -265,7 +265,7 @@ export const MOCK_PROJECTS = [
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
       { name: "Base", chainid: 8453, icon: "/networks/base.svg" },
-      { name: "Polygon", chainid: 137, icon: "/networks/polygon.svg" },
+      { name: "Sonic", chainid: 146, icon: "/networks/sonic.svg" },
     ],
   },
   {
@@ -326,7 +326,7 @@ export const MOCK_PROJECTS = [
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
       { name: "Base", chainid: 8453, icon: "/networks/base.svg" },
-      { name: "Polygon", chainid: 137, icon: "/networks/polygon.svg" },
+      { name: "Sonic", chainid: 146, icon: "/networks/sonic.svg" },
     ],
   },
   {
@@ -387,7 +387,7 @@ export const MOCK_PROJECTS = [
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
       { name: "Base", chainid: 8453, icon: "/networks/base.svg" },
-      { name: "Polygon", chainid: 137, icon: "/networks/polygon.svg" },
+      { name: "Sonic", chainid: 146, icon: "/networks/sonic.svg" },
     ],
   },
   {
@@ -471,7 +471,7 @@ export const MOCK_PROJECTS = [
     createdTime: "2025-05-06T14:20:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
-      { name: "Polygon", chainid: 137, icon: "/networks/polygon.svg" },
+      { name: "Sonic", chainid: 146, icon: "/networks/sonic.svg" },
     ],
   },
 
@@ -1185,7 +1185,7 @@ export const MOCK_PROJECTS = [
     createdTime: "2025-06-01T10:00:00Z",
     omnichain: [
       { name: "Ethereum", chainid: 1, icon: "/networks/ethereum.svg" },
-      { name: "Polygon", chainid: 137, icon: "/networks/polygon.svg" },
+      { name: "Sonic", chainid: 146, icon: "/networks/sonic.svg" },
     ],
     website: "https://refundable-raccoons.io",
     twitter: "https://twitter.com/refundable_raccoons",

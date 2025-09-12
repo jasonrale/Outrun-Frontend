@@ -68,10 +68,10 @@ export const FormSection = React.memo(
             </div>
           </div>
 
-          {/* 间距 */}
+          {/* ���距 */}
           <div className="hidden md:block w-6"></div>
 
-          {/* 右侧输入区域 */}
+          {/* 右侧��入区域 */}
           <div className="flex-1 flex flex-col w-full">
             {/* Name和Symbol */}
             <div className="flex flex-col md:flex-row mb-6 space-y-6 md:space-y-0">

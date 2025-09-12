@@ -38,12 +38,13 @@ export default function Home() {
                   </div>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-gradient-fill bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white text-gradient-fill bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
                   OUTRUN
                 </h1>
 
-                <p className="text-xl md:text-2xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
-                  Unlock higher and capital-efficient DeFi yields for users and drive mass adoption of DAOs in Web3 and the real world.
+                <p className="text-xl md:text-2xl text-zinc-100 max-w-3xl mx-auto leading-relaxed">
+                  Unlock higher and capital-efficient DeFi yields for users and drive mass adoption of DAOs in Web3 and
+                  the real world.
                 </p>
               </motion.div>
 
@@ -93,11 +94,13 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10" />
         <div className="container px-4 md:px-6 mx-auto">
           <div className="max-w-3xl mx-auto text-center mb-16 md:mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-500 mb-6">
               The Outrun Ecosystem
             </h2>
-            <p className="text-zinc-300 text-lg md:text-xl leading-relaxed">
-              The Outrun ecosystem currently consists of four major modules, encompassing yield tokenization, stablecoin, RWAfi, decentralized exchange, a next-generation token financing paradigm, and Memecoin × DeFi × DAO.
+            <p className="text-zinc-100 text-lg md:text-xl leading-relaxed">
+              The Outrun ecosystem currently consists of four major modules, encompassing yield tokenization,
+              stablecoin, RWAfi, decentralized exchange, a next-generation token financing paradigm, and Memecoin × DeFi
+              × DAO.
             </p>
           </div>
 
@@ -146,11 +149,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f0326]/0 via-[#1a0445]/50 to-[#0f0326]/0" />
         <div className="container px-4 md:px-6 mx-auto relative">
           <div className="max-w-3xl mx-auto text-center mb-16 md:mb-24">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gradient-fill bg-gradient-to-r from-blue-400 to-cyan-500 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white text-gradient-fill bg-gradient-to-r from-blue-400 to-cyan-500 mb-6">
               Key Features
             </h2>
-            <p className="text-zinc-300 text-lg md:text-xl leading-relaxed">
-              Outrun combines innovative yield tokenization, stable coin, fair launch models, and sustainable community development.
+            <p className="text-zinc-100 text-lg md:text-xl leading-relaxed">
+              Outrun combines innovative yield tokenization, stable coin, fair launch models, and sustainable community
+              development.
             </p>
           </div>
 
@@ -211,11 +215,12 @@ export default function Home() {
               <div className="relative p-8 md:p-12 lg:p-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 mb-6">
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 mb-6">
                       Ready to Join the Next Generation of Web3?
                     </h2>
-                    <p className="text-zinc-300 text-lg leading-relaxed mb-8">
-                      Explore the Outrun ecosystem and discover new opportunities for yield generation, liquidity provision, and Memecoin participation.
+                    <p className="text-zinc-100 text-lg leading-relaxed mb-8">
+                      Explore the Outrun ecosystem and discover new opportunities for yield generation, liquidity
+                      provision, and Memecoin participation.
                     </p>
                     <div className="flex justify-center">
                       <Button
@@ -238,7 +243,7 @@ export default function Home() {
 
                   <div className="bg-black/30 backdrop-blur-[2px] rounded-2xl border border-white/10 p-6 md:p-8">
                     <h3 className="text-xl font-bold mb-4 text-white">Stay Updated</h3>
-                    <p className="text-zinc-300 mb-6">
+                    <p className="text-zinc-100 mb-6">
                       Subscribe to our newsletter to receive the latest updates and announcements.
                     </p>
                     <div className="space-y-4">

@@ -298,7 +298,7 @@ export function PositionsTable() {
               <div>
                 <div className="flex items-center mb-1">
                   <div className="text-xs text-zinc-400 mr-1">{getPriceRangeTitle(position)}</div>
-                  {/* 反转按钮 - 使用独立的处理函数 */}
+                  {/* 反转按钮 - 使用独立��处理函数 */}
                   <button onClick={handleFlipClick} className="text-white hover:text-purple-300 transition-colors">
                     <RefreshCw size={12} />
                   </button>
@@ -681,7 +681,7 @@ export function PositionsTable() {
                   <tr className="bg-[#170538]/70">
                     <td colSpan={6} className="px-4 py-4">
                       <div className="grid grid-cols-4 gap-4">
-                        {/* 价格范围部分 - 修改为包含币种信息的标题，反转按钮去掉背景紧贴文本 */}
+                        {/* 价格范围部分 - 修改为包含币��信息的标题，反转按钮去掉背景紧贴文本 */}
                         <div>
                           <div className="flex items-center mb-1">
                             <div className="text-xs text-zinc-400 mr-1">{getPriceRangeTitle(position)}</div>

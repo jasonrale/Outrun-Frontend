@@ -17,6 +17,7 @@ export function InfoTooltip({
   iconColor,
 }: InfoTooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
+  const [isClickOpened, setIsClickOpened] = useState(false)
   const [tooltipStyles, setTooltipStyles] = useState<React.CSSProperties>({
     position: "fixed",
     zIndex: 99999,
@@ -121,18 +122,53 @@ export function InfoTooltip({
       clearTimeout(hideTimeoutRef.current)
       hideTimeoutRef.current = null
     }
-    setIsVisible(true)
+    if (!("ontouchstart" in window)) {
+      setIsVisible(true)
+    }
   }, [])
 
-  const handleClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation()
-  }, [])
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      e.preventDefault()
+
+      if (isVisible && isClickOpened) {
+        setIsVisible(false)
+        setIsClickOpened(false)
+      } else {
+        setIsVisible(true)
+        setIsClickOpened(true)
+      }
+    },
+    [isVisible, isClickOpened],
+  )
 
   const handleMouseLeave = useCallback(() => {
-    hideTimeoutRef.current = setTimeout(() => setIsVisible(false), 300)
-  }, [])
+    if (!isClickOpened) {
+      hideTimeoutRef.current = setTimeout(() => setIsVisible(false), 300)
+    }
+  }, [isClickOpened])
 
-  // Process content to add styling to "Learn more" links
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isClickOpened &&
+        iconRef.current &&
+        tooltipRef.current &&
+        !iconRef.current.contains(event.target as Node) &&
+        !tooltipRef.current.contains(event.target as Node)
+      ) {
+        setIsVisible(false)
+        setIsClickOpened(false)
+      }
+    }
+
+    if (isClickOpened) {
+      document.addEventListener("click", handleClickOutside)
+      return () => document.removeEventListener("click", handleClickOutside)
+    }
+  }, [isClickOpened])
+
   const processedContent = useMemo(() => {
     const processContent = (content: React.ReactNode): React.ReactNode => {
       if (typeof content === "string") {
@@ -140,10 +176,8 @@ export function InfoTooltip({
       }
 
       if (React.isValidElement(content)) {
-        // If it's a React element, recursively process its children
         if (content.props.children) {
           const newChildren = React.Children.map(content.props.children, (child) => {
-            // If it's a link with "Learn more" text, add the gradient style
             if (
               React.isValidElement(child) &&
               child.type === "a" &&
@@ -171,7 +205,6 @@ export function InfoTooltip({
     return processContent(content)
   }, [content])
 
-  // Arrow styles based on position
   const arrowStyles = useMemo(() => {
     const baseStyles = {
       filter: "drop-shadow(0 0 1px rgba(236,72,153,0.2))",

@@ -54,7 +54,7 @@ export const MemeversePriceChart = React.memo(({ project }: MemeversePriceChartP
         const time = new Date(now.getTime() - i * interval)
 
         // Add some random fluctuation while maintaining overall trend
-        const volatility = 0.05 // 5%的波动率
+        const volatility = 0.05 // 5%的��动率
         const trend = timeframe === "all" ? 0.001 : 0.0005 // Long-term upward trend
         const randomFactor = (Math.random() - 0.5) * 2 * volatility
 

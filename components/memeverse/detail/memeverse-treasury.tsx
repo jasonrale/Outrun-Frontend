@@ -147,7 +147,7 @@ export function MemeverseTreasury({ project }: MemeverseTreasuryProps) {
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between mt-2 text-xs text-zinc-500">
+              <div className="flex justify-between mt-2 text-xs text-zinc-300">
                 <div>Jan</div>
                 <div>Feb</div>
                 <div>Mar</div>
@@ -236,7 +236,7 @@ export function MemeverseTreasury({ project }: MemeverseTreasuryProps) {
               {/* Pie chart */}
               <div className="flex items-center justify-center">
                 <div className="relative w-64 h-64">
-                  <PieChart className="w-full h-full text-zinc-700" />
+                  <PieChart className="w-full h-full text-zinc-400" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                       <div className="text-2xl font-bold text-white">{formatUSD(treasuryFund)}</div>

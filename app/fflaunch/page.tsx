@@ -42,7 +42,7 @@ export default function FFLaunchPage() {
                   FFLaunch
                 </h1>
 
-                <p className="text-xl md:text-2xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-xl md:text-2xl text-zinc-100 max-w-3xl mx-auto leading-relaxed">
                   A revolutionary fair and risk-free token financing paradigm that protects investors from fraud, helps
                   fundraisers secure continuous funding, and achieves a win-win for both.
                 </p>
@@ -163,7 +163,7 @@ export default function FFLaunchPage() {
                       1
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Apply Stage</h3>
-                    <p className="text-zinc-300 text-sm md:text-base max-w-md">
+                    <p className="text-zinc-100 text-sm md:text-base max-w-md">
                       Project teams develop smart contracts and apply to the Outrun Audit Team with detailed project
                       information.
                     </p>
@@ -175,7 +175,7 @@ export default function FFLaunchPage() {
                       1
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Apply Stage</h3>
-                    <p className="text-zinc-300 text-sm max-w-md">
+                    <p className="text-zinc-100 text-sm max-w-md">
                       Project teams develop smart contracts and apply to the Outrun Audit Team with detailed project
                       information.
                     </p>
@@ -185,17 +185,17 @@ export default function FFLaunchPage() {
                     <ul className="space-y-1">
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-purple-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">
+                        <span className="text-zinc-100 text-sm">
                           Develop TokenGenerator, Token, and TimeLockVault contracts
                         </span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-purple-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">Submit detailed project and team information</span>
+                        <span className="text-zinc-100 text-sm">Submit detailed project and team information</span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-purple-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">Maintain communication with the Outrun Audit Team</span>
+                        <span className="text-zinc-100 text-sm">Maintain communication with the Outrun Audit Team</span>
                       </li>
                     </ul>
                   </div>
@@ -214,7 +214,7 @@ export default function FFLaunchPage() {
                       2
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Audit Stage</h3>
-                    <p className="text-zinc-300 text-sm max-w-md">
+                    <p className="text-zinc-100 text-sm max-w-md">
                       The Outrun Audit Team thoroughly reviews the project and audits all contracts to ensure safety and
                       compliance.
                     </p>
@@ -224,15 +224,15 @@ export default function FFLaunchPage() {
                     <ul className="space-y-1">
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-pink-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">Review project team materials and audit contracts</span>
+                        <span className="text-zinc-100 text-sm">Review project team materials and audit contracts</span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-pink-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">Verify token release conditions for safety</span>
+                        <span className="text-zinc-100 text-sm">Verify token release conditions for safety</span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-pink-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">Register new LaunchPool upon successful audit</span>
+                        <span className="text-zinc-100 text-sm">Register new LaunchPool upon successful audit</span>
                       </li>
                     </ul>
                   </div>
@@ -243,7 +243,7 @@ export default function FFLaunchPage() {
                       2
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Audit Stage</h3>
-                    <p className="text-zinc-300 text-sm md:text-base max-w-md">
+                    <p className="text-zinc-100 text-sm md:text-base max-w-md">
                       The Outrun Audit Team thoroughly reviews the project and audits all contracts to ensure safety and
                       compliance.
                     </p>
@@ -263,7 +263,7 @@ export default function FFLaunchPage() {
                       3
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Genesis Stage</h3>
-                    <p className="text-zinc-300 text-sm md:text-base max-w-md">
+                    <p className="text-zinc-100 text-sm md:text-base max-w-md">
                       Investors deposit UPT tokens into the LaunchPool, with funds allocated for both liquidity and
                       token generation.
                     </p>
@@ -275,7 +275,7 @@ export default function FFLaunchPage() {
                       3
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Genesis Stage</h3>
-                    <p className="text-zinc-300 text-sm max-w-md">
+                    <p className="text-zinc-100 text-sm max-w-md">
                       Investors deposit UPT tokens into the LaunchPool, with funds allocated for both liquidity and
                       token generation.
                     </p>
@@ -285,19 +285,20 @@ export default function FFLaunchPage() {
                     <ul className="space-y-1">
                       <li className="flex items-start">
                         <Coins className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">
-                          <span className="font-semibold text-blue-400">1/3</span> of funds used for POL (Proof Of Liquidity) pair
+                        <span className="text-zinc-100 text-sm">
+                          <span className="font-semibold text-blue-400">1/3</span> of funds used for POL (Proof Of
+                          Liquidity) pair
                         </span>
                       </li>
                       <li className="flex items-start">
                         <Coins className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">
+                        <span className="text-zinc-100 text-sm">
                           <span className="font-semibold text-blue-400">2/3</span> of funds used for project token pair
                         </span>
                       </li>
                       <li className="flex items-start">
                         <Clock className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">
+                        <span className="text-zinc-100 text-sm">
                           Occurs between startTime and endTime of the LaunchPool
                         </span>
                       </li>
@@ -318,7 +319,7 @@ export default function FFLaunchPage() {
                       4
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Liquidity Lock Stage</h3>
-                    <p className="text-zinc-300 text-sm max-w-md">
+                    <p className="text-zinc-100 text-sm max-w-md">
                       Project tokens are minted and paired with UPT to form trading pairs. Liquidity is locked until the
                       unlockTime.
                     </p>
@@ -328,21 +329,21 @@ export default function FFLaunchPage() {
                     <ul className="space-y-1">
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-cyan-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">
+                        <span className="text-zinc-100 text-sm">
                           Project tokens minted according to totalTokenFunds
                         </span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-cyan-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">Trading pairs deployed on OutrunAMM</span>
+                        <span className="text-zinc-100 text-sm">Trading pairs deployed on OutrunAMM</span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-cyan-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">POL tokens minted with 1/4 forming trading pairs</span>
+                        <span className="text-zinc-100 text-sm">POL tokens minted with 1/4 forming trading pairs</span>
                       </li>
                       <li className="flex items-start">
                         <Coins className="h-5 w-5 text-cyan-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">
+                        <span className="text-zinc-100 text-sm">
                           Project team earns market-making fees as continuous funding
                         </span>
                       </li>
@@ -355,7 +356,7 @@ export default function FFLaunchPage() {
                       4
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Liquidity Lock Stage</h3>
-                    <p className="text-zinc-300 text-sm md:text-base max-w-md">
+                    <p className="text-zinc-100 text-sm md:text-base max-w-md">
                       Project tokens are minted and paired with UPT to form trading pairs. Liquidity is locked until the
                       unlockTime.
                     </p>
@@ -369,25 +370,13 @@ export default function FFLaunchPage() {
             {/* Stage 5: Liquidity Unlock Stage */}
             <div className="relative mb-20">
               <div className="flex flex-col md:flex-row items-start">
-                <div className="hidden md:flex items-center md:w-1/2 md:justify-end md:pr-8">
-                  <div className="relative z-10 md:text-right">
-                    <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white font-bold mb-3 shadow-glow-green">
-                      5
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Liquidity Unlock Stage</h3>
-                    <p className="text-zinc-300 text-sm md:text-base max-w-md">
-                      After the unlockTime is reached, investors can redeem their liquidity proportional to their
-                      initial deposits.
-                    </p>
-                  </div>
-                </div>
-                <div className="md:w-1/2 md:pl-8 pl-12 w-full">
+                <div className="md:w-1/2 md:pr-8 order-2 md:order-1 pl-12 md:pl-0">
                   <div className="md:hidden mb-4">
                     <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white font-bold mb-3 shadow-glow-green">
                       5
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Liquidity Unlock Stage</h3>
-                    <p className="text-zinc-300 text-sm max-w-md">
+                    <p className="text-zinc-100 text-sm md:text-base max-w-md">
                       After the unlockTime is reached, investors can redeem their liquidity proportional to their
                       initial deposits.
                     </p>
@@ -397,19 +386,31 @@ export default function FFLaunchPage() {
                     <ul className="space-y-1">
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">Investors can redeem POL/UPT liquidity</span>
+                        <span className="text-zinc-100 text-sm">Investors can redeem POL/UPT liquidity</span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">
+                        <span className="text-zinc-100 text-sm">
                           Burn POL tokens to redeem ProjectToken/UPT liquidity
                         </span>
                       </li>
                       <li className="flex items-start">
                         <Clock className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">48-hour Liquidity Protection Period implemented</span>
+                        <span className="text-zinc-100 text-sm">48-hour Liquidity Protection Period implemented</span>
                       </li>
                     </ul>
+                  </div>
+                </div>
+                <div className="hidden md:flex items-center md:w-1/2 md:justify-start md:pl-8 order-1 md:order-2">
+                  <div className="relative z-10">
+                    <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white font-bold mb-3 shadow-glow-green">
+                      5
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Liquidity Unlock Stage</h3>
+                    <p className="text-zinc-100 text-sm md:text-base max-w-md">
+                      After the unlockTime is reached, investors can redeem their liquidity proportional to their
+                      initial deposits.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -426,7 +427,7 @@ export default function FFLaunchPage() {
                       6
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Remaining Token Generation</h3>
-                    <p className="text-zinc-300 text-sm max-w-md">
+                    <p className="text-zinc-100 text-sm max-w-md">
                       After 14 days in the unlock stage, the project team can generate any remaining tokens to the
                       TimeLockVault contract.
                     </p>
@@ -436,17 +437,17 @@ export default function FFLaunchPage() {
                     <ul className="space-y-1">
                       <li className="flex items-start">
                         <Clock className="h-5 w-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">Occurs 14 days after liquidity unlock stage</span>
+                        <span className="text-zinc-100 text-sm">Occurs 14 days after liquidity unlock stage</span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">
+                        <span className="text-zinc-100 text-sm">
                           Project team can mint remaining tokens to TimeLockVault
                         </span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="h-4 w-4 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-zinc-300 text-sm">
+                        <span className="text-zinc-100 text-sm">
                           No additional tokens can be minted if fully circulating
                         </span>
                       </li>
@@ -459,7 +460,7 @@ export default function FFLaunchPage() {
                       6
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Remaining Token Generation</h3>
-                    <p className="text-zinc-300 text-sm md:text-base max-w-md">
+                    <p className="text-zinc-100 text-sm md:text-base max-w-md">
                       After 14 days in the unlock stage, the project team can generate any remaining tokens to the
                       TimeLockVault contract.
                     </p>
@@ -485,7 +486,7 @@ export default function FFLaunchPage() {
                   <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 mb-6">
                     Ready to Launch or Invest?
                   </h2>
-                  <p className="text-zinc-300 text-lg leading-relaxed mb-8">
+                  <p className="text-zinc-100 text-lg leading-relaxed mb-8">
                     Join FFLaunch today to launch your project or invest in the next generation of innovative blockchain
                     projects.
                   </p>

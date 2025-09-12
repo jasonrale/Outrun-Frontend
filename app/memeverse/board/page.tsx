@@ -68,7 +68,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
   const isUpdatingURL = useRef(false)
   const lastURLUpdate = useRef("")
 
-  // 初始化时从URL读取参数 - 只在初始化时执行一次
+  // 初始化时从URL读取参数 - 只在初始化时���行一次
   useEffect(() => {
     const currentURL = searchParams.toString()
 

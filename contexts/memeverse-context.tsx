@@ -11,7 +11,7 @@ const CHAIN_FILTERS: ChainFilter[] = [
   { id: "ethereum", label: "Ethereum", icon: "/networks/ethereum.svg" },
   { id: "base", label: "Base", icon: "/networks/base.svg" },
   { id: "arbitrum", label: "Arbitrum", icon: "/networks/arbitrum.svg" },
-  { id: "polygon", label: "Polygon", icon: "/networks/polygon.svg" },
+  { id: "sonic", label: "Sonic", icon: "/networks/sonic.svg" },
   { id: "bnb", label: "BNB Chain", icon: "/networks/bnb.svg" },
 ]
 
