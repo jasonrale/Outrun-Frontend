@@ -4,16 +4,15 @@ import { Button } from "@/components/ui/button"
 import { formatMarketCap } from "@/utils/format"
 import { InfoTooltip } from "@/components/ui/info-tooltip"
 import { useState, useEffect, useCallback } from "react"
-import { GradientBackgroundCard } from "@/components/ui/gradient-background-card"
-import { ChevronDown, RefreshCw, Settings, X, Loader2 } from "lucide-react"
+import { ChevronDown, RefreshCw, Loader2, X } from "lucide-react"
 import { TokenIcon } from "@/components/ui/token-icon"
 import { SettingsPanel } from "@/components/ui/settings-panel"
 import { USER_BALANCES } from "@/data/memeverse-projects"
 import { MemeverseSocialShare } from "@/components/memeverse/detail/memeverse-social-share"
-import { motion, AnimatePresence } from "framer-motion"
 import { useWallet } from "@/contexts/wallet-context"
 import { PolMintSuccessModal } from "@/components/memeverse/detail/pol-mint-success-modal"
 import { PolRedeemSuccessModal } from "@/components/memeverse/detail/pol-redeem-success-modal"
+import { BaseModal } from "@/components/ui/base-modal" // Import BaseModal
 
 // Add this function after the imports and before the component
 const formatNumberWithSubscriptZeros = (num: number): string => {
@@ -265,21 +264,24 @@ export function POLTab({ project }: POLTabProps) {
     setIsRedeeming(true)
     // Simulate an asynchronous redeem operation
     setTimeout(() => {
-      const outputs = getRedeemOutputs()
-
-      // Set redeem result data
-      setRedeemResult({
-        redeemedTokens: [{ amount: redeemPolAmount, symbol: `POL-${project.symbol}`, type: "pol" }],
-        receivedTokens: [
-          { amount: outputs.lpAmount.toString(), symbol: `${project.symbol}/UETH LP`, type: "lp" },
-          { amount: outputs.polLpAmount.toString(), symbol: `POL ${project.symbol}/UETH LP`, type: "pol-lp" },
-        ],
-      })
-
       setIsRedeeming(false)
       handleRedeemModalClose()
-      setShowRedeemSuccessModal(true)
-    }, 2000) // Simulate 2-second redeeming process
+
+      setTimeout(() => {
+        const outputs = getRedeemOutputs()
+
+        // Set redeem result data
+        setRedeemResult({
+          redeemedTokens: [{ amount: redeemPolAmount, symbol: `POL-${project.symbol}`, type: "pol" }],
+          receivedTokens: [
+            { amount: outputs.lpAmount.toString(), symbol: `${project.symbol}/UETH LP`, type: "lp" },
+            { amount: outputs.polLpAmount.toString(), symbol: `POL ${project.symbol}/UETH LP`, type: "pol-lp" },
+          ],
+        })
+
+        setShowRedeemSuccessModal(true)
+      }, 300)
+    }, 3000) // Simulate 3-second redeeming process
   }
 
   const hasInputAmounts = pfrogAmount || uethAmount
@@ -305,7 +307,6 @@ export function POLTab({ project }: POLTabProps) {
       setIsMinting(false)
       handleMintModalClose()
 
-      // Add a small delay before opening the social share modal to ensure proper state transition
       setTimeout(() => {
         setMintResult({
           suppliedTokens: [
@@ -330,7 +331,7 @@ export function POLTab({ project }: POLTabProps) {
         })
 
         setShowMintSuccessModal(true)
-      }, 400) // Increased delay to account for close animation
+      }, 300)
     }, 3000) // Simulate 3-second minting process
   }
 
@@ -545,531 +546,397 @@ export function POLTab({ project }: POLTabProps) {
         )}
       </div>
 
-      {/* Claim POL Modal */}
-      <AnimatePresence mode="wait">
-        {isClaimModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={handleClaimModalClose}
-            />
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{
-                scale: isClaimModalClosing ? 0.95 : 1,
-                opacity: isClaimModalClosing ? 0 : 1,
-              }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative z-10"
-            >
-              <GradientBackgroundCard className="max-w-md w-full" border shadow>
-                <div className="p-6 space-y-6">
-                  <div className="flex justify-center">
-                    <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400 inline-block">
-                      Claim POL Tokens
-                    </h2>
-                  </div>
-                  <p className="text-white/90 text-center leading-relaxed">
-                    Because you participated in the Genesis, you can claim{" "}
-                    <span className="font-bold text-pink-300">{polData.claimablePOL.toLocaleString()} </span>
-                    <span className="font-bold text-gradient-fill bg-gradient-to-r from-purple-400 to-pink-400">
-                      POL {project.symbol}
-                    </span>
-                  </p>
-                  <div className="flex justify-center">
-                    <Button
-                      className="h-8 text-base bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 px-6"
-                      onClick={() => {
-                        setIsClaiming(true)
-                        // Simulate an asynchronous claim operation
-                        setTimeout(() => {
-                          // Handle actual claim logic here
-                          setIsClaiming(false)
-                          handleClaimModalClose()
-
-                          // Add a small delay before opening the social share modal to ensure proper state transition
-                          setTimeout(() => {
-                            setSocialShareTriggerSource("claimPol")
-                            setShowSocialShareModal(true)
-                          }, 400) // Increased delay to account for close animation
-                        }, 2000) // Simulate 2-second claiming process
-                      }}
-                      disabled={isClaiming || isClaimModalClosing} // Disable during claiming or closing
-                    >
-                      {isClaiming ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Claiming...
-                        </>
-                      ) : (
-                        "Claim"
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </GradientBackgroundCard>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
       {/* Mint POL Modal */}
-      <AnimatePresence mode="wait">
-        {isMintModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ margin: 0, height: "100vh" }}>
-            <motion.div
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+      <BaseModal
+        isOpen={isMintModalOpen}
+        onClose={handleMintModalClose}
+        showSettings
+        onSettingsClick={() => setShowSettings(!showSettings)}
+      >
+        <div className="space-y-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-gradient-fill">
+              Mint POL
+            </h2>
+            <button
+              className="rounded-lg p-1 text-purple-500 transition-all duration-300 hover:bg-white/10 hover:text-pink-400 flex items-center justify-center"
               onClick={handleMintModalClose}
-            />
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{
-                scale: isMintModalClosing ? 0.95 : 1,
-                opacity: isMintModalClosing ? 0 : 1,
-              }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative z-10"
             >
-              <GradientBackgroundCard className="max-w-md w-full my-0" shadow border contentClassName="p-6">
-                <div className="space-y-6">
-                  {/* Header */}
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">
-                      Mint POL
-                    </h2>
-                    <div className="flex items-center gap-1">
-                      <button
-                        className="p-2 text-purple-400 hover:text-purple-300 relative ml-1"
-                        onClick={() => setShowSettings(!showSettings)}
-                        disabled={isMintModalClosing}
-                      >
-                        <Settings size={18} />
-                      </button>
-                      {/* Close button - visible on both desktop and mobile */}
-                      <button
-                        className="p-2 text-purple-400 hover:text-pink-400 relative"
-                        onClick={handleMintModalClose}
-                        disabled={isMintModalClosing}
-                      >
-                        <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110" />
-                      </button>
-                    </div>
-                  </div>
+              <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110" />
+            </button>
+          </div>
 
-                  {/* Settings Panel */}
-                  <SettingsPanel
-                    isOpen={showSettings}
-                    onClose={() => setShowSettings(false)}
-                    slippage={slippage}
-                    onSlippageChange={setSlippage}
-                    transactionDeadline={transactionDeadline}
-                    onTransactionDeadlineChange={setTransactionDeadline}
-                  />
+          {/* Settings Panel */}
+          <SettingsPanel
+            isOpen={showSettings}
+            onClose={() => setShowSettings(false)}
+            slippage={slippage}
+            onSlippageChange={setSlippage}
+            transactionDeadline={transactionDeadline}
+            onTransactionDeadlineChange={setTransactionDeadline}
+          />
 
-                  {/* Supply Amount Section */}
-                  <div className="mb-4">
-                    <label className="block text-white/70 text-sm mb-2">Supply Amount</label>
+          {/* Supply Amount Section */}
+          <div className="mb-4">
+            <label className="block text-white/70 text-sm mb-2">Supply Amount</label>
 
-                    {/* Project Token Input */}
-                    <div
-                      className="mb-3 p-3 rounded-lg bg-black/40 border border-pink-500/20"
-                      style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <input
-                          type="text"
-                          placeholder="0.00"
-                          value={pfrogAmount}
-                          onChange={(e) => {
-                            const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
-                            handleProjectTokenChange(cleanValue)
-                          }}
-                          className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
-                          aria-label={`${project.symbol} amount`}
-                          disabled={isMintModalClosing}
-                        />
-                        <div className="flex items-center">
-                          <TokenIcon symbol={project.symbol} size={20} className="mr-2" />
-                          <span className="text-white font-medium">{project.symbol}</span>
-                        </div>
+            {/* Project Token Input */}
+            <div
+              className="mb-3 p-3 rounded-lg bg-black/40 border border-pink-500/20"
+              style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <input
+                  type="text"
+                  placeholder="0.00"
+                  value={pfrogAmount}
+                  onChange={(e) => {
+                    const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
+                    handleProjectTokenChange(cleanValue)
+                  }}
+                  className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
+                  aria-label={`${project.symbol} amount`}
+                  disabled={isMintModalClosing}
+                />
+                <div className="flex items-center">
+                  <TokenIcon symbol={project.symbol} size={20} className="mr-2" />
+                  <span className="text-white font-medium">{project.symbol}</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <div className="text-white/60">~$--</div>
+                <div className="flex items-center text-white/60">
+                  <span>Balance: {USER_BALANCES.memecoin[project.symbol]?.toLocaleString() || "0"}</span>
+                  <button
+                    className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
+                    disabled={isMintModalClosing}
+                    onClick={() => {
+                      const maxBalance = USER_BALANCES.memecoin[project.symbol] || 0
+                      handleProjectTokenChange(maxBalance.toString())
+                    }}
+                  >
+                    Max
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* UETH Token Input */}
+            <div
+              className="p-3 rounded-lg bg-black/40 border border-pink-500/20"
+              style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <input
+                  type="text"
+                  placeholder="0.00"
+                  value={uethAmount}
+                  onChange={(e) => {
+                    const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
+                    handleUethChange(cleanValue)
+                  }}
+                  className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
+                  aria-label="UETH amount"
+                  disabled={isMintModalClosing}
+                />
+                <div className="flex items-center">
+                  <TokenIcon symbol="UETH" size={20} className="mr-2" />
+                  <span className="text-white font-medium">UETH</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <div className="text-white/60">~$--</div>
+                <div className="flex items-center text-white/60">
+                  <span>Balance: 1,250.00</span>
+                  <button
+                    className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
+                    disabled={isMintModalClosing}
+                    onClick={() => {
+                      handleUethChange("1250.00")
+                    }}
+                  >
+                    Max
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Arrow between UETH and POL-Symbol */}
+            <div className="flex justify-center py-3">
+              <svg
+                width="16"
+                height="18"
+                viewBox="0 0 24 28"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="text-pink-400"
+              >
+                <path d="M12 2v21M19 15l-7 7-7-7" />
+              </svg>
+            </div>
+
+            {/* POL-Symbol Output */}
+            <div
+              className="p-3 rounded-lg bg-black/40 border border-pink-500/20"
+              style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <input
+                  type="text"
+                  placeholder="0.00"
+                  value={polAmount}
+                  onChange={(e) => {
+                    const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
+                    handlePolChange(cleanValue)
+                  }}
+                  className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
+                  aria-label={`POL-${project.symbol} amount`}
+                  disabled={isMintModalClosing}
+                />
+                <div className="flex items-center">
+                  <TokenIcon symbol={`POL-${project.symbol}`} size={20} className="mr-2" />
+                  <span className="text-white font-medium">POL-{project.symbol}</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <div className="text-white/60">~$--</div>
+                <div className="flex items-center text-white/60">
+                  <span>Balance: {userPolBalance.toLocaleString()}</span>
+                  <button
+                    className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
+                    disabled={isMintModalClosing}
+                    onClick={() => {
+                      handlePolChange(userPolBalance.toString())
+                    }}
+                  >
+                    Max
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Price Info */}
+          {(hasInputAmounts || hasPolAmount) && (
+            <div
+              className="mb-3 p-2 rounded-lg bg-black/40 border border-pink-500/20"
+              style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
+            >
+              {getExchangeRateDisplay()}
+
+              {showDetails && (
+                <>
+                  {/* Divider line */}
+                  <div className="w-full h-px bg-zinc-700/50 my-2"></div>
+
+                  {hasInputAmounts && (
+                    <>
+                      <div className="flex justify-between items-center py-0.5">
+                        <span className="text-xs text-zinc-400">Min. Receive:</span>
+                        <span className="text-xs text-white">
+                          {getMinReceived(slippage)} POL-{project.symbol}
+                        </span>
                       </div>
-                      <div className="flex items-center justify-between text-xs">
-                        <div className="text-white/60">~$--</div>
-                        <div className="flex items-center text-white/60">
-                          <span>Balance: {USER_BALANCES.memecoin[project.symbol]?.toLocaleString() || "0"}</span>
-                          <button
-                            className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
-                            disabled={isMintModalClosing}
-                            onClick={() => {
-                              const maxBalance = USER_BALANCES.memecoin[project.symbol] || 0
-                              handleProjectTokenChange(maxBalance.toString())
-                            }}
-                          >
-                            Max
-                          </button>
-                        </div>
+
+                      <div className="flex justify-between items-center py-0.5">
+                        <span className="text-xs text-zinc-400">Max. Slippage:</span>
+                        <span className="text-xs text-white">{slippage}%</span>
                       </div>
-                    </div>
-
-                    {/* UETH Token Input */}
-                    <div
-                      className="p-3 rounded-lg bg-black/40 border border-pink-500/20"
-                      style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <input
-                          type="text"
-                          placeholder="0.00"
-                          value={uethAmount}
-                          onChange={(e) => {
-                            const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
-                            handleUethChange(cleanValue)
-                          }}
-                          className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
-                          aria-label="UETH amount"
-                          disabled={isMintModalClosing}
-                        />
-                        <div className="flex items-center">
-                          <TokenIcon symbol="UETH" size={20} className="mr-2" />
-                          <span className="text-white font-medium">UETH</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between text-xs">
-                        <div className="text-white/60">~$--</div>
-                        <div className="flex items-center text-white/60">
-                          <span>Balance: 1,250.00</span>
-                          <button
-                            className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
-                            disabled={isMintModalClosing}
-                            onClick={() => {
-                              handleUethChange("1250.00")
-                            }}
-                          >
-                            Max
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Arrow between UETH and POL-Symbol */}
-                    <div className="flex justify-center py-3">
-                      <svg
-                        width="16"
-                        height="18"
-                        viewBox="0 0 24 28"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="text-pink-400"
-                      >
-                        <path d="M12 2v20M19 15l-7 7-7-7" />
-                      </svg>
-                    </div>
-
-                    {/* POL-Symbol Output */}
-                    <div
-                      className="p-3 rounded-lg bg-black/40 border border-pink-500/20"
-                      style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <input
-                          type="text"
-                          placeholder="0.00"
-                          value={polAmount}
-                          onChange={(e) => {
-                            const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
-                            handlePolChange(cleanValue)
-                          }}
-                          className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
-                          aria-label={`POL-${project.symbol} amount`}
-                          disabled={isMintModalClosing}
-                        />
-                        <div className="flex items-center">
-                          <TokenIcon symbol={`POL-${project.symbol}`} size={20} className="mr-2" />
-                          <span className="text-white font-medium">POL-{project.symbol}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between text-xs">
-                        <div className="text-white/60">~$--</div>
-                        <div className="flex items-center text-white/60">
-                          <span>Balance: {userPolBalance.toLocaleString()}</span>
-                          <button
-                            className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
-                            disabled={isMintModalClosing}
-                            onClick={() => {
-                              handlePolChange(userPolBalance.toString())
-                            }}
-                          >
-                            Max
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Price Info */}
-                  {(hasInputAmounts || hasPolAmount) && (
-                    <div
-                      className="mb-3 p-2 rounded-lg bg-black/40 border border-pink-500/20"
-                      style={{ boxShadow: "0 0 10px rgba(236,72,153,0.1) inset" }}
-                    >
-                      {getExchangeRateDisplay()}
-
-                      {showDetails && (
-                        <>
-                          {/* Divider line */}
-                          <div className="w-full h-px bg-zinc-700/50 my-2"></div>
-
-                          {hasInputAmounts && (
-                            <>
-                              <div className="flex justify-between items-center py-0.5">
-                                <span className="text-xs text-zinc-400">Min. Receive:</span>
-                                <span className="text-xs text-white">
-                                  {getMinReceived(slippage)} POL-{project.symbol}
-                                </span>
-                              </div>
-
-                              <div className="flex justify-between items-center py-0.5">
-                                <span className="text-xs text-zinc-400">Max. Slippage:</span>
-                                <span className="text-xs text-white">{slippage}%</span>
-                              </div>
-                            </>
-                          )}
-
-                          {hasPolAmount && !hasInputAmounts && (
-                            <div className="flex justify-between items-center py-0.5">
-                              <span className="text-xs text-zinc-400">Max. Slippage:</span>
-                              <span className="text-xs text-white">{slippage}%</span>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
+                    </>
                   )}
 
-                  {/* Mint Button */}
-                  <Button
-                    className="w-full h-12 text-base bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={
-                      isConnected
-                        ? (!hasInputAmounts && !hasPolAmount) || isMintModalClosing || isMinting
-                        : isConnectingWallet || isMintModalClosing
-                    }
-                    onClick={isConnected ? handleMint : handleConnectWallet}
-                  >
-                    {!isConnected ? (
-                      isConnectingWallet ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Connecting Wallet...
-                        </>
-                      ) : (
-                        "Connect Wallet"
-                      )
-                    ) : isMinting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Minting...
-                      </>
-                    ) : !hasInputAmounts && !hasPolAmount ? (
-                      "Please Input"
-                    ) : (
-                      "Mint"
-                    )}
-                  </Button>
-                </div>
-              </GradientBackgroundCard>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+                  {hasPolAmount && !hasInputAmounts && (
+                    <div className="flex justify-between items-center py-0.5">
+                      <span className="text-xs text-zinc-400">Max. Slippage:</span>
+                      <span className="text-xs text-white">{slippage}%</span>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Mint Button */}
+          <Button
+            className="w-full h-12 text-base bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={
+              isConnected
+                ? (!hasInputAmounts && !hasPolAmount) || isMintModalClosing || isMinting
+                : isConnectingWallet || isMintModalClosing
+            }
+            onClick={isConnected ? handleMint : handleConnectWallet}
+          >
+            {!isConnected ? (
+              isConnectingWallet ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Connecting Wallet...
+                </>
+              ) : (
+                "Connect Wallet"
+              )
+            ) : isMinting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Minting...
+              </>
+            ) : !hasInputAmounts && !hasPolAmount ? (
+              "Please Input"
+            ) : (
+              "Mint"
+            )}
+          </Button>
+        </div>
+      </BaseModal>
 
       {/* Redeem POL Modal */}
-      <AnimatePresence mode="wait">
-        {isRedeemModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ margin: 0, height: "100vh" }}>
-            <motion.div
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+      <BaseModal isOpen={isRedeemModalOpen} onClose={handleRedeemModalClose}>
+        <div className="space-y-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-gradient-fill">
+              Redeem POL
+            </h2>
+            <button
+              className="rounded-lg p-1 text-purple-500 transition-all duration-300 hover:bg-white/10 hover:text-pink-400 flex items-center justify-center"
               onClick={handleRedeemModalClose}
-            />
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{
-                scale: isRedeemModalClosing ? 0.95 : 1,
-                opacity: isRedeemModalClosing ? 0 : 1,
-              }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative z-10"
             >
-              <GradientBackgroundCard className="max-w-md w-full my-0" shadow border contentClassName="p-6">
-                <div className="space-y-6">
-                  {/* Header */}
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-gradient-fill bg-gradient-to-r from-red-400 via-pink-500 to-orange-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
-                      Redeem POL
-                    </h2>
-                    <div className="flex items-center gap-2">
-                      <button
-                        className="rounded-lg p-1 text-red-400 transition-all duration-300 hover:bg-white/10 hover:text-pink-400 flex items-center justify-center"
-                        onClick={handleRedeemModalClose}
-                        disabled={isRedeemModalClosing}
-                      >
-                        <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Redeem Amount Section */}
-                  <div className="mb-4">
-                    <label className="block text-white/70 text-sm mb-2">Redeem Amount</label>
-
-                    {/* POL Token Input */}
-                    <div
-                      className="p-3 rounded-lg bg-black/40 border border-red-500/20"
-                      style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <input
-                          type="text"
-                          placeholder="0.00"
-                          value={redeemPolAmount}
-                          onChange={(e) => {
-                            const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
-                            setRedeemPolAmount(cleanValue)
-                          }}
-                          className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
-                          aria-label={`POL-${project.symbol} amount`}
-                          disabled={isRedeemModalClosing}
-                        />
-                        <div className="flex items-center">
-                          <TokenIcon symbol={`POL-${project.symbol}`} size={20} className="mr-2" />
-                          <span className="text-white font-medium">POL-{project.symbol}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between text-xs">
-                        <div className="text-white/60">~$--</div>
-                        <div className="flex items-center text-white/60">
-                          <span>Balance: {userPolBalance.toLocaleString()}</span>
-                          <button
-                            className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
-                            disabled={isRedeemModalClosing}
-                            onClick={() => setRedeemPolAmount(userPolBalance.toString())}
-                          >
-                            Max
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Arrow between POL and outputs */}
-                    <div className="flex justify-center py-3">
-                      <svg
-                        width="16"
-                        height="18"
-                        viewBox="0 0 24 28"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="text-red-400"
-                      >
-                        <path d="M12 2v20M19 15l-7 7-7-7" />
-                      </svg>
-                    </div>
-
-                    {/* NSHIB/UETH LP Token Output (Immediate) */}
-                    <div
-                      className="mb-3 p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
-                      style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
-                    >
-                      <div className="flex flex-col space-y-2">
-                        <div className="flex items-center justify-start">
-                          <div className="text-left text-green-300 text-lg font-medium">
-                            {formatLargeNumber(getRedeemOutputs().lpAmount)}
-                          </div>
-                          <div className="text-green-400/60 text-xs ml-2">~$--</div>
-                        </div>
-                        <div className="flex items-center justify-end">
-                          <TokenIcon symbol={project.symbol} size={20} className="mr-2" />
-                          <span className="text-green-300 font-medium">
-                            {project.symbol}/UETH <span className="text-orange-400">LP</span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* POL NSHIB/UETH LP Token Output (Delayed) */}
-                    <div
-                      className="p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
-                      style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
-                    >
-                      <div className="flex flex-col space-y-2">
-                        <div className="flex items-center justify-start">
-                          <div className="text-left text-green-300 text-lg font-medium">
-                            {formatLargeNumber(getRedeemOutputs().polLpAmount)}
-                          </div>
-                          <div className="text-green-400/60 text-xs ml-2">~$--</div>
-                        </div>
-                        <div className="flex items-center justify-end">
-                          <TokenIcon symbol={`POL ${project.symbol}`} size={20} className="mr-2" />
-                          <span className="text-green-300 font-medium">
-                            POL {project.symbol}/UETH <span className="text-orange-400">LP</span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Redeem Button */}
-                  <Button
-                    className="w-full h-12 text-base bg-gradient-to-r from-red-600 via-pink-600 to-orange-600 hover:from-red-500 hover:via-pink-500 hover:to-orange-500 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={
-                      isConnected
-                        ? !hasRedeemAmount || isRedeemModalClosing || isRedeeming
-                        : isConnectingWallet || isRedeemModalClosing
-                    }
-                    onClick={isConnected ? handleRedeem : handleConnectWallet}
-                  >
-                    {!isConnected ? (
-                      isConnectingWallet ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Connecting Wallet...
-                        </>
-                      ) : (
-                        "Connect Wallet"
-                      )
-                    ) : isRedeeming ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Redeeming...
-                      </>
-                    ) : !hasRedeemAmount ? (
-                      "Please Input"
-                    ) : (
-                      "Redeem"
-                    )}
-                  </Button>
-                </div>
-              </GradientBackgroundCard>
-            </motion.div>
+              <X size={20} strokeWidth={2.5} className="transition-transform duration-300 hover:scale-110" />
+            </button>
           </div>
-        )}
-      </AnimatePresence>
+
+          {/* Redeem Amount Section */}
+          <div className="mb-4">
+            <label className="block text-white/70 text-sm mb-2">Redeem Amount</label>
+
+            {/* POL Token Input */}
+            <div
+              className="p-3 rounded-lg bg-black/40 border border-red-500/20"
+              style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
+            >
+              <div className="flex items-center justify-between">
+                <input
+                  type="text"
+                  placeholder="0.00"
+                  value={redeemPolAmount}
+                  onChange={(e) => {
+                    const cleanValue = e.target.value.replace(/[^0-9.]/g, "")
+                    setRedeemPolAmount(cleanValue)
+                  }}
+                  className="bg-transparent text-left text-white text-lg font-medium focus:outline-none w-1/2"
+                  aria-label={`POL-${project.symbol} amount`}
+                  disabled={isRedeemModalClosing}
+                />
+                <div className="flex items-center">
+                  <TokenIcon symbol={`POL-${project.symbol}`} size={20} className="mr-2" />
+                  <span className="text-white font-medium">POL-{project.symbol}</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <div className="text-white/60">~$--</div>
+                <div className="flex items-center text-white/60">
+                  <span>Balance: {userPolBalance.toLocaleString()}</span>
+                  <button
+                    className="ml-1 px-1.5 py-0.5 text-xs bg-white/10 hover:bg-white/20 transition-colors rounded text-white/80"
+                    disabled={isRedeemModalClosing}
+                    onClick={() => setRedeemPolAmount(userPolBalance.toString())}
+                  >
+                    Max
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Arrow between POL and outputs */}
+            <div className="flex justify-center py-3">
+              <svg
+                width="16"
+                height="18"
+                viewBox="0 0 24 28"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="text-red-400"
+              >
+                <path d="M12 2v21M19 15l-7 7-7-7" />
+              </svg>
+            </div>
+
+            {/* NSHIB/UETH LP Token Output (Immediate) */}
+            <div
+              className="mb-3 p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
+              style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
+            >
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-start">
+                  <div className="text-left text-green-300 text-lg font-medium">
+                    {formatLargeNumber(getRedeemOutputs().lpAmount)}
+                  </div>
+                  <div className="text-green-400/60 text-xs ml-2">~$--</div>
+                </div>
+                <div className="flex items-center justify-end">
+                  <TokenIcon symbol={project.symbol} size={20} className="mr-2" />
+                  <span className="text-green-300 font-medium">
+                    {project.symbol}/UETH <span className="text-orange-400">LP</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* POL NSHIB/UETH LP Token Output (Delayed) */}
+            <div
+              className="p-3 rounded-lg bg-gradient-to-br from-green-900/20 to-emerald-800/20 border border-green-500/30"
+              style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
+            >
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-start">
+                  <div className="text-left text-green-300 text-lg font-medium">
+                    {formatLargeNumber(getRedeemOutputs().polLpAmount)}
+                  </div>
+                  <div className="text-green-400/60 text-xs ml-2">~$--</div>
+                </div>
+                <div className="flex items-center justify-end">
+                  <TokenIcon symbol={`POL ${project.symbol}`} size={20} className="mr-2" />
+                  <span className="text-green-300 font-medium">
+                    POL {project.symbol}/UETH <span className="text-orange-400">LP</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Redeem Button */}
+          <Button
+            className="w-full h-12 text-base bg-gradient-to-r from-red-600 via-pink-600 to-orange-600 hover:from-red-500 hover:via-pink-500 hover:to-orange-500 text-white shadow-lg hover:shadow-xl transition-all duration-200 saturate-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={
+              isConnected
+                ? !hasRedeemAmount || isRedeemModalClosing || isRedeeming
+                : isConnectingWallet || isRedeemModalClosing
+            }
+            onClick={isConnected ? handleRedeem : handleConnectWallet}
+          >
+            {!isConnected ? (
+              isConnectingWallet ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Connecting Wallet...
+                </>
+              ) : (
+                "Connect Wallet"
+              )
+            ) : isRedeeming ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Redeeming...
+              </>
+            ) : !hasRedeemAmount ? (
+              "Please Input"
+            ) : (
+              "Redeem"
+            )}
+          </Button>
+        </div>
+      </BaseModal>
 
       {/* Social Share Modal - Render outside of other modals to prevent conflicts */}
       <MemeverseSocialShare

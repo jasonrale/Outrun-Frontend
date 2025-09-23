@@ -143,7 +143,7 @@ export function UPTPositionsTable({
                           </div>
                         </div>
                         <div>
-                          <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent font-semibold text-sm">
+                          <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-gradient-fill font-semibold text-sm">
                             {position.asset}
                           </p>
                         </div>
@@ -239,7 +239,7 @@ export function UPTPositionsTable({
                               </div>
                             </div>
                             <div>
-                              <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
+                              <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-gradient-fill font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
                                 {positionPair[0].asset}
                               </p>
                             </div>
@@ -296,7 +296,7 @@ export function UPTPositionsTable({
                                   </div>
                                 </div>
                                 <div>
-                                  <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
+                                  <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-gradient-fill font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
                                     {positionPair[1].asset}
                                   </p>
                                 </div>

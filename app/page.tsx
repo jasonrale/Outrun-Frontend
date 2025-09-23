@@ -98,9 +98,7 @@ export default function Home() {
               The Outrun Ecosystem
             </h2>
             <p className="text-zinc-100 text-lg md:text-xl leading-relaxed">
-              The Outrun ecosystem currently consists of four major modules, encompassing yield tokenization,
-              stablecoin, RWAfi, decentralized exchange, a next-generation token financing paradigm, and Memecoin × DeFi
-              × DAO.
+              Outrun has built a unique multi-module closed-loop ecosystem, addressing pain points in various scenarios through modular design. By combining and interoperating, it creates a synergistic effect, driving the continuous operation of the growth flywheel.
             </p>
           </div>
 

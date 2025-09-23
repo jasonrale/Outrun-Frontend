@@ -195,7 +195,7 @@ interface ChainTooltipProps {
 export function ChainTooltip({ chainName, chainIcon, className = "" }: ChainTooltipProps) {
   return (
     <UniversalTooltip content={chainName} position="top" usePortal={true} className={`inline-flex ${className}`}>
-      <img src={chainIcon || "/placeholder.svg"} alt={chainName} className="w-4 h-4 ml-0.5" />
+      <img src={chainIcon || "/placeholder.svg"} alt={chainName} className="w-6 h-6 ml-0.5" />
     </UniversalTooltip>
   )
 }

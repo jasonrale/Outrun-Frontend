@@ -83,10 +83,10 @@ export function LPPositionsTable({ filteredPositions, getNetworkIcon }: LPPositi
                     </div>
                   </div>
                   <div>
-                    <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent font-semibold text-sm">
+                    <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-gradient-fill font-semibold text-sm">
                       {position.asset} ({position.protocol})
                     </p>
-                    <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent text-xs">
+                    <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-gradient-fill text-xs">
                       {position.asset} / {position.upt}
                     </p>
                   </div>
@@ -105,7 +105,15 @@ export function LPPositionsTable({ filteredPositions, getNetworkIcon }: LPPositi
                 </div>
                 <div className="bg-black/30 rounded-lg p-2">
                   <p className="text-purple-200 text-xs mb-1">Claimable Yield</p>
-                  <p className="text-cyan-400 font-semibold text-sm">${position.claimableYieldUSD}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-cyan-400 font-semibold text-sm">${position.claimableYieldUSD}</p>
+                    <Button
+                      className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white border-0 rounded-md h-5 px-2 text-xs font-semibold shadow-[0_0_10px_rgba(34,211,238,0.3)] hover:shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-all duration-300"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Claim
+                    </Button>
+                  </div>
                 </div>
               </div>
 
@@ -158,14 +166,12 @@ export function LPPositionsTable({ filteredPositions, getNetworkIcon }: LPPositi
               return (
                 <React.Fragment key={uniquePositionId}>
                   <tr
-                    className={`border-b border-purple-500/10 transition-all duration-300 cursor-pointer ${
-                      isHovered ? "bg-gradient-to-r from-purple-900/10 to-pink-900/10" : ""
-                    }`}
+                    className={`${isExpanded ? "border-b-0" : "border-b border-purple-500/10"} cursor-pointer ${isHovered ? "bg-gradient-to-r from-purple-900/10 to-pink-900/10" : ""}`}
                     onClick={() => toggleRowExpansion(uniquePositionId)}
                     onMouseEnter={() => handleRowHover(uniquePositionId)}
                     onMouseLeave={() => handleRowHover(null)}
                   >
-                    <td className="px-8 py-4 text-left">
+                    <td className={`px-8 text-left ${isExpanded ? "pt-4 pb-0" : "py-4"}`}>
                       <div className="flex items-center justify-start space-x-4">
                         <div className="flex items-center gap-2">
                           <div
@@ -196,27 +202,27 @@ export function LPPositionsTable({ filteredPositions, getNetworkIcon }: LPPositi
                         </div>
                         <div>
                           <div className="inline-block">
-                            <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
+                            <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-gradient-fill font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
                               {position.asset} ({position.protocol})
                             </p>
                           </div>
-                          <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent text-sm">
+                          <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-gradient-fill text-sm">
                             {position.asset} / {position.upt}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-8 py-4 text-right">
+                    <td className={`px-8 text-right ${isExpanded ? "pt-4 pb-0" : "py-4"}`}>
                       <span className="text-purple-400 font-semibold drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]">
                         {position.apy}%
                       </span>
                     </td>
-                    <td className="px-8 py-4 text-right">
+                    <td className={`px-8 text-right ${isExpanded ? "pt-4 pb-0" : "py-4"}`}>
                       <p className="text-pink-400 font-semibold drop-shadow-[0_0_8px_rgba(244,114,182,0.3)]">
                         ${position.positionValueUSD}
                       </p>
                     </td>
-                    <td className="px-8 py-4 text-right">
+                    <td className={`px-8 text-right ${isExpanded ? "pt-4 pb-0" : "py-4"}`}>
                       <span className="text-cyan-400 font-semibold drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
                         ${position.claimableYieldUSD}
                       </span>
@@ -224,14 +230,13 @@ export function LPPositionsTable({ filteredPositions, getNetworkIcon }: LPPositi
                   </tr>
                   {isExpanded && (
                     <tr
-                      className={`border-b border-purple-500/10 transition-all duration-300 ${
-                        isHovered ? "bg-gradient-to-r from-purple-900/10 to-pink-900/10" : ""
-                      }`}
+                      className={`border-b border-purple-500/10 cursor-pointer ${isHovered ? "bg-gradient-to-r from-purple-900/10 to-pink-900/10" : ""}`}
+                      onClick={() => toggleRowExpansion(uniquePositionId)}
                       onMouseEnter={() => handleRowHover(uniquePositionId)}
                       onMouseLeave={() => handleRowHover(null)}
                     >
-                      <td colSpan={4} className="px-8 py-4">
-                        <div className="flex gap-4 justify-center">
+                      <td colSpan={4} className="px-8 pt-0 pb-4">
+                        <div className="flex gap-4 justify-center animate-in fade-in slide-in-from-bottom-2 duration-500 ease-in-out">
                           <Button
                             className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 text-white border-0 rounded-lg h-8 px-4 text-sm font-semibold shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300"
                             onClick={(e) => e.stopPropagation()}
