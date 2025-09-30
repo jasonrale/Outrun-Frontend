@@ -11,11 +11,13 @@ interface EncapsulateSPModalProps {
   isOpen: boolean
   onClose: () => void
   position: PositionData | null
+  onSuccess: (uptBurn: string, spReceive: string) => void
 }
 
-export function EncapsulateSPModal({ isOpen, onClose, position }: EncapsulateSPModalProps) {
+export function EncapsulateSPModal({ isOpen, onClose, position, onSuccess }: EncapsulateSPModalProps) {
   const [isEncapsulating, setIsEncapsulating] = useState(false)
   const [encapsulateAmount, setEncapsulateAmount] = useState("")
+  const [isClosing, setIsClosing] = useState(false)
 
   const nonTransferableSPAmount = position
     ? (Number.parseFloat(position.spAmount) / Math.pow(10, position.syDecimal)).toFixed(6)
@@ -48,15 +50,26 @@ export function EncapsulateSPModal({ isOpen, onClose, position }: EncapsulateSPM
 
   const handleModalClose = () => {
     if (isEncapsulating) return
-    onClose()
-    setEncapsulateAmount("")
+    setIsClosing(true)
+    setTimeout(() => {
+      setIsClosing(false)
+      onClose()
+      setEncapsulateAmount("")
+    }, 300)
   }
 
   const handleEncapsulate = () => {
     setIsEncapsulating(true)
     setTimeout(() => {
       setIsEncapsulating(false)
-      handleModalClose()
+      const uptBurnFormatted = `${uptBurnAmount} ${position?.upt || "UPT"}`
+      const spReceiveFormatted = `${transferableSPAmount} SP ${position?.assetName || ""}`
+      setIsClosing(true)
+      setTimeout(() => {
+        setIsClosing(false)
+        onSuccess(uptBurnFormatted, spReceiveFormatted)
+        setEncapsulateAmount("")
+      }, 300)
     }, 2000)
   }
 
@@ -65,7 +78,7 @@ export function EncapsulateSPModal({ isOpen, onClose, position }: EncapsulateSPM
   if (!position) return null
 
   return (
-    <BaseModal isOpen={isOpen} onClose={handleModalClose} className="max-w-md">
+    <BaseModal isOpen={isOpen && !isClosing} onClose={handleModalClose} className="max-w-md">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold bg-gradient-to-r text-gradient-fill bg-clip-text from-purple-400 via-pink-400 to-blue-400">
           Encapsulate SP

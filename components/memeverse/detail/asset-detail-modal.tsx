@@ -32,10 +32,15 @@ export function AssetDetailModal({
   onClaim,
 }: AssetDetailModalProps) {
   const [isClaiming, setIsClaiming] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
 
   const handleClose = () => {
     if (isClaiming) return // Prevent closing while claiming
-    onClose()
+    setIsClosing(true)
+    setTimeout(() => {
+      setIsClosing(false)
+      onClose()
+    }, 300) // Match BaseModal exit animation duration
   }
 
   // Calculate max height for asset list (5 items max visible)
@@ -59,7 +64,7 @@ export function AssetDetailModal({
   }
 
   return (
-    <BaseModal isOpen={isOpen} onClose={handleClose} maxWidth="max-w-sm">
+    <BaseModal isOpen={isOpen && !isClosing} onClose={handleClose} maxWidth="max-w-sm">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 text-gradient-fill">
           {title}

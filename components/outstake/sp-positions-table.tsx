@@ -9,6 +9,7 @@ import { InfoTooltip } from "@/components/ui/info-tooltip"
 import type { PositionData } from "@/data/position"
 import { useState } from "react"
 import { EncapsulateSPModal } from "./encapsulate-sp-modal"
+import { EncapsulateSuccessModal } from "./encapsulate-success-modal"
 
 interface SPPositionsTableProps {
   filteredPositions: PositionData[]
@@ -52,6 +53,11 @@ export function SPPositionsTable({
   const [expandedRows, setExpandedRows] = useState<string[]>([])
   const [isEncapsulateModalOpen, setIsEncapsulateModalOpen] = useState(false)
   const [selectedPosition, setSelectedPosition] = useState<PositionData | null>(null)
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+  const [encapsulateData, setEncapsulateData] = useState<{
+    uptBurn: string
+    spReceive: string
+  } | null>(null)
 
   const getPositionId = (position: PositionData, index: number) => {
     return `${position.assetName}-${position.chain}-${position.expirationDate}-${position.initPrincipal}-${index}`
@@ -76,6 +82,20 @@ export function SPPositionsTable({
   const handleEncapsulateModalClose = () => {
     setIsEncapsulateModalOpen(false)
     setSelectedPosition(null)
+  }
+
+  const handleEncapsulateSuccess = (uptBurn: string, spReceive: string) => {
+    setEncapsulateData({ uptBurn, spReceive })
+    setIsEncapsulateModalOpen(false)
+    setSelectedPosition(null)
+    setTimeout(() => {
+      setIsSuccessModalOpen(true)
+    }, 100)
+  }
+
+  const handleSuccessModalClose = () => {
+    setIsSuccessModalOpen(false)
+    setEncapsulateData(null)
   }
 
   const groupedSPPositions = () => {
@@ -554,7 +574,18 @@ export function SPPositionsTable({
         isOpen={isEncapsulateModalOpen}
         onClose={handleEncapsulateModalClose}
         position={selectedPosition}
+        onSuccess={handleEncapsulateSuccess}
       />
+
+      {/* Success Modal */}
+      {encapsulateData && (
+        <EncapsulateSuccessModal
+          isOpen={isSuccessModalOpen}
+          onClose={handleSuccessModalClose}
+          uptBurn={encapsulateData.uptBurn}
+          spReceive={encapsulateData.spReceive}
+        />
+      )}
     </>
   )
 }
