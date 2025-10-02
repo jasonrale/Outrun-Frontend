@@ -68,7 +68,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
   const isUpdatingURL = useRef(false)
   const lastURLUpdate = useRef("")
 
-  // 初始化时从URL读取参数 - 只在初始化时���行一次
+  // 初始化时从URL读取参数 - 只在初始化时运行一次
   useEffect(() => {
     const currentURL = searchParams.toString()
 
@@ -255,7 +255,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
       <div className="flex items-center justify-center mt-8 space-x-2">
         {/* 上一页按钮 */}
         <Button
-          variant="outline"
           size="sm"
           className={`rounded-full w-8 h-8 flex items-center justify-center p-0 bg-black/30 border ${
             currentPage === 1
@@ -272,7 +271,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
         {paginationData.pageNumbers.map((number) => (
           <Button
             key={number}
-            variant="outline"
             size="sm"
             className={`rounded-full w-8 h-8 flex items-center justify-center p-0 ${
               currentPage === number
@@ -287,7 +285,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
 
         {/* 下一页按钮 */}
         <Button
-          variant="outline"
           size="sm"
           className={`rounded-full w-8 h-8 flex items-center justify-center p-0 bg-black/30 border ${
             currentPage === totalPages
@@ -370,7 +367,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
               {/* Chain filter dropdown menu */}
               <div className="relative dropdown-container">
                 <Button
-                  variant="outline"
                   size="sm"
                   className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                   onClick={toggleChainDropdown}
@@ -381,7 +377,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                         <img
                           src={CHAIN_FILTERS.find((c) => c.id === activeChainFilter)?.icon || "/placeholder.svg"}
                           alt={activeChainFilter}
-                          className="w-4 h-4"
+                          className="w-6 h-6"
                         />
                         {CHAIN_FILTERS.find((c) => c.id === activeChainFilter)?.label}
                       </div>
@@ -404,7 +400,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                         onClick={() => handleChainFilterChange(chain.id)}
                       >
                         {chain.icon && (
-                          <img src={chain.icon || "/placeholder.svg"} alt={chain.label} className="w-4 h-4 mr-2" />
+                          <img src={chain.icon || "/placeholder.svg"} alt={chain.label} className="w-6 h-6 mr-2" />
                         )}
                         {chain.label}
                       </button>
@@ -416,7 +412,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
               {/* Stage filter dropdown menu */}
               <div className="relative dropdown-container">
                 <Button
-                  variant="outline"
                   size="sm"
                   className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                   onClick={toggleStageDropdown}
@@ -448,7 +443,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
               {/* Sort filter */}
               <div className="relative dropdown-container">
                 <Button
-                  variant="outline"
                   size="sm"
                   className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                   onClick={toggleSortDropdown}
@@ -479,7 +473,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
 
               {/* Sort direction button */}
               <Button
-                variant="outline"
                 size="sm"
                 className="p-0 w-8 h-8 flex justify-center items-center bg-black/30 border border-purple-500/30 rounded-full hover:bg-purple-900/30 hover:border-pink-400/50"
                 onClick={handleSortDirectionToggle}
@@ -534,7 +527,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 {/* Chain filter dropdown menu */}
                 <div className="relative dropdown-container">
                   <Button
-                    variant="outline"
                     size="sm"
                     className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                     onClick={toggleChainDropdown}
@@ -580,7 +572,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 {/* Stage filter dropdown menu */}
                 <div className="relative dropdown-container">
                   <Button
-                    variant="outline"
                     size="sm"
                     className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                     onClick={toggleStageDropdown}
@@ -612,7 +603,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                 {/* Sort filter */}
                 <div className="relative dropdown-container">
                   <Button
-                    variant="outline"
                     size="sm"
                     className="bg-black/30 border border-purple-500/30 text-pink-300 hover:bg-purple-900/30 hover:border-pink-400/50 hover:text-white rounded-full transition-all duration-300 px-4"
                     onClick={toggleSortDropdown}
@@ -643,7 +633,6 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
 
                 {/* Sort direction button */}
                 <Button
-                  variant="outline"
                   size="sm"
                   className="p-0 w-8 h-8 flex justify-center items-center bg-black/30 border border-purple-500/30 rounded-full hover:bg-purple-900/30 hover:border-pink-400/50"
                   onClick={handleSortDirectionToggle}

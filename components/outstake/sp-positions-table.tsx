@@ -383,6 +383,12 @@ export function SPPositionsTable({
                         {/* Card Action Button */}
                         <div className="flex gap-2">
                           <Button
+                            className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white border-0 rounded-lg h-9 text-sm font-semibold shadow-[0_0_15px_rgba(236,72,153,0.3)] hover:shadow-[0_0_20px rgba(236,72,153,0.5)] transition-all duration-300"
+                            onClick={(e) => handleRedeemClick(position, e)}
+                          >
+                            Redeem
+                          </Button>
+                          <Button
                             className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 text-white border-0 rounded-lg h-9 text-sm font-semibold shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_20px rgba(168,85,247,0.5)] transition-all duration-300"
                             onClick={(e) => handleMintUPTClick(position, e)}
                           >
