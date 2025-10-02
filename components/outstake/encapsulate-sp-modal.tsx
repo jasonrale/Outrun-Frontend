@@ -80,7 +80,7 @@ export function EncapsulateSPModal({ isOpen, onClose, position, onSuccess }: Enc
   return (
     <BaseModal isOpen={isOpen && !isClosing} onClose={handleModalClose} className="max-w-md">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold bg-gradient-to-r text-gradient-fill bg-clip-text from-purple-400 via-pink-400 to-blue-400">
+        <h2 className="text-xl font-bold bg-gradient-to-r text-gradient-fill bg-clip-text from-purple-400 via-pink-400 to-blue-400">
           Encapsulate SP
         </h2>
         <button
@@ -114,7 +114,7 @@ export function EncapsulateSPModal({ isOpen, onClose, position, onSuccess }: Enc
                 disabled={isEncapsulating}
               />
               <div className="flex items-center">
-                <TokenIcon symbol={position.assetName} size={20} className="mr-2" />
+                <TokenIcon symbol={position.assetName} size={24} className="mr-2 ring-2 ring-purple-400 rounded-full" />
                 <span className="text-white font-medium">SP {position.assetName}</span>
               </div>
             </div>
@@ -143,7 +143,7 @@ export function EncapsulateSPModal({ isOpen, onClose, position, onSuccess }: Enc
             <div className="flex items-center justify-between">
               <div className="text-left text-white text-lg font-medium">{uptBurnAmount}</div>
               <div className="flex items-center">
-                <TokenIcon symbol={position.upt} size={20} className="mr-2" />
+                <TokenIcon symbol={position.upt} size={24} className="mr-2 ring-2 ring-pink-400 rounded-full" />
                 <span className="text-white font-medium">{position.upt}</span>
               </div>
             </div>
@@ -173,14 +173,14 @@ export function EncapsulateSPModal({ isOpen, onClose, position, onSuccess }: Enc
             style={{ boxShadow: "0 0 15px rgba(34,197,94,0.15) inset, 0 0 20px rgba(34,197,94,0.1)" }}
           >
             <div className="flex items-center justify-between">
-              <div className="text-left text-white text-lg font-medium">{transferableSPAmount}</div>
+              <div className="flex flex-col text-left">
+                <div className="text-white text-lg font-medium">{transferableSPAmount}</div>
+                <div className="text-white/60 text-xs mt-1">Transferable</div>
+              </div>
               <div className="flex items-center">
-                <TokenIcon symbol={position.assetName} size={20} className="mr-2" />
+                <TokenIcon symbol={position.assetName} size={24} className="mr-2 ring-2 ring-purple-400 rounded-full" />
                 <span className="text-white font-medium">SP {position.assetName}</span>
               </div>
-            </div>
-            <div className="flex items-center justify-between text-xs mt-1">
-              <div className="text-white/60">Transferable</div>
             </div>
           </div>
         </div>

@@ -12,6 +12,7 @@ export interface PositionData {
   spAmount: string
   syDecimal: number
   upt: string
+  supportedOutputTokens?: string[]
 }
 
 export interface YTPositionData {
@@ -67,6 +68,7 @@ export const positionsData: PositionData[] = [
     spAmount: "5234561847293756482937",
     upt: "UUSD",
     syDecimal: 18,
+    supportedOutputTokens: ["sUSDe", "USDe"],
   },
   {
     address: "0x2345678901bcdef12345678901bcdef123456789",
@@ -82,6 +84,7 @@ export const positionsData: PositionData[] = [
     spAmount: "12456893847562938475629",
     upt: "UUSD",
     syDecimal: 18,
+    supportedOutputTokens: ["sUSDe", "USDe"],
   },
   {
     address: "0x3456789012cdef123456789012cdef1234567890",
@@ -97,6 +100,7 @@ export const positionsData: PositionData[] = [
     spAmount: "8765432847563928475639",
     upt: "UUSD",
     syDecimal: 18,
+    supportedOutputTokens: ["sUSDe", "USDe"],
   },
   {
     address: "0x4567890123def1234567890123def12345678901",
@@ -112,6 +116,7 @@ export const positionsData: PositionData[] = [
     spAmount: "8765432847563928475639",
     upt: "UUSD",
     syDecimal: 18,
+    supportedOutputTokens: ["sUSDe", "USDe"],
   },
 
   // wstETH positions
@@ -129,6 +134,7 @@ export const positionsData: PositionData[] = [
     spAmount: "56908475639284756392",
     upt: "UETH",
     syDecimal: 18,
+    supportedOutputTokens: ["wstETH", "stETH", "ETH"],
   },
   {
     address: "0x6789012345f123456789012345f1234567890123",
@@ -144,6 +150,7 @@ export const positionsData: PositionData[] = [
     spAmount: "81003847562938475639",
     upt: "UETH",
     syDecimal: 18,
+    supportedOutputTokens: ["wstETH", "stETH", "ETH"],
   },
   {
     address: "0x789012345f6123456789012345f61234567890124",
@@ -159,6 +166,7 @@ export const positionsData: PositionData[] = [
     spAmount: "23808475639284756392",
     upt: "UETH",
     syDecimal: 18,
+    supportedOutputTokens: ["wstETH", "stETH", "ETH"],
   },
 
   // cbETH positions
@@ -176,6 +184,7 @@ export const positionsData: PositionData[] = [
     spAmount: "48108475639284756392",
     upt: "UETH",
     syDecimal: 18,
+    supportedOutputTokens: ["cbETH", "ETH"],
   },
 
   // aUSDC positions
@@ -193,6 +202,7 @@ export const positionsData: PositionData[] = [
     spAmount: "15678911938",
     upt: "UUSD",
     syDecimal: 6,
+    supportedOutputTokens: ["aUSDC", "USDC"],
   },
 ]
 
@@ -287,7 +297,7 @@ export const lpPositionsData: LPPositionData[] = [
     positionValueUSD: 89120.45,
     claimableYieldUSD: 256.89,
     lpBalance: "45670000000000000000",
-    upt: "UETH"
+    upt: "UETH",
   },
   {
     address: "0x5512345f6789abcdef0123123456789012345f6",
@@ -298,7 +308,7 @@ export const lpPositionsData: LPPositionData[] = [
     positionValueUSD: 148900.12,
     claimableYieldUSD: 559.56,
     lpBalance: "150000000000000000000",
-    upt: "UUSD"
+    upt: "UUSD",
   },
 ]
 
@@ -308,19 +318,19 @@ export const uptPositionsData: UPTPositionData[] = [
     address: "0x6612345f6789abcdef01234123456789012345",
     asset: "UUSD",
     chain: "Ethereum",
-    uptBalance: "45230670000000000000000"
+    uptBalance: "45230670000000000000000",
   },
   {
     address: "0x6712345f6789abcdef01234123456789012346",
     asset: "UUSD",
     chain: "Base",
-    uptBalance: "32145890000000000000000"
+    uptBalance: "32145890000000000000000",
   },
   {
     address: "0x6812345f6789abcdef01234123456789012347",
     asset: "UUSD",
     chain: "Arbitrum",
-    uptBalance: "18567340000000000000000"
+    uptBalance: "18567340000000000000000",
   },
 
   // UETH positions
@@ -328,13 +338,13 @@ export const uptPositionsData: UPTPositionData[] = [
     address: "0x7712345f6789abcdef01234512345678901234",
     asset: "UETH",
     chain: "Ethereum",
-    uptBalance: "32145000000000000000"
+    uptBalance: "32145000000000000000",
   },
   {
     address: "0x7812345f6789abcdef01234512345678901235",
     asset: "UETH",
     chain: "BNB Chain",
-    uptBalance: "24123000000000000000"
+    uptBalance: "24123000000000000000",
   },
 
   // UBNB positions
@@ -342,13 +352,13 @@ export const uptPositionsData: UPTPositionData[] = [
     address: "0x8812345f6789abcdef01234561234567890123",
     asset: "UBNB",
     chain: "BNB Chain",
-    uptBalance: "21567000000000000000"
+    uptBalance: "21567000000000000000",
   },
   {
     address: "0x8912345f6789abcdef01234561234567890124",
     asset: "UBNB",
     chain: "Ethereum",
-    uptBalance: "14123000000000000000"
+    uptBalance: "14123000000000000000",
   },
 
   // US positions
@@ -356,6 +366,6 @@ export const uptPositionsData: UPTPositionData[] = [
     address: "0x9912345f6789abcdef0123456712345678901234",
     asset: "US",
     chain: "Sonic",
-    uptBalance: "67234120000000000000000"
-  }
+    uptBalance: "67234120000000000000000",
+  },
 ]

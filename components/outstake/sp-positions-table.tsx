@@ -10,6 +10,10 @@ import type { PositionData } from "@/data/position"
 import { useState } from "react"
 import { EncapsulateSPModal } from "./encapsulate-sp-modal"
 import { EncapsulateSuccessModal } from "./encapsulate-success-modal"
+import { RedeemPrincipalModal } from "./redeem-principal-modal"
+import { MintUPTModal } from "./mint-upt-modal"
+import { RedeemSuccessModal } from "./redeem-success-modal"
+import { MintUPTSuccessModal } from "./mint-upt-success-modal"
 
 interface SPPositionsTableProps {
   filteredPositions: PositionData[]
@@ -58,6 +62,20 @@ export function SPPositionsTable({
     uptBurn: string
     spReceive: string
   } | null>(null)
+  const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false)
+  const [isMintUPTModalOpen, setIsMintUPTModalOpen] = useState(false)
+  const [isRedeemSuccessModalOpen, setIsRedeemSuccessModalOpen] = useState(false)
+  const [isMintUPTSuccessModalOpen, setIsMintUPTSuccessModalOpen] = useState(false)
+  const [redeemSuccessData, setRedeemSuccessData] = useState<{
+    principalRedeemed: string
+    receiveToken: string
+  } | null>(null)
+  const [mintSuccessData, setMintSuccessData] = useState<{
+    uptMinted: string
+    upt: string
+    spAmount?: string
+    transferable?: boolean
+  } | null>(null)
 
   const getPositionId = (position: PositionData, index: number) => {
     return `${position.assetName}-${position.chain}-${position.expirationDate}-${position.initPrincipal}-${index}`
@@ -96,6 +114,46 @@ export function SPPositionsTable({
   const handleSuccessModalClose = () => {
     setIsSuccessModalOpen(false)
     setEncapsulateData(null)
+  }
+
+  const handleRedeemClick = (position: PositionData, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSelectedPosition(position)
+    setIsRedeemModalOpen(true)
+  }
+
+  const handleRedeemModalClose = () => {
+    setIsRedeemModalOpen(false)
+    setSelectedPosition(null)
+  }
+
+  const handleRedeemSuccess = (principalRedeemed: string, receiveToken: string) => {
+    setRedeemSuccessData({ principalRedeemed, receiveToken })
+    setIsRedeemModalOpen(false)
+    setSelectedPosition(null)
+    setTimeout(() => {
+      setIsRedeemSuccessModalOpen(true)
+    }, 300)
+  }
+
+  const handleMintUPTClick = (position: PositionData, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSelectedPosition(position)
+    setIsMintUPTModalOpen(true)
+  }
+
+  const handleMintUPTModalClose = () => {
+    setIsMintUPTModalOpen(false)
+    setSelectedPosition(null)
+  }
+
+  const handleMintUPTSuccess = (uptMinted: string, upt: string, spAmount?: string, transferable?: boolean) => {
+    setMintSuccessData({ uptMinted, upt, spAmount, transferable })
+    setIsMintUPTModalOpen(false)
+    setSelectedPosition(null)
+    setTimeout(() => {
+      setIsMintUPTSuccessModalOpen(true)
+    }, 300)
   }
 
   const groupedSPPositions = () => {
@@ -324,11 +382,11 @@ export function SPPositionsTable({
 
                         {/* Card Action Button */}
                         <div className="flex gap-2">
-                          <Button className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 text-white border-0 rounded-lg h-9 text-sm font-semibold shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_20px rgba(168,85,247,0.5)] transition-all duration-300">
+                          <Button
+                            className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 text-white border-0 rounded-lg h-9 text-sm font-semibold shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_20px rgba(168,85,247,0.5)] transition-all duration-300"
+                            onClick={(e) => handleMintUPTClick(position, e)}
+                          >
                             Mint UPT
-                          </Button>
-                          <Button className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white border-0 rounded-lg h-9 text-sm font-semibold shadow-[0_0_15px_rgba(236,72,153,0.3)] hover:shadow-[0_0_20px rgba(236,72,153,0.5)] transition-all duration-300">
-                            Redeem
                           </Button>
                         </div>
                       </Card>
@@ -485,7 +543,7 @@ export function SPPositionsTable({
                                   <div className="flex justify-end mt-3 animate-in fade-in slide-in-from-bottom-2 duration-200 ease-in-out">
                                     <Button
                                       className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white border-0 rounded-lg h-8 px-4 text-sm font-semibold shadow-[0_0_15px_rgba(236,72,153,0.3)] hover:shadow-[0_0_20px rgba(236,72,153,0.5)] transition-all duration-300"
-                                      onClick={(e) => e.stopPropagation()}
+                                      onClick={(e) => handleRedeemClick(position, e)}
                                     >
                                       Redeem
                                     </Button>
@@ -513,7 +571,7 @@ export function SPPositionsTable({
                                   <div className="flex justify-end mt-3 animate-in fade-in slide-in-from-bottom-2 duration-200 ease-in-out">
                                     <Button
                                       className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 text-white border-0 rounded-lg h-8 px-4 text-sm font-semibold shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_20px rgba(168,85,247,0.5)] transition-all duration-300"
-                                      onClick={(e) => e.stopPropagation()}
+                                      onClick={(e) => handleMintUPTClick(position, e)}
                                     >
                                       Mint UPT
                                     </Button>
@@ -584,6 +642,48 @@ export function SPPositionsTable({
           onClose={handleSuccessModalClose}
           uptBurn={encapsulateData.uptBurn}
           spReceive={encapsulateData.spReceive}
+        />
+      )}
+
+      {/* Redeem Principal Modal */}
+      <RedeemPrincipalModal
+        isOpen={isRedeemModalOpen}
+        onClose={handleRedeemModalClose}
+        position={selectedPosition}
+        onSuccess={handleRedeemSuccess}
+      />
+
+      {/* Mint UPT Modal */}
+      <MintUPTModal
+        isOpen={isMintUPTModalOpen}
+        onClose={handleMintUPTModalClose}
+        position={selectedPosition}
+        onSuccess={handleMintUPTSuccess}
+      />
+
+      {redeemSuccessData && (
+        <RedeemSuccessModal
+          isOpen={isRedeemSuccessModalOpen}
+          onClose={() => {
+            setIsRedeemSuccessModalOpen(false)
+            setRedeemSuccessData(null)
+          }}
+          principalRedeemed={redeemSuccessData.principalRedeemed}
+          receiveToken={redeemSuccessData.receiveToken}
+        />
+      )}
+
+      {mintSuccessData && (
+        <MintUPTSuccessModal
+          isOpen={isMintUPTSuccessModalOpen}
+          onClose={() => {
+            setIsMintUPTSuccessModalOpen(false)
+            setMintSuccessData(null)
+          }}
+          uptMinted={mintSuccessData.uptMinted}
+          upt={mintSuccessData.upt}
+          spAmount={mintSuccessData.spAmount}
+          transferable={mintSuccessData.transferable}
         />
       )}
     </>

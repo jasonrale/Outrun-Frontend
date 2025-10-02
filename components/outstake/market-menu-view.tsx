@@ -313,7 +313,7 @@ export function MarketMenuView({
                           <img
                             src={networkIconSrc || "/placeholder.svg"}
                             alt={market.network || "Network"}
-                            className="w-4 h-4 object-contain"
+                            className="w-6 h-6 object-contain"
                           />
                         </div>
                         <TokenIcon

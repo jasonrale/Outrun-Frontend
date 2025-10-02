@@ -227,7 +227,7 @@ export function MarketListView({
                   <img
                     src={networkIconSrc || "/placeholder.svg"}
                     alt={market.network || "Network"}
-                    className="w-4 h-4 object-contain"
+                    className="w-6 h-6 object-contain"
                   />
                 </div>
                 <TokenIcon symbol={market.assetName} size={24} className="border border-black flex-shrink-0" />
