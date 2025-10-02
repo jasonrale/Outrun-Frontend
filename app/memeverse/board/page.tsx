@@ -545,7 +545,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                           <img
                             src={CHAIN_FILTERS.find((c) => c.id === activeChainFilter)?.icon || "/placeholder.svg"}
                             alt={activeChainFilter}
-                            className="w-4 h-4"
+                            className="w-6 h-6"
                           />
                           {CHAIN_FILTERS.find((c) => c.id === activeChainFilter)?.label}
                         </div>
@@ -568,7 +568,7 @@ const MemeverseBoardContent = React.memo(function MemeverseBoardContent() {
                           onClick={() => handleChainFilterChange(chain.id)}
                         >
                           {chain.icon && (
-                            <img src={chain.icon || "/placeholder.svg"} alt={chain.label} className="w-4 h-4 mr-2" />
+                            <img src={chain.icon || "/placeholder.svg"} alt={chain.label} className="w-6 h-6 mr-2" />
                           )}
                           {chain.label}
                         </button>
