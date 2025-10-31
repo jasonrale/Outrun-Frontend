@@ -11,13 +11,10 @@ const nextConfig = {
     domains: ['raw.githubusercontent.com', 'placeholder.svg'],
     unoptimized: true,
   },
-  // 添加自定义配置以禁用内置的PWA功能
   experimental: {
-    // 禁用任何可能自动生成Service Worker的功能
     disableOptimizedLoading: true,
-    optimizeCss: false,
+    // optimizeCss: false, // ← REMOVED: This was causing blur, border, and color issues in production
   },
-  // 添加字体优化配置
 };
 
 export default nextConfig;
