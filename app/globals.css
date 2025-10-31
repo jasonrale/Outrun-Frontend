@@ -1,10 +1,11 @@
 /* 在@tailwind指令之前添加 */
-@font-face {
+
+/*@font-face {
   font-family: "Montserrat";
   font-style: normal;
-  font-weight: 100 900; /* 覆盖所有字重 */
-  font-display: swap; /* 使用swap策略加快显示 */
-}
+  font-weight: 100 900;
+  font-display: swap;
+}*/
 
 @tailwind base;
 @tailwind components;
