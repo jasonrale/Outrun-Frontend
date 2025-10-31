@@ -18,8 +18,8 @@ import "./globals.css"
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
-  display: "swap", // 添加字体交换策略
-  preload: false, // 禁用自动预加载，改为按需加载
+  display: "swap",
+  preload: true,
 })
 
 export default function RootLayout({
